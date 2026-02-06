@@ -17,6 +17,10 @@ echo
 bash "$SCRIPT_DIR/03_list_rules.sh"
 echo
 bash "$SCRIPT_DIR/04_mcp_tools.sh"
+echo
+bash "$SCRIPT_DIR/05_claude_code_hook.sh"
+echo
+bash "$SCRIPT_DIR/06_format.sh"
 
 echo
 echo "=== All examples completed ==="

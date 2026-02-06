@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "scitex-linter"
-version = "0.1.1"
+version = "0.1.2"
 description = "AST-based linter enforcing SciTeX reproducible research patterns"
 readme = "README.md"
 license = {text = "AGPL-3.0"}

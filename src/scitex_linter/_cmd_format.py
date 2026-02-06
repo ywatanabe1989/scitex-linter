@@ -25,13 +25,15 @@ def register(subparsers) -> None:
 
 def cmd_format(args) -> int:
     from .cli import _collect_files
+    from .config import load_config
 
+    config = load_config(args.path)
     target = Path(args.path)
     if not target.exists():
         print(f"Error: {args.path} not found", file=sys.stderr)
         return 2
 
-    files = _collect_files(target)
+    files = _collect_files(target, config=config)
     if not files:
         print(f"No Python files found in {args.path}", file=sys.stderr)
         return 0
@@ -39,7 +41,7 @@ def cmd_format(args) -> int:
     changed_count = 0
     for f in files:
         original = f.read_text(encoding="utf-8")
-        fixed = fix_source(original, filepath=str(f))
+        fixed = fix_source(original, filepath=str(f), config=config)
         if fixed != original:
             changed_count += 1
             if args.diff:

@@ -8,7 +8,7 @@ import ast
 import re
 from pathlib import Path
 
-# The 5 required INJECTED parameters (in canonical order)
+# The 5 required INJECTED parameters (in canonical order) — default fallback
 REQUIRED_INJECTED = ["CONFIG", "plt", "COLORS", "rngg", "logger"]
 
 # Canonical default value for injected params
@@ -40,10 +40,11 @@ def _declared_params(node: ast.FunctionDef) -> list:
     return [arg.arg for arg in node.args.args]
 
 
-def _missing_injected(declared: list) -> list:
+def _missing_injected(declared: list, required: list = None) -> list:
     """Return INJECTED param names not yet declared, preserving canonical order."""
+    required = required if required is not None else REQUIRED_INJECTED
     declared_set = set(declared)
-    return [p for p in REQUIRED_INJECTED if p not in declared_set]
+    return [p for p in required if p not in declared_set]
 
 
 def _is_injected_value(default_node: ast.expr) -> bool:
@@ -78,12 +79,12 @@ def _is_canonical_injected(default_node: ast.expr) -> bool:
     return False
 
 
-def _has_non_canonical_injected(node: ast.FunctionDef) -> bool:
+def _has_non_canonical_injected(node: ast.FunctionDef, required: list = None) -> bool:
     """Check if any INJECTED param uses stx.INJECTED instead of stx.session.INJECTED."""
     args = node.args.args
     defaults = node.args.defaults
     n_positional = len(args) - len(defaults)
-    injected_set = set(REQUIRED_INJECTED)
+    injected_set = set(required if required is not None else REQUIRED_INJECTED)
 
     for i, arg in enumerate(args):
         if arg.arg not in injected_set:
@@ -126,12 +127,14 @@ def _find_def_line_range(lines: list, func_node: ast.FunctionDef) -> tuple:
     return start, colon_line
 
 
-def _fix_s006_in_source(source: str, filepath: str) -> str:
+def _fix_s006_in_source(source: str, filepath: str, config=None) -> str:
     """Fix S006 violations: add missing INJECTED params to @stx.session functions."""
     try:
         tree = ast.parse(source, filename=filepath)
     except SyntaxError:
         return source
+
+    required = config.required_injected if config else REQUIRED_INJECTED
 
     lines = source.splitlines(keepends=True)
     # Ensure the last line has a newline
@@ -145,8 +148,8 @@ def _fix_s006_in_source(source: str, filepath: str) -> str:
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             if _has_session_decorator(node):
                 declared = _declared_params(node)
-                missing = _missing_injected(declared)
-                needs_normalize = _has_non_canonical_injected(node)
+                missing = _missing_injected(declared, required)
+                needs_normalize = _has_non_canonical_injected(node, required)
                 if missing or needs_normalize:
                     fixes.append((node, missing))
 
@@ -154,7 +157,7 @@ def _fix_s006_in_source(source: str, filepath: str) -> str:
     fixes.sort(key=lambda x: x[0].lineno, reverse=True)
 
     for func_node, missing in fixes:
-        lines = _apply_s006_fix(lines, func_node, missing)
+        lines = _apply_s006_fix(lines, func_node, missing, required)
 
     return "".join(lines)
 
@@ -165,7 +168,12 @@ def _get_def_indent(line: str) -> str:
     return match.group(1) if match else ""
 
 
-def _apply_s006_fix(lines: list, func_node: ast.FunctionDef, missing: list) -> list:
+def _apply_s006_fix(
+    lines: list,
+    func_node: ast.FunctionDef,
+    missing: list,
+    required_injected: list = None,
+) -> list:
     """Apply S006 fix to a single function in the source lines.
 
     Strategy:
@@ -174,6 +182,8 @@ def _apply_s006_fix(lines: list, func_node: ast.FunctionDef, missing: list) -> l
     3. Extract user params and existing injected params from source text
     4. Rebuild the signature with all params
     """
+    if required_injected is None:
+        required_injected = REQUIRED_INJECTED
     start_idx, colon_idx = _find_def_line_range(lines, func_node)
     def_indent = _get_def_indent(lines[start_idx])
     param_indent = def_indent + "    "
@@ -199,7 +209,7 @@ def _apply_s006_fix(lines: list, func_node: ast.FunctionDef, missing: list) -> l
     existing_param_strings = _split_params(params_text)
 
     # Classify params: user params vs injected params
-    injected_names = set(REQUIRED_INJECTED)
+    injected_names = set(required_injected)
     user_param_strings = []
     existing_injected_strings = []
 
@@ -223,7 +233,7 @@ def _apply_s006_fix(lines: list, func_node: ast.FunctionDef, missing: list) -> l
         pname = ps.strip().split("=")[0].split(":")[0].strip()
         existing_injected_names.add(pname)
 
-    for p in REQUIRED_INJECTED:
+    for p in required_injected:
         if p in existing_injected_names or p in missing:
             new_param_lines.append(f"{param_indent}{p}={_INJECTED_DEFAULT},\n")
 
@@ -293,17 +303,18 @@ def _split_params(params_text: str) -> list:
 # =========================================================================
 
 
-def fix_source(source: str, filepath: str = "<stdin>") -> str:
+def fix_source(source: str, filepath: str = "<stdin>", config=None) -> str:
     """Auto-fix SciTeX issues in source code. Returns fixed source."""
-    return _fix_s006_in_source(source, filepath)
+    return _fix_s006_in_source(source, filepath, config=config)
 
 
-def fix_file(filepath: str, write: bool = True) -> tuple:
+def fix_file(filepath: str, write: bool = True, config=None) -> tuple:
     """Fix a file in place. Returns (fixed_source, changed).
 
     Args:
         filepath: Path to the Python file.
         write: If True, write the fixed source back to the file.
+        config: Optional LinterConfig instance.
 
     Returns:
         Tuple of (fixed_source, changed) where changed is a bool.
@@ -313,7 +324,7 @@ def fix_file(filepath: str, write: bool = True) -> tuple:
         return ("", False)
 
     original = path.read_text(encoding="utf-8")
-    fixed = fix_source(original, filepath=str(path))
+    fixed = fix_source(original, filepath=str(path), config=config)
     changed = fixed != original
 
     if write and changed:

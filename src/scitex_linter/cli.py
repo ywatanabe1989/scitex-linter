@@ -18,6 +18,7 @@ from pathlib import Path
 from . import __version__
 from ._cmd_format import register as _register_format
 from .checker import lint_file
+from .config import load_config
 from .formatter import format_issue, format_summary, to_json
 from .rules import ALL_RULES, SEVERITY_ORDER
 
@@ -26,13 +27,17 @@ from .rules import ALL_RULES, SEVERITY_ORDER
 # =========================================================================
 
 
-def _collect_files(path: Path, recursive: bool = True) -> list:
+def _collect_files(path: Path, recursive: bool = True, config=None) -> list:
     """Collect Python files from a path."""
     if path.is_file():
         return [path]
     if path.is_dir():
         pattern = "**/*.py" if recursive else "*.py"
-        skip = {"__pycache__", ".git", "node_modules", ".tox", "venv", ".venv"}
+        skip = (
+            set(config.exclude_dirs)
+            if config
+            else {"__pycache__", ".git", "node_modules", ".tox", "venv", ".venv"}
+        )
         return sorted(
             p for p in path.glob(pattern) if not any(s in p.parts for s in skip)
         )
@@ -67,6 +72,7 @@ def _register_check(subparsers) -> None:
 
 
 def _cmd_check(args) -> int:
+    config = load_config(args.path)
     use_color = not args.no_color and sys.stdout.isatty()
     min_sev = SEVERITY_ORDER[args.severity]
     categories = set(args.category.split(",")) if args.category else None
@@ -76,14 +82,14 @@ def _cmd_check(args) -> int:
         print(f"Error: {args.path} not found", file=sys.stderr)
         return 2
 
-    files = _collect_files(target)
+    files = _collect_files(target, config=config)
     if not files:
         print(f"No Python files found in {args.path}", file=sys.stderr)
         return 0
 
     all_results = {}
     for f in files:
-        issues = lint_file(str(f))
+        issues = lint_file(str(f), config=config)
         issues = [
             i
             for i in issues

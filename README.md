@@ -50,11 +50,12 @@ scitex-linter python experiment.py --strict
 scitex-linter rule
 ```
 
-## Four Interfaces
+## Five Interfaces
 
 | Interface | For | Description |
 |-----------|-----|-------------|
 | 🖥️ **CLI** | Terminal users | `scitex-linter check`, `scitex-linter python` |
+| ✨ **Format** | Auto-fix | `scitex-linter format` — auto-fix SciTeX issues |
 | 🐍 **Python API** | Programmatic use | `from scitex_linter.checker import lint_file` |
 | 🔌 **flake8 Plugin** | CI pipelines | `flake8 --select STX` |
 | 🔧 **MCP Server** | AI agents | 3 tools for Claude/GPT integration |
@@ -74,6 +75,12 @@ scitex-linter check ./src/                         # Check a directory
 scitex-linter check script.py --severity error     # Only errors
 scitex-linter check script.py --category path      # Only path rules
 scitex-linter check script.py --json               # JSON output for CI
+
+# Format - Auto-fix SciTeX pattern issues
+scitex-linter format script.py                     # Fix in place
+scitex-linter format script.py --check             # Dry run (exit 1 if changes needed)
+scitex-linter format script.py --diff              # Show diff of changes
+scitex-linter format ./src/                        # Format a directory
 
 # Python - Lint then execute
 scitex-linter python experiment.py                # Lint and run
@@ -208,6 +215,37 @@ SciTeX Linter works as a **post-tool-use hook** for Claude Code, automatically l
 ```
 
 This ensures AI-generated code follows SciTeX patterns from the start.
+
+## Configuration
+
+<details>
+<summary><strong>Configure via pyproject.toml or environment variables</strong></summary>
+
+<br>
+
+```toml
+[tool.scitex-linter]
+severity = "info"                    # Minimum severity: error, warning, info
+disable = ["STX-P004", "STX-I003"]   # Disable specific rules
+exclude-dirs = ["venv", ".venv"]     # Directories to skip
+library-dirs = ["src"]               # Exempt from script-only rules
+
+[tool.scitex-linter.per-rule-severity]
+STX-S003 = "warning"                 # Downgrade argparse rule
+
+[tool.scitex-linter.session]
+required-injected = ["CONFIG", "plt", "COLORS", "rngg", "logger"]
+```
+
+Environment variables (highest priority):
+```bash
+SCITEX_LINTER_SEVERITY=error
+SCITEX_LINTER_DISABLE=STX-P004,STX-I003
+```
+
+Priority: CLI flags > env vars > pyproject.toml > defaults
+
+</details>
 
 ## What a Clean Script Looks Like
 
