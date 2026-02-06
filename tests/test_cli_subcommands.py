@@ -218,7 +218,7 @@ class TestRuleSubcommand:
         code = main(["rule"])
         out = capsys.readouterr().out
         assert "STX-S001" in out
-        assert "36 rules" in out
+        assert "43 rules" in out
         assert code == 0
 
     def test_rule_json(self, capsys):
