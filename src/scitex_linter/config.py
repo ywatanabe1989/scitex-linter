@@ -41,7 +41,7 @@ class LinterConfig:
             "manage.py",
         ]
     )
-    library_dirs: list[str] = field(default_factory=lambda: ["src"])
+    library_dirs: list[str] = field(default_factory=lambda: ["src", "tests"])
     disable: list[str] = field(default_factory=list)
     enable: list[str] = field(default_factory=list)
     per_rule_severity: dict[str, str] = field(default_factory=dict)

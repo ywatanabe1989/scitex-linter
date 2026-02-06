@@ -1,7 +1,7 @@
 """AST-based checker that detects SciTeX anti-patterns."""
 
 import ast
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 from . import rules
@@ -29,7 +29,7 @@ _CALL_RULES: dict = {
     ("plt", "savefig"): rules.IO007,
     # Plot rules
     (None, "show"): rules.P004,  # plt.show()
-    # Stats rules — scipy.stats.X()
+    # Stats rules -- scipy.stats.X()
     ("stats", "ttest_ind"): rules.ST001,
     ("stats", "mannwhitneyu"): rules.ST002,
     ("stats", "pearsonr"): rules.ST003,
@@ -98,7 +98,10 @@ class SciTeXChecker(ast.NodeVisitor):
         self.filepath = filepath
         self.config = config or LinterConfig()
         self.issues: list = []
+        # Package availability for rule gating
+        from ._packages import detect as _detect_pkgs
 
+        self._available = _detect_pkgs()
         # Tracking state
         self._has_stx_import = False
         self._has_main_guard = False
@@ -107,9 +110,7 @@ class SciTeXChecker(ast.NodeVisitor):
         self._imports: dict = {}  # alias -> full module path
         self._is_script = is_script(filepath, self.config)
 
-    # -----------------------------------------------------------------
-    # Import visitors
-    # -----------------------------------------------------------------
+    # -- Import visitors --
 
     def visit_Import(self, node: ast.Import) -> None:
         for alias in node.names:
@@ -180,9 +181,7 @@ class SciTeXChecker(ast.NodeVisitor):
         if module == "argparse":
             self._add(S003, node.lineno, node.col_offset, line)
 
-    # -----------------------------------------------------------------
-    # Call visitors (Phase 2)
-    # -----------------------------------------------------------------
+    # -- Call visitors (Phase 2) --
 
     def visit_Call(self, node: ast.Call) -> None:
         self._check_call(node)
@@ -192,7 +191,7 @@ class SciTeXChecker(ast.NodeVisitor):
         """Check function calls against Phase 2 rules."""
         func = node.func
 
-        # module.func() pattern — e.g., np.save(), stats.ttest_ind()
+        # module.func() pattern -- e.g., np.save(), stats.ttest_ind()
         if isinstance(func, ast.Attribute):
             func_name = func.attr
             mod_name = None
@@ -200,7 +199,7 @@ class SciTeXChecker(ast.NodeVisitor):
             if isinstance(func.value, ast.Name):
                 mod_name = func.value.id
             elif isinstance(func.value, ast.Attribute):
-                # module.sub.func() — e.g., scipy.stats.ttest_ind()
+                # module.sub.func() -- e.g., scipy.stats.ttest_ind()
                 if isinstance(func.value.value, ast.Name):
                     mod_name = func.value.attr  # use "stats" from scipy.stats
 
@@ -225,14 +224,14 @@ class SciTeXChecker(ast.NodeVisitor):
 
             # Special cases
             if rule is not None:
-                # plt.show() — only flag if mod resolves to matplotlib
+                # plt.show() -- only flag if mod resolves to matplotlib
                 if rule is rules.P004:
                     if mod_name not in ("plt", "pyplot") and resolved not in (
                         "matplotlib.pyplot",
                     ):
                         return
 
-                # to_csv — only flag on DataFrame-like objects (not stx)
+                # to_csv -- only flag on DataFrame-like objects (not stx)
                 if rule is rules.IO004:
                     if mod_name in ("stx", "os", "sys", "Path"):
                         return
@@ -274,7 +273,7 @@ class SciTeXChecker(ast.NodeVisitor):
                 if "Path" in line or "path" in line.lower():
                     self._add(rules.PA003, node.lineno, node.col_offset, line)
 
-        # bare func() pattern — e.g., print(), open()
+        # bare func() pattern -- e.g., print(), open()
         elif isinstance(func, ast.Name):
             if func.id == "print" and self._has_session_decorator:
                 line = self._get_source(node.lineno)
@@ -283,9 +282,7 @@ class SciTeXChecker(ast.NodeVisitor):
                 line = self._get_source(node.lineno)
                 self._add(rules.PA002, node.lineno, node.col_offset, line)
 
-    # -----------------------------------------------------------------
-    # stx.io path checking
-    # -----------------------------------------------------------------
+    # -- stx.io path checking --
 
     def _check_stx_io_path(self, node: ast.Call) -> None:
         """Check path arguments in stx.io.save() / stx.io.load() calls."""
@@ -306,7 +303,6 @@ class SciTeXChecker(ast.NodeVisitor):
             return
 
         # Check if this is stx.io.save/load (not stx.plt.save, etc.)
-        # Pattern: stx.io.save(...) where func.value is Attribute(value=Name('stx'), attr='io')
         is_stx_io = False
         if isinstance(func.value, ast.Attribute):
             if (
@@ -351,9 +347,7 @@ class SciTeXChecker(ast.NodeVisitor):
         elif not path_str.startswith("./") and not path_str.startswith("../"):
             self._add(rules.PA005, node.lineno, node.col_offset, line)
 
-    # -----------------------------------------------------------------
-    # Function/decorator visitors
-    # -----------------------------------------------------------------
+    # -- Function/decorator visitors --
 
     @property
     def _REQUIRED_INJECTED(self):
@@ -413,12 +407,11 @@ class SciTeXChecker(ast.NodeVisitor):
                     f"All 5 must be declared: CONFIG, COLORS, logger, plt, rngg"
                 ),
                 suggestion=S006.suggestion,
+                requires=S006.requires,
             )
             self._add(dynamic_rule, node.lineno, node.col_offset, line)
 
-    # -----------------------------------------------------------------
-    # Module-level checks (run after visiting entire tree)
-    # -----------------------------------------------------------------
+    # -- Module-level checks (run after visiting entire tree) --
 
     def visit_If(self, node: ast.If) -> None:
         """Detect if __name__ == '__main__' guard."""
@@ -439,9 +432,7 @@ class SciTeXChecker(ast.NodeVisitor):
                 return True
         return False
 
-    # -----------------------------------------------------------------
-    # Finalization
-    # -----------------------------------------------------------------
+    # -- Finalization --
 
     def get_issues(self) -> list:
         """Return all issues, including post-visit structural checks."""
@@ -464,11 +455,13 @@ class SciTeXChecker(ast.NodeVisitor):
         return self.issues
 
     def _add(self, rule: Rule, line: int, col: int, source_line: str) -> None:
+        if rule.requires and rule.requires not in self._available:
+            return
         if rule.id in self.config.disable:
             return
         sev = self.config.per_rule_severity.get(rule.id)
         if sev:
-            rule = Rule(rule.id, sev, rule.category, rule.message, rule.suggestion)
+            rule = replace(rule, severity=sev)
         self.issues.append(
             Issue(rule=rule, line=line, col=col, source_line=source_line)
         )
@@ -494,7 +487,7 @@ def lint_source(source: str, filepath: str = "<stdin>", config=None) -> list:
     lines = source.splitlines()
     checker = SciTeXChecker(lines, filepath=filepath, config=config)
     checker.visit(tree)
-    if config and "FM" in config.enable:
+    if config and "FM" in config.enable and checker._available.get("figrecipe"):
         from ._fm_checker import FMChecker
 
         fm = FMChecker(lines, config)
