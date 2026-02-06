@@ -307,6 +307,54 @@ if __name__ == "__main__":
 # =============================================================================
 
 
+# =============================================================================
+# fr.* namespace exemption
+# =============================================================================
+
+
+class TestFRExemption:
+    def test_fr_save_exempt_from_fm006(self):
+        """fr.save() should not trigger FM006."""
+        src = """
+import figrecipe as fr
+
+fr.save(fig, "output.png")
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-FM006" not in _rule_ids(src, enable_fm=True)
+
+    def test_fr_subplots_figsize_exempt_from_fm001(self):
+        """fr.subplots(figsize=...) should not trigger FM001."""
+        src = """
+import figrecipe as fr
+
+fig, ax = fr.subplots(figsize=(10, 8))
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-FM001" not in _rule_ids(src, enable_fm=True)
+
+    def test_fr_sub_module_exempt(self):
+        """fr.io.save() should not trigger FM rules."""
+        src = """
+import figrecipe as fr
+
+fr.io.save(fig, "output.png")
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-FM006" not in _rule_ids(src, enable_fm=True)
+
+
+# =============================================================================
+# FM007: rcParams modification
+# =============================================================================
+
+
 class TestFM007RcParams:
     def test_plt_rcparams_fires(self):
         """plt.rcParams modification triggers FM007."""
@@ -331,3 +379,107 @@ if __name__ == "__main__":
     pass
 """
         assert "STX-FM007" in _rule_ids(src, enable_fm=True)
+
+
+# =============================================================================
+# FM008: set_size_inches()
+# =============================================================================
+
+
+class TestFM008SetSizeInches:
+    def test_fig_set_size_inches_fires(self):
+        """fig.set_size_inches() triggers FM008."""
+        src = """
+fig.set_size_inches(10, 8)
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-FM008" in _rule_ids(src, enable_fm=True)
+
+    def test_set_size_inches_with_tuple_fires(self):
+        """fig.set_size_inches((10, 8)) triggers FM008."""
+        src = """
+fig.set_size_inches((10, 8))
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-FM008" in _rule_ids(src, enable_fm=True)
+
+    def test_no_set_size_inches_clean(self):
+        """No set_size_inches call is clean."""
+        src = """
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-FM008" not in _rule_ids(src, enable_fm=True)
+
+    def test_stx_exempt(self):
+        """stx.* set_size_inches is exempt."""
+        src = """
+import scitex as stx
+
+stx.fig.set_size_inches(10, 8)
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-FM008" not in _rule_ids(src, enable_fm=True)
+
+    def test_fr_exempt(self):
+        """fr.* set_size_inches is exempt."""
+        src = """
+import figrecipe as fr
+
+fr.fig.set_size_inches(10, 8)
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-FM008" not in _rule_ids(src, enable_fm=True)
+
+
+# =============================================================================
+# FM009: ax.set_position()
+# =============================================================================
+
+
+class TestFM009SetPosition:
+    def test_ax_set_position_fires(self):
+        """ax.set_position() triggers FM009."""
+        src = """
+ax.set_position([0.1, 0.1, 0.8, 0.8])
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-FM009" in _rule_ids(src, enable_fm=True)
+
+    def test_no_set_position_clean(self):
+        """No set_position call is clean."""
+        src = """
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-FM009" not in _rule_ids(src, enable_fm=True)
+
+    def test_stx_exempt(self):
+        """stx.* set_position is exempt."""
+        src = """
+import scitex as stx
+
+stx.ax.set_position([0.1, 0.1, 0.8, 0.8])
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-FM009" not in _rule_ids(src, enable_fm=True)

@@ -389,7 +389,7 @@ FM003 = Rule(
     severity="warning",
     category="figure",
     message='`bbox_inches="tight"` detected — can crop important elements unpredictably',
-    suggestion="Use `stx.io.save(fig, './plot.png')` which handles cropping intelligently.",
+    suggestion="Use `fr.save(fig, './plot.png')` or `stx.io.save(fig, './plot.png')` which handle cropping intelligently.",
 )
 
 FM004 = Rule(
@@ -416,7 +416,7 @@ FM006 = Rule(
     severity="info",
     category="figure",
     message="`plt.savefig()` detected — no provenance tracking",
-    suggestion="Use `stx.io.save(fig, './plot.png')` for automatic CSV data export and provenance.",
+    suggestion="Use `fr.save(fig, './plot.png')` or `stx.io.save(fig, './plot.png')` for recipe tracking and provenance.",
 )
 
 FM007 = Rule(
@@ -425,6 +425,28 @@ FM007 = Rule(
     category="figure",
     message="`rcParams` direct modification detected — hard to maintain across figures",
     suggestion="Use figrecipe style presets: `fr.load_style('SCITEX')` for consistent styling.",
+)
+
+FM008 = Rule(
+    id="STX-FM008",
+    severity="warning",
+    category="figure",
+    message="`set_size_inches()` detected — bypasses mm-based layout control",
+    suggestion=(
+        "Use mm-based sizing: `fr.subplots(axes_width_mm=40, axes_height_mm=28)` "
+        "or `stx.plt.subplots(axes_width_mm=40, axes_height_mm=28)` for precise control."
+    ),
+)
+
+FM009 = Rule(
+    id="STX-FM009",
+    severity="warning",
+    category="figure",
+    message="`ax.set_position()` detected — conflicts with mm-based layout control",
+    suggestion=(
+        "Use mm-based margins: `fr.subplots(margin_left_mm=15, margin_bottom_mm=12)` "
+        "or `stx.plt.subplots(margin_left_mm=15, margin_bottom_mm=12)` for deterministic layout."
+    ),
 )
 
 
@@ -475,6 +497,8 @@ ALL_RULES = {
         FM005,
         FM006,
         FM007,
+        FM008,
+        FM009,
     ]
 }
 

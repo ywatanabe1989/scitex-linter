@@ -11,15 +11,18 @@ from .checker import Issue
 from .rules import Rule
 
 
-def _is_stx_call(node):
-    """Check if the call is on a stx.* object."""
+def _is_exempt_call(node):
+    """Check if the call is on a stx.* or fr.* object (exempt from FM rules)."""
     func = node.func
     if not isinstance(func, ast.Attribute):
         return False
-    if isinstance(func.value, ast.Name) and func.value.id == "stx":
+    if isinstance(func.value, ast.Name) and func.value.id in ("stx", "fr"):
         return True
     if isinstance(func.value, ast.Attribute):
-        if isinstance(func.value.value, ast.Name) and func.value.value.id == "stx":
+        if isinstance(func.value.value, ast.Name) and func.value.value.id in (
+            "stx",
+            "fr",
+        ):
             return True
     return False
 
@@ -68,7 +71,7 @@ class FMChecker(ast.NodeVisitor):
 
     def _check_call(self, node):
         """Check Call nodes for FM001-FM006."""
-        if _is_stx_call(node):
+        if _is_exempt_call(node):
             return
 
         func = node.func
@@ -93,6 +96,16 @@ class FMChecker(ast.NodeVisitor):
             if _has_kwarg(node, "bbox_inches", "tight"):
                 self._add(rules.FM003, node.lineno, node.col_offset, line)
             self._add(rules.FM006, node.lineno, node.col_offset, line)
+            return
+
+        # FM008: set_size_inches()
+        if func_name == "set_size_inches":
+            self._add(rules.FM008, node.lineno, node.col_offset, line)
+            return
+
+        # FM009: set_position()
+        if func_name == "set_position":
+            self._add(rules.FM009, node.lineno, node.col_offset, line)
             return
 
         # FM001: figsize= kwarg on figure()/subplots()
