@@ -372,7 +372,6 @@ def _cmd_mcp_installation(args) -> int:
 def _print_help_recursive(parser, subparsers_actions) -> None:
     """Print help for all commands recursively."""
     cyan = "\033[96m" if sys.stdout.isatty() else ""
-    bold = "\033[1m" if sys.stdout.isatty() else ""
     reset = "\033[0m" if sys.stdout.isatty() else ""
 
     bar = "\u2501" * 3

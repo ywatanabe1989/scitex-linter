@@ -62,7 +62,7 @@ class Issue:
     source_line: str = ""
 
 
-def is_script(filepath: str, config: "LinterConfig | None" = None) -> bool:
+def is_script(filepath: str, config=None) -> bool:
     """Check if file is a script (not a library module).
 
     Uses config.library_patterns and config.library_dirs to determine
