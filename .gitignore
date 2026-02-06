@@ -1,6 +1,7 @@
 
 ### Source: /home/ywatanabe/.git-templates/.gitignore-templates/Custom/Specific.gitignore ###
 # Please add files here
+GITIGNORED/
 
 ### Source: /home/ywatanabe/.git-templates/.gitignore-templates/Custom/Claude.gitignore ###
 docs/to_claude
@@ -110,6 +111,9 @@ data/*
 **/*.ppt
 **/*.pptx
 **/*.txt
+!docs/sphinx/requirements.txt
+!docs/scitex-logo-banner.png
+!docs/scitex-icon-navy-inverted.png
 **/*.log
 **/*.db
 **/*.sqlite

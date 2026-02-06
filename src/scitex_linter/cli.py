@@ -237,6 +237,14 @@ def _register_mcp(subparsers) -> None:
     list_p = mcp_sub.add_parser("list-tools", help="List available MCP tools")
     list_p.set_defaults(func=_cmd_mcp_list_tools)
 
+    doctor_p = mcp_sub.add_parser("doctor", help="Check MCP server health")
+    doctor_p.set_defaults(func=_cmd_mcp_doctor)
+
+    install_p = mcp_sub.add_parser(
+        "installation", help="Show Claude Desktop configuration"
+    )
+    install_p.set_defaults(func=_cmd_mcp_installation)
+
     p.set_defaults(func=lambda args: _cmd_mcp_help(p, args))
 
 
@@ -271,6 +279,80 @@ def _cmd_mcp_list_tools(args) -> int:
     for name, desc in tools:
         print(f"  {name:30s} {desc}")
     print(f"\n  {len(tools)} tools")
+    return 0
+
+
+def _cmd_mcp_doctor(args) -> int:
+    import shutil
+
+    print(f"scitex-linter {__version__}\n")
+    print("Health Check")
+    print("=" * 40)
+
+    checks = []
+
+    try:
+        import fastmcp
+
+        checks.append(("fastmcp", True, fastmcp.__version__))
+    except ImportError:
+        checks.append(("fastmcp", False, "not installed"))
+
+    try:
+        from ._mcp.tools import register_all_tools  # noqa: F401
+
+        checks.append(("MCP tools", True, "3 tools"))
+    except Exception as e:
+        checks.append(("MCP tools", False, str(e)))
+
+    cli_path = shutil.which("scitex-linter")
+    if cli_path:
+        checks.append(("CLI", True, cli_path))
+    else:
+        checks.append(("CLI", False, "not in PATH"))
+
+    rule_count = len(ALL_RULES)
+    checks.append(("Rules", True, f"{rule_count} rules"))
+
+    all_ok = True
+    for name, ok, info in checks:
+        status = "\u2713" if ok else "\u2717"
+        if not ok:
+            all_ok = False
+        print(f"  {status} {name}: {info}")
+
+    print()
+    if all_ok:
+        print("All checks passed!")
+    else:
+        print("Some checks failed. Run 'pip install scitex-linter[mcp]' to fix.")
+
+    return 0 if all_ok else 1
+
+
+def _cmd_mcp_installation(args) -> int:
+    import shutil
+
+    print(f"scitex-linter {__version__}\n")
+    print("Add this to your Claude Desktop config file:\n")
+    print("  macOS: ~/Library/Application Support/Claude/claude_desktop_config.json")
+    print("  Linux: ~/.config/Claude/claude_desktop_config.json\n")
+
+    cli_path = shutil.which("scitex-linter")
+    if cli_path:
+        print(f"Your installation path: {cli_path}\n")
+
+    config = (
+        "{\n"
+        '  "mcpServers": {\n'
+        '    "scitex-linter": {\n'
+        f'      "command": "{cli_path or "scitex-linter"}",\n'
+        '      "args": ["mcp", "start"]\n'
+        "    }\n"
+        "  }\n"
+        "}"
+    )
+    print(config)
     return 0
 
 
