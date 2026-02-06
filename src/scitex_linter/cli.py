@@ -1,0 +1,367 @@
+"""CLI entry point for scitex-linter.
+
+Usage:
+    scitex-linter lint <path> [--json] [--severity] [--category] [--no-color]
+    scitex-linter python <script.py> [--strict] [-- script_args...]
+    scitex-linter list-rules [--json] [--category] [--severity]
+    scitex-linter mcp start
+    scitex-linter mcp list-tools
+    scitex-linter --help-recursive
+"""
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+from . import __version__
+from .checker import lint_file
+from .formatter import format_issue, format_summary, to_json
+from .rules import ALL_RULES, SEVERITY_ORDER
+
+# =========================================================================
+# File collection helper
+# =========================================================================
+
+
+def _collect_files(path: Path, recursive: bool = True) -> list:
+    """Collect Python files from a path."""
+    if path.is_file():
+        return [path]
+    if path.is_dir():
+        pattern = "**/*.py" if recursive else "*.py"
+        skip = {"__pycache__", ".git", "node_modules", ".tox", "venv", ".venv"}
+        return sorted(
+            p for p in path.glob(pattern) if not any(s in p.parts for s in skip)
+        )
+    return []
+
+
+# =========================================================================
+# Subcommand: lint
+# =========================================================================
+
+
+def _register_lint(subparsers) -> None:
+    p = subparsers.add_parser(
+        "lint",
+        help="Lint Python files for SciTeX pattern compliance",
+        description="Lint Python files for SciTeX pattern compliance.",
+    )
+    p.add_argument("path", help="Python file or directory to lint")
+    p.add_argument("--json", action="store_true", dest="as_json", help="Output as JSON")
+    p.add_argument("--no-color", action="store_true", help="Disable colored output")
+    p.add_argument(
+        "--severity",
+        choices=["error", "warning", "info"],
+        default="info",
+        help="Minimum severity to report (default: info)",
+    )
+    p.add_argument(
+        "--category",
+        help="Filter by category (comma-separated: structure,import,io,plot,stats)",
+    )
+    p.set_defaults(func=_cmd_lint)
+
+
+def _cmd_lint(args) -> int:
+    use_color = not args.no_color and sys.stdout.isatty()
+    min_sev = SEVERITY_ORDER[args.severity]
+    categories = set(args.category.split(",")) if args.category else None
+
+    target = Path(args.path)
+    if not target.exists():
+        print(f"Error: {args.path} not found", file=sys.stderr)
+        return 2
+
+    files = _collect_files(target)
+    if not files:
+        print(f"No Python files found in {args.path}", file=sys.stderr)
+        return 0
+
+    all_results = {}
+    for f in files:
+        issues = lint_file(str(f))
+        issues = [
+            i
+            for i in issues
+            if SEVERITY_ORDER[i.rule.severity] >= min_sev
+            and (categories is None or i.rule.category in categories)
+        ]
+        if issues:
+            all_results[str(f)] = issues
+
+    # JSON output
+    if args.as_json:
+        combined = {fp: to_json(issues, fp) for fp, issues in all_results.items()}
+        print(json.dumps(combined, indent=2))
+        has_errors = any(
+            any(i.rule.severity == "error" for i in issues)
+            for issues in all_results.values()
+        )
+        return 2 if has_errors else (1 if all_results else 0)
+
+    # Terminal output
+    if not all_results:
+        msg = "All files clean"
+        if use_color:
+            print(f"\033[92m{msg}\033[0m")
+        else:
+            print(msg)
+        return 0
+
+    has_errors = False
+    for filepath, issues in all_results.items():
+        for issue in issues:
+            print(format_issue(issue, filepath, color=use_color))
+            if issue.rule.severity == "error":
+                has_errors = True
+        print(format_summary(issues, filepath, color=use_color))
+        print()
+
+    return 2 if has_errors else 1
+
+
+# =========================================================================
+# Subcommand: python (lint then execute)
+# =========================================================================
+
+
+def _register_python(subparsers) -> None:
+    p = subparsers.add_parser(
+        "python",
+        help="Lint then execute a Python script",
+        description=(
+            "Lint a Python script, then execute it.\n"
+            "Use -- to separate script arguments: scitex-linter python script.py -- --arg1"
+        ),
+    )
+    p.add_argument("script", help="Python script to run")
+    p.add_argument("--strict", action="store_true", help="Abort on lint errors")
+    p.set_defaults(func=_cmd_python)
+
+
+def _cmd_python(args) -> int:
+    from .runner import run_script
+
+    # Extract script args: everything after -- in sys.argv (or test argv)
+    # argparse already consumed known flags; remaining unknown args go to script
+    script_args = getattr(args, "_script_args", [])
+    return run_script(args.script, strict=args.strict, script_args=script_args)
+
+
+# =========================================================================
+# Subcommand: list-rules
+# =========================================================================
+
+
+def _register_list_rules(subparsers) -> None:
+    p = subparsers.add_parser(
+        "list-rules",
+        help="List all lint rules",
+        description="List all available SciTeX lint rules.",
+    )
+    p.add_argument("--json", action="store_true", dest="as_json", help="Output as JSON")
+    p.add_argument(
+        "--category",
+        help="Filter by category (comma-separated: structure,import,io,plot,stats)",
+    )
+    p.add_argument(
+        "--severity",
+        choices=["error", "warning", "info"],
+        help="Filter by severity",
+    )
+    p.set_defaults(func=_cmd_list_rules)
+
+
+def _cmd_list_rules(args) -> int:
+    categories = set(args.category.split(",")) if args.category else None
+    rules_list = list(ALL_RULES.values())
+
+    if categories:
+        rules_list = [r for r in rules_list if r.category in categories]
+    if args.severity:
+        rules_list = [r for r in rules_list if r.severity == args.severity]
+
+    if args.as_json:
+        data = [
+            {
+                "id": r.id,
+                "severity": r.severity,
+                "category": r.category,
+                "message": r.message,
+                "suggestion": r.suggestion,
+            }
+            for r in rules_list
+        ]
+        print(json.dumps(data, indent=2))
+        return 0
+
+    use_color = sys.stdout.isatty()
+    sev_color = {"error": "\033[91m", "warning": "\033[93m", "info": "\033[94m"}
+    reset = "\033[0m"
+
+    for r in rules_list:
+        if use_color:
+            c = sev_color.get(r.severity, "")
+            print(f"  {c}{r.id}{reset}  [{r.severity}]  {r.message}")
+        else:
+            print(f"  {r.id}  [{r.severity}]  {r.message}")
+
+    print(f"\n  {len(rules_list)} rules")
+    return 0
+
+
+# =========================================================================
+# Subcommand: mcp
+# =========================================================================
+
+
+def _register_mcp(subparsers) -> None:
+    p = subparsers.add_parser(
+        "mcp",
+        help="MCP server commands",
+        description="Manage the scitex-linter MCP server.",
+    )
+    mcp_sub = p.add_subparsers(dest="mcp_command")
+
+    start_p = mcp_sub.add_parser("start", help="Start the MCP server (stdio)")
+    start_p.add_argument(
+        "--transport",
+        choices=["stdio", "sse"],
+        default="stdio",
+        help="Transport mode (default: stdio)",
+    )
+    start_p.set_defaults(func=_cmd_mcp_start)
+
+    list_p = mcp_sub.add_parser("list-tools", help="List available MCP tools")
+    list_p.set_defaults(func=_cmd_mcp_list_tools)
+
+    p.set_defaults(func=lambda args: _cmd_mcp_help(p, args))
+
+
+def _cmd_mcp_help(parser, args) -> int:
+    if not hasattr(args, "mcp_command") or args.mcp_command is None:
+        parser.print_help()
+        return 0
+    return 0
+
+
+def _cmd_mcp_start(args) -> int:
+    try:
+        from ._server import run_server
+
+        run_server(transport=args.transport)
+        return 0
+    except ImportError:
+        print(
+            "fastmcp is required for MCP server. "
+            "Install with: pip install scitex-linter[mcp]",
+            file=sys.stderr,
+        )
+        return 1
+
+
+def _cmd_mcp_list_tools(args) -> int:
+    tools = [
+        ("linter_lint", "Lint a Python file for SciTeX pattern compliance"),
+        ("linter_list_rules", "List all available lint rules"),
+        ("linter_check_source", "Lint Python source code string"),
+    ]
+    for name, desc in tools:
+        print(f"  {name:30s} {desc}")
+    print(f"\n  {len(tools)} tools")
+    return 0
+
+
+# =========================================================================
+# --help-recursive
+# =========================================================================
+
+
+def _print_help_recursive(parser, subparsers_actions) -> None:
+    """Print help for all commands recursively."""
+    cyan = "\033[96m" if sys.stdout.isatty() else ""
+    bold = "\033[1m" if sys.stdout.isatty() else ""
+    reset = "\033[0m" if sys.stdout.isatty() else ""
+
+    bar = "\u2501" * 3
+    print(f"\n{cyan}{bar} scitex-linter {bar}{reset}\n")
+    parser.print_help()
+
+    for action in subparsers_actions:
+        for choice, subparser in action.choices.items():
+            print(f"\n{cyan}{bar} scitex-linter {choice} {bar}{reset}\n")
+            subparser.print_help()
+
+            # Nested subparsers (e.g., mcp -> start, list-tools)
+            if subparser._subparsers is not None:
+                for sub_action in subparser._subparsers._group_actions:
+                    if not hasattr(sub_action, "choices") or not sub_action.choices:
+                        continue
+                    for sub_choice, sub_subparser in sub_action.choices.items():
+                        print(
+                            f"\n{cyan}{bar} scitex-linter {choice} {sub_choice} {bar}{reset}\n"
+                        )
+                        sub_subparser.print_help()
+
+
+# =========================================================================
+# Main entry point
+# =========================================================================
+
+
+def main(argv: list = None) -> int:
+    parser = argparse.ArgumentParser(
+        prog="scitex-linter",
+        description="SciTeX Linter \u2014 enforce reproducible research patterns",
+    )
+    parser.add_argument(
+        "-V", "--version", action="version", version=f"%(prog)s {__version__}"
+    )
+    parser.add_argument(
+        "--help-recursive",
+        action="store_true",
+        help="Show help for all commands",
+    )
+
+    subparsers = parser.add_subparsers(dest="command")
+
+    _register_lint(subparsers)
+    _register_python(subparsers)
+    _register_list_rules(subparsers)
+    _register_mcp(subparsers)
+
+    # Split on -- to capture script args for the 'python' subcommand
+    raw = argv if argv is not None else sys.argv[1:]
+    script_args = []
+    if "--" in raw:
+        idx = raw.index("--")
+        script_args = raw[idx + 1 :]
+        raw = raw[:idx]
+
+    args = parser.parse_args(raw)
+
+    # Attach script_args for the run subcommand
+    args._script_args = script_args
+
+    if args.help_recursive:
+        subparsers_actions = [
+            a for a in parser._subparsers._group_actions if hasattr(a, "choices")
+        ]
+        _print_help_recursive(parser, subparsers_actions)
+        return 0
+
+    if args.command is None:
+        parser.print_help()
+        return 0
+
+    if hasattr(args, "func"):
+        return args.func(args)
+
+    parser.print_help()
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
