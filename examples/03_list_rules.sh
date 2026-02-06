@@ -3,7 +3,7 @@
 # File: examples/03_list_rules.sh
 # Usage: bash examples/03_list_rules.sh
 #
-# Demonstrates: scitex-linter list-rules command
+# Demonstrates: scitex-linter rule command
 
 set -e
 
@@ -12,16 +12,16 @@ echo "=== Example 03: List Rules ==="
 # List all rules
 echo
 echo "--- All rules ---"
-scitex-linter list-rules
+scitex-linter rule
 
 # Filter by category
 echo
 echo "--- Path rules only ---"
-scitex-linter list-rules --category path
+scitex-linter rule --category path
 
 # Filter by severity
 echo
 echo "--- Errors only ---"
-scitex-linter list-rules --severity error
+scitex-linter rule --severity error
 
 # EOF

@@ -10,13 +10,17 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "=== SciTeX Linter Examples ==="
 echo
 
-bash "$SCRIPT_DIR/01_lint_files.sh"
+bash "$SCRIPT_DIR/01_check_files.sh"
 echo
 bash "$SCRIPT_DIR/02_lint_and_run.sh"
 echo
 bash "$SCRIPT_DIR/03_list_rules.sh"
 echo
 bash "$SCRIPT_DIR/04_mcp_tools.sh"
+echo
+bash "$SCRIPT_DIR/05_claude_code_hook.sh"
+echo
+bash "$SCRIPT_DIR/06_format.sh"
 
 echo
 echo "=== All examples completed ==="

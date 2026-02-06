@@ -37,9 +37,9 @@ fi
 # Run linter if available
 if [ -n "$STX_LINT" ]; then
     # Errors block Claude (exit 2)
-    $STX_LINT lint "$FILE_PATH" --severity error --no-color >&2 || exit 2
+    $STX_LINT check "$FILE_PATH" --severity error --no-color >&2 || exit 2
     # Warnings shown but don't block
-    $STX_LINT lint "$FILE_PATH" --severity warning --no-color >&2 || true
+    $STX_LINT check "$FILE_PATH" --severity warning --no-color >&2 || true
 fi
 
 # Standard Python linting (optional)

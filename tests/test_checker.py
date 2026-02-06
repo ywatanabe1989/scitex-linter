@@ -354,6 +354,71 @@ if __name__ == "__main__":
 
 
 # =========================================================================
+# S006: Missing INJECTED parameters
+# =========================================================================
+
+
+class TestS006:
+    def test_missing_injected_fires(self):
+        src = """
+import scitex as stx
+
+@stx.session
+def main():
+    return 0
+
+if __name__ == "__main__":
+    main()
+"""
+        assert "STX-S006" in _rule_ids(src)
+
+    def test_partial_injected_fires(self):
+        src = """
+import scitex as stx
+
+@stx.session
+def main(CONFIG=stx.session.INJECTED, plt=stx.session.INJECTED):
+    return 0
+
+if __name__ == "__main__":
+    main()
+"""
+        assert "STX-S006" in _rule_ids(src)
+
+    def test_all_injected_clean(self):
+        src = """
+import scitex as stx
+
+@stx.session
+def main(
+    CONFIG=stx.session.INJECTED,
+    plt=stx.session.INJECTED,
+    COLORS=stx.session.INJECTED,
+    rngg=stx.session.INJECTED,
+    logger=stx.session.INJECTED,
+):
+    return 0
+
+if __name__ == "__main__":
+    main()
+"""
+        assert "STX-S006" not in _rule_ids(src)
+
+    def test_no_session_no_s006(self):
+        """S006 should not fire on functions without @stx.session."""
+        src = """
+import scitex as stx
+
+def main():
+    return 0
+
+if __name__ == "__main__":
+    main()
+"""
+        assert "STX-S006" not in _rule_ids(src)
+
+
+# =========================================================================
 # Clean script (golden path)
 # =========================================================================
 
@@ -364,7 +429,14 @@ class TestCleanScript:
 import scitex as stx
 
 @stx.session
-def main(data_path="input.csv", CONFIG=stx.session.INJECTED, plt=stx.session.INJECTED):
+def main(
+    data_path="input.csv",
+    CONFIG=stx.session.INJECTED,
+    plt=stx.session.INJECTED,
+    COLORS=stx.session.INJECTED,
+    rngg=stx.session.INJECTED,
+    logger=stx.session.INJECTED,
+):
     fig, ax = stx.plt.subplots()
     return 0
 
@@ -388,7 +460,13 @@ class TestExitCodes:
 import scitex as stx
 
 @stx.session
-def main():
+def main(
+    CONFIG=stx.session.INJECTED,
+    plt=stx.session.INJECTED,
+    COLORS=stx.session.INJECTED,
+    rngg=stx.session.INJECTED,
+    logger=stx.session.INJECTED,
+):
     return 0
 
 if __name__ == "__main__":
@@ -401,7 +479,7 @@ if __name__ == "__main__":
             f.write(src)
             f.flush()
             try:
-                code = cli_main(["lint", f.name, "--no-color"])
+                code = cli_main(["check", f.name, "--no-color"])
                 assert code == 0
             finally:
                 os.unlink(f.name)
@@ -422,7 +500,7 @@ if __name__ == "__main__":
             f.write(src)
             f.flush()
             try:
-                code = cli_main(["lint", f.name, "--no-color"])
+                code = cli_main(["check", f.name, "--no-color"])
                 assert code == 2
             finally:
                 os.unlink(f.name)

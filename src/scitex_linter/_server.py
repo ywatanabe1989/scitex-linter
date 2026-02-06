@@ -8,7 +8,7 @@ _INSTRUCTIONS = """\
 SciTeX Linter: AST-based linter enforcing reproducible research patterns.
 
 Tools:
-- linter_lint: Lint a Python file
+- linter_check: Check a Python file
 - linter_list_rules: List all lint rules
 - linter_check_source: Lint source code string
 """

@@ -8,13 +8,8 @@ from . import rules
 from .rules import Rule
 
 # Shortcuts for Phase 1 rules
-S001, S002, S003, S004, S005 = (
-    rules.S001,
-    rules.S002,
-    rules.S003,
-    rules.S004,
-    rules.S005,
-)
+S001, S002, S003 = rules.S001, rules.S002, rules.S003
+S004, S005, S006 = rules.S004, rules.S005, rules.S006
 I001, I002, I003 = rules.I001, rules.I002, rules.I003
 I006, I007 = rules.I006, rules.I007
 
@@ -67,24 +62,42 @@ class Issue:
     source_line: str = ""
 
 
-def is_script(filepath: str) -> bool:
-    """Check if file is a script (not a library module)."""
-    name = Path(filepath).name
-    if name == "__init__.py":
+def is_script(filepath: str, config=None) -> bool:
+    """Check if file is a script (not a library module).
+
+    Uses config.library_patterns and config.library_dirs to determine
+    which files are library modules (exempt from script-only rules).
+    """
+    from .config import LinterConfig, matches_library_pattern
+
+    if config is None:
+        config = LinterConfig()
+
+    path = Path(filepath)
+    name = path.name
+
+    # Check filename against library patterns (e.g., __*__.py, test_*.py)
+    if matches_library_pattern(name, config):
         return False
-    if name.startswith("test_") or name == "conftest.py":
-        return False
-    if name in ("setup.py", "manage.py"):
-        return False
+
+    # Check if file is inside a library directory (e.g., src/)
+    parts = path.parts
+    for lib_dir in config.library_dirs:
+        if lib_dir in parts:
+            return False
+
     return True
 
 
 class SciTeXChecker(ast.NodeVisitor):
     """AST visitor detecting non-SciTeX patterns."""
 
-    def __init__(self, source_lines: list, filepath: str = "<stdin>"):
+    def __init__(self, source_lines: list, filepath: str = "<stdin>", config=None):
+        from .config import LinterConfig
+
         self.source_lines = source_lines
         self.filepath = filepath
+        self.config = config or LinterConfig()
         self.issues: list = []
 
         # Tracking state
@@ -93,7 +106,7 @@ class SciTeXChecker(ast.NodeVisitor):
         self._has_session_decorator = False
         self._session_func_returns_int = False
         self._imports: dict = {}  # alias -> full module path
-        self._is_script = is_script(filepath)
+        self._is_script = is_script(filepath, self.config)
 
     # -----------------------------------------------------------------
     # Import visitors
@@ -343,10 +356,15 @@ class SciTeXChecker(ast.NodeVisitor):
     # Function/decorator visitors
     # -----------------------------------------------------------------
 
+    @property
+    def _REQUIRED_INJECTED(self):
+        return set(self.config.required_injected)
+
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
         if self._has_session_deco(node):
             self._has_session_decorator = True
             self._check_session_return(node)
+            self._check_injected_params(node)
         self.generic_visit(node)
 
     visit_AsyncFunctionDef = visit_FunctionDef
@@ -379,6 +397,25 @@ class SciTeXChecker(ast.NodeVisitor):
         # No int return found
         line = self._get_source(node.lineno)
         self._add(S004, node.lineno, node.col_offset, line)
+
+    def _check_injected_params(self, node: ast.FunctionDef) -> None:
+        """Check that @stx.session function declares all INJECTED parameters."""
+        declared = {arg.arg for arg in node.args.args}
+        missing = sorted(self._REQUIRED_INJECTED - declared)
+        if missing:
+            line = self._get_source(node.lineno)
+            missing_str = ", ".join(missing)
+            dynamic_rule = Rule(
+                id=S006.id,
+                severity=S006.severity,
+                category=S006.category,
+                message=(
+                    f"@stx.session function missing INJECTED parameters: {missing_str}. "
+                    f"All 5 must be declared: CONFIG, COLORS, logger, plt, rngg"
+                ),
+                suggestion=S006.suggestion,
+            )
+            self._add(dynamic_rule, node.lineno, node.col_offset, line)
 
     # -----------------------------------------------------------------
     # Module-level checks (run after visiting entire tree)
@@ -427,11 +464,12 @@ class SciTeXChecker(ast.NodeVisitor):
         self.issues.sort(key=lambda i: (-SEVERITY_ORDER[i.rule.severity], i.line))
         return self.issues
 
-    # -----------------------------------------------------------------
-    # Helpers
-    # -----------------------------------------------------------------
-
     def _add(self, rule: Rule, line: int, col: int, source_line: str) -> None:
+        if rule.id in self.config.disable:
+            return
+        sev = self.config.per_rule_severity.get(rule.id)
+        if sev:
+            rule = Rule(rule.id, sev, rule.category, rule.message, rule.suggestion)
         self.issues.append(
             Issue(rule=rule, line=line, col=col, source_line=source_line)
         )
@@ -447,7 +485,7 @@ class SciTeXChecker(ast.NodeVisitor):
 # =============================================================================
 
 
-def lint_source(source: str, filepath: str = "<stdin>") -> list:
+def lint_source(source: str, filepath: str = "<stdin>", config=None) -> list:
     """Lint Python source code and return list of Issues."""
     try:
         tree = ast.parse(source, filename=filepath)
@@ -455,15 +493,15 @@ def lint_source(source: str, filepath: str = "<stdin>") -> list:
         return []
 
     lines = source.splitlines()
-    checker = SciTeXChecker(lines, filepath=filepath)
+    checker = SciTeXChecker(lines, filepath=filepath, config=config)
     checker.visit(tree)
     return checker.get_issues()
 
 
-def lint_file(filepath: str) -> list:
+def lint_file(filepath: str, config=None) -> list:
     """Lint a Python file and return list of Issues."""
     path = Path(filepath)
     if not path.exists() or not path.is_file():
         return []
     source = path.read_text(encoding="utf-8")
-    return lint_source(source, filepath=str(path))
+    return lint_source(source, filepath=str(path), config=config)

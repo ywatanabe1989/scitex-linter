@@ -1,9 +1,10 @@
 """CLI entry point for scitex-linter.
 
 Usage:
-    scitex-linter lint <path> [--json] [--severity] [--category] [--no-color]
+    scitex-linter check <path> [--json] [--severity] [--category] [--no-color]
+    scitex-linter format <path> [--check] [--diff]
     scitex-linter python <script.py> [--strict] [-- script_args...]
-    scitex-linter list-rules [--json] [--category] [--severity]
+    scitex-linter rule [--json] [--category] [--severity]
     scitex-linter mcp start
     scitex-linter mcp list-tools
     scitex-linter --help-recursive
@@ -15,7 +16,9 @@ import sys
 from pathlib import Path
 
 from . import __version__
+from ._cmd_format import register as _register_format
 from .checker import lint_file
+from .config import load_config
 from .formatter import format_issue, format_summary, to_json
 from .rules import ALL_RULES, SEVERITY_ORDER
 
@@ -24,13 +27,17 @@ from .rules import ALL_RULES, SEVERITY_ORDER
 # =========================================================================
 
 
-def _collect_files(path: Path, recursive: bool = True) -> list:
+def _collect_files(path: Path, recursive: bool = True, config=None) -> list:
     """Collect Python files from a path."""
     if path.is_file():
         return [path]
     if path.is_dir():
         pattern = "**/*.py" if recursive else "*.py"
-        skip = {"__pycache__", ".git", "node_modules", ".tox", "venv", ".venv"}
+        skip = (
+            set(config.exclude_dirs)
+            if config
+            else {"__pycache__", ".git", "node_modules", ".tox", "venv", ".venv"}
+        )
         return sorted(
             p for p in path.glob(pattern) if not any(s in p.parts for s in skip)
         )
@@ -38,17 +45,17 @@ def _collect_files(path: Path, recursive: bool = True) -> list:
 
 
 # =========================================================================
-# Subcommand: lint
+# Subcommand: check
 # =========================================================================
 
 
-def _register_lint(subparsers) -> None:
+def _register_check(subparsers) -> None:
     p = subparsers.add_parser(
-        "lint",
-        help="Lint Python files for SciTeX pattern compliance",
-        description="Lint Python files for SciTeX pattern compliance.",
+        "check",
+        help="Check Python files for SciTeX pattern compliance",
+        description="Check Python files for SciTeX pattern compliance.",
     )
-    p.add_argument("path", help="Python file or directory to lint")
+    p.add_argument("path", help="Python file or directory to check")
     p.add_argument("--json", action="store_true", dest="as_json", help="Output as JSON")
     p.add_argument("--no-color", action="store_true", help="Disable colored output")
     p.add_argument(
@@ -61,10 +68,11 @@ def _register_lint(subparsers) -> None:
         "--category",
         help="Filter by category (comma-separated: structure,import,io,plot,stats)",
     )
-    p.set_defaults(func=_cmd_lint)
+    p.set_defaults(func=_cmd_check)
 
 
-def _cmd_lint(args) -> int:
+def _cmd_check(args) -> int:
+    config = load_config(args.path)
     use_color = not args.no_color and sys.stdout.isatty()
     min_sev = SEVERITY_ORDER[args.severity]
     categories = set(args.category.split(",")) if args.category else None
@@ -74,14 +82,14 @@ def _cmd_lint(args) -> int:
         print(f"Error: {args.path} not found", file=sys.stderr)
         return 2
 
-    files = _collect_files(target)
+    files = _collect_files(target, config=config)
     if not files:
         print(f"No Python files found in {args.path}", file=sys.stderr)
         return 0
 
     all_results = {}
     for f in files:
-        issues = lint_file(str(f))
+        issues = lint_file(str(f), config=config)
         issues = [
             i
             for i in issues
@@ -151,13 +159,13 @@ def _cmd_python(args) -> int:
 
 
 # =========================================================================
-# Subcommand: list-rules
+# Subcommand: rule
 # =========================================================================
 
 
-def _register_list_rules(subparsers) -> None:
+def _register_rule(subparsers) -> None:
     p = subparsers.add_parser(
-        "list-rules",
+        "rule",
         help="List all lint rules",
         description="List all available SciTeX lint rules.",
     )
@@ -171,10 +179,10 @@ def _register_list_rules(subparsers) -> None:
         choices=["error", "warning", "info"],
         help="Filter by severity",
     )
-    p.set_defaults(func=_cmd_list_rules)
+    p.set_defaults(func=_cmd_rule)
 
 
-def _cmd_list_rules(args) -> int:
+def _cmd_rule(args) -> int:
     categories = set(args.category.split(",")) if args.category else None
     rules_list = list(ALL_RULES.values())
 
@@ -272,7 +280,7 @@ def _cmd_mcp_start(args) -> int:
 
 def _cmd_mcp_list_tools(args) -> int:
     tools = [
-        ("linter_lint", "Lint a Python file for SciTeX pattern compliance"),
+        ("linter_check", "Check a Python file for SciTeX pattern compliance"),
         ("linter_list_rules", "List all available lint rules"),
         ("linter_check_source", "Lint Python source code string"),
     ]
@@ -364,7 +372,6 @@ def _cmd_mcp_installation(args) -> int:
 def _print_help_recursive(parser, subparsers_actions) -> None:
     """Print help for all commands recursively."""
     cyan = "\033[96m" if sys.stdout.isatty() else ""
-    bold = "\033[1m" if sys.stdout.isatty() else ""
     reset = "\033[0m" if sys.stdout.isatty() else ""
 
     bar = "\u2501" * 3
@@ -409,9 +416,10 @@ def main(argv: list = None) -> int:
 
     subparsers = parser.add_subparsers(dest="command")
 
-    _register_lint(subparsers)
+    _register_check(subparsers)
+    _register_format(subparsers)
     _register_python(subparsers)
-    _register_list_rules(subparsers)
+    _register_rule(subparsers)
     _register_mcp(subparsers)
 
     # Split on -- to capture script args for the 'python' subcommand

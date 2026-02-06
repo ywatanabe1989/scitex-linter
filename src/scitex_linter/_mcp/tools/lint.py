@@ -7,15 +7,17 @@ def register_lint_tools(mcp) -> None:
     """Register lint-related MCP tools."""
 
     @mcp.tool()
-    def linter_lint(
+    def linter_check(
         path: str, severity: str = "info", category: Optional[str] = None
     ) -> dict:
-        """[linter] Lint a Python file for SciTeX pattern compliance."""
+        """[linter] Check a Python file for SciTeX pattern compliance."""
         from ...checker import lint_file
+        from ...config import load_config
         from ...formatter import to_json
         from ...rules import SEVERITY_ORDER
 
-        issues = lint_file(path)
+        config = load_config(path)
+        issues = lint_file(path, config=config)
         min_sev = SEVERITY_ORDER.get(severity, 0)
         categories = set(category.split(",")) if category else None
 
@@ -61,7 +63,9 @@ def register_lint_tools(mcp) -> None:
     def linter_check_source(source: str, filepath: str = "<stdin>") -> dict:
         """[linter] Lint Python source code string for SciTeX pattern compliance."""
         from ...checker import lint_source
+        from ...config import load_config
         from ...formatter import to_json
 
-        issues = lint_source(source, filepath=filepath)
+        config = load_config(filepath)
+        issues = lint_source(source, filepath=filepath, config=config)
         return to_json(issues, filepath)

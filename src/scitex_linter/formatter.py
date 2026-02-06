@@ -1,6 +1,5 @@
 """Output formatting for terminal and JSON."""
 
-
 from .checker import Issue
 
 # ANSI colors

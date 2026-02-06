@@ -43,13 +43,13 @@ CLI:
 .. code-block:: bash
 
     # Lint a file
-    scitex-linter lint script.py
+    scitex-linter check script.py
 
     # Lint then execute
     scitex-linter python experiment.py --strict
 
     # List all rules
-    scitex-linter list-rules
+    scitex-linter rule
 
 flake8:
 

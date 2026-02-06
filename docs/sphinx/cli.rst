@@ -8,7 +8,7 @@ Global Options
 
 .. code-block:: text
 
-    scitex-linter [-h] [-V] [--help-recursive] {lint,python,list-rules,mcp} ...
+    scitex-linter [-h] [-V] [--help-recursive] {check,python,rule,mcp} ...
 
 ``-V, --version``
     Show version and exit.
@@ -16,17 +16,17 @@ Global Options
 ``--help-recursive``
     Show help for all commands and subcommands.
 
-scitex-linter lint
-------------------
+scitex-linter check
+-------------------
 
-Lint Python files for SciTeX pattern compliance.
+Check Python files for SciTeX pattern compliance.
 
 .. code-block:: text
 
-    scitex-linter lint <path> [--json] [--no-color] [--severity LEVEL] [--category CAT]
+    scitex-linter check <path> [--json] [--no-color] [--severity LEVEL] [--category CAT]
 
 ``path``
-    Python file or directory to lint. Directories are searched recursively.
+    Python file or directory to check. Directories are searched recursively.
 
 ``--json``
     Output results as JSON.
@@ -50,14 +50,14 @@ Lint Python files for SciTeX pattern compliance.
 
 .. code-block:: bash
 
-    # Lint a single file
-    scitex-linter lint script.py
+    # Check a single file
+    scitex-linter check script.py
 
-    # Lint a directory, errors only
-    scitex-linter lint ./src/ --severity error
+    # Check a directory, errors only
+    scitex-linter check ./src/ --severity error
 
     # JSON output for CI
-    scitex-linter lint . --json --no-color
+    scitex-linter check . --json --no-color
 
 scitex-linter python
 --------------------
@@ -90,14 +90,14 @@ Lint a Python script, then execute it.
     # Pass arguments to script
     scitex-linter python experiment.py -- --epochs 100 --lr 0.001
 
-scitex-linter list-rules
--------------------------
+scitex-linter rule
+------------------
 
 List all available lint rules.
 
 .. code-block:: text
 
-    scitex-linter list-rules [--json] [--category CAT] [--severity LEVEL]
+    scitex-linter rule [--json] [--category CAT] [--severity LEVEL]
 
 ``--json``
     Output as JSON.
