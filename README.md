@@ -1,8 +1,10 @@
 <!-- ---
-!-- Timestamp: 2026-02-06
+!-- Timestamp: 2026-02-06 20:53:45
 !-- Author: ywatanabe
 !-- File: /home/ywatanabe/proj/scitex-linter/README.md
 !-- --- -->
+
+# SciTeX Linter
 
 <p align="center">
   <a href="https://scitex.ai">
@@ -240,7 +242,7 @@ Zero lint issues. Fully reproducible. Auto-CLI from function signature.
 <p align="center">
   <a href="https://scitex.ai" target="_blank"><img src="docs/scitex-icon-navy-inverted.png" alt="SciTeX" width="40"/></a>
   <br>
-  MIT · ywatanabe@scitex.ai
+  AGPL-3.0 · ywatanabe@scitex.ai
 </p>
 
 <!-- EOF -->

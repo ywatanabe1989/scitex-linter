@@ -7,7 +7,7 @@ name = "scitex-linter"
 version = "0.1.0"
 description = "AST-based linter enforcing SciTeX reproducible research patterns"
 readme = "README.md"
-license = {text = "MIT"}
+license = {text = "AGPL-3.0"}
 requires-python = ">=3.8"
 authors = [{name = "ywatanabe"}]
 
@@ -26,6 +26,7 @@ docs = [
 ]
 dev = [
     "pytest",
+    "pytest-cov",
     "ruff",
 ]
 all = [
@@ -46,6 +47,18 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = ["--disable-warnings"]
+
+[tool.coverage.run]
+source = ["scitex_linter"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.",
+    "if TYPE_CHECKING:",
+]
 
 [tool.ruff]
 target-version = "py38"
