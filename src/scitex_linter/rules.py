@@ -67,6 +67,25 @@ S005 = Rule(
     suggestion="Add `import scitex as stx` to use SciTeX modules.",
 )
 
+S006 = Rule(
+    id="STX-S006",
+    severity="warning",
+    category="structure",
+    message="@stx.session function missing explicit INJECTED parameters",
+    suggestion=(
+        "Declare auto-injected values explicitly in the function signature:\n"
+        "  @stx.session\n"
+        "  def main(\n"
+        "      CONFIG=stx.session.INJECTED,\n"
+        "      plt=stx.session.INJECTED,\n"
+        "      COLORS=stx.session.INJECTED,\n"
+        "      rngg=stx.session.INJECTED,\n"
+        "      logger=stx.session.INJECTED,\n"
+        "  ):\n"
+        "      return 0"
+    ),
+)
+
 
 # =============================================================================
 # Category I: Imports
@@ -348,6 +367,7 @@ ALL_RULES = {
         S003,
         S004,
         S005,
+        S006,
         I001,
         I002,
         I003,

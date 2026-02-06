@@ -8,12 +8,13 @@ from . import rules
 from .rules import Rule
 
 # Shortcuts for Phase 1 rules
-S001, S002, S003, S004, S005 = (
+S001, S002, S003, S004, S005, S006 = (
     rules.S001,
     rules.S002,
     rules.S003,
     rules.S004,
     rules.S005,
+    rules.S006,
 )
 I001, I002, I003 = rules.I001, rules.I002, rules.I003
 I006, I007 = rules.I006, rules.I007
@@ -68,13 +69,26 @@ class Issue:
 
 
 def is_script(filepath: str) -> bool:
-    """Check if file is a script (not a library module)."""
-    name = Path(filepath).name
-    if name == "__init__.py":
+    """Check if file is a script (not a library module).
+
+    Library modules (not scripts):
+    - __init__.py, __main__.py
+    - test_*, conftest.py
+    - setup.py, manage.py
+    - Files inside src/ directories (pip package source)
+    - _private modules (underscore prefix)
+    """
+    path = Path(filepath)
+    name = path.name
+    if name.startswith("__") and name.endswith("__.py"):
         return False
     if name.startswith("test_") or name == "conftest.py":
         return False
     if name in ("setup.py", "manage.py"):
+        return False
+    # Files inside src/ are typically library modules
+    parts = path.parts
+    if "src" in parts:
         return False
     return True
 
@@ -343,10 +357,14 @@ class SciTeXChecker(ast.NodeVisitor):
     # Function/decorator visitors
     # -----------------------------------------------------------------
 
+    # Required INJECTED parameters for @stx.session functions
+    _REQUIRED_INJECTED = {"CONFIG", "plt", "COLORS", "rngg", "logger"}
+
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
         if self._has_session_deco(node):
             self._has_session_decorator = True
             self._check_session_return(node)
+            self._check_injected_params(node)
         self.generic_visit(node)
 
     visit_AsyncFunctionDef = visit_FunctionDef
@@ -379,6 +397,25 @@ class SciTeXChecker(ast.NodeVisitor):
         # No int return found
         line = self._get_source(node.lineno)
         self._add(S004, node.lineno, node.col_offset, line)
+
+    def _check_injected_params(self, node: ast.FunctionDef) -> None:
+        """Check that @stx.session function declares all INJECTED parameters."""
+        declared = {arg.arg for arg in node.args.args}
+        missing = sorted(self._REQUIRED_INJECTED - declared)
+        if missing:
+            line = self._get_source(node.lineno)
+            missing_str = ", ".join(missing)
+            dynamic_rule = Rule(
+                id=S006.id,
+                severity=S006.severity,
+                category=S006.category,
+                message=(
+                    f"@stx.session function missing INJECTED parameters: {missing_str}. "
+                    f"All 5 must be declared: CONFIG, COLORS, logger, plt, rngg"
+                ),
+                suggestion=S006.suggestion,
+            )
+            self._add(dynamic_rule, node.lineno, node.col_offset, line)
 
     # -----------------------------------------------------------------
     # Module-level checks (run after visiting entire tree)

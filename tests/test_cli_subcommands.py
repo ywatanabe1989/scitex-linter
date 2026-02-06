@@ -45,7 +45,13 @@ class TestLintSubcommand:
         src = (
             "import scitex as stx\n\n"
             "@stx.session\n"
-            "def main():\n"
+            "def main(\n"
+            "    CONFIG=stx.session.INJECTED,\n"
+            "    plt=stx.session.INJECTED,\n"
+            "    COLORS=stx.session.INJECTED,\n"
+            "    rngg=stx.session.INJECTED,\n"
+            "    logger=stx.session.INJECTED,\n"
+            "):\n"
             "    return 0\n\n"
             "if __name__ == '__main__':\n"
             "    main()\n"
@@ -117,7 +123,7 @@ class TestListRules:
         code = main(["list-rules"])
         out = capsys.readouterr().out
         assert "STX-S001" in out
-        assert "35 rules" in out
+        assert "36 rules" in out
         assert code == 0
 
     def test_list_rules_json(self, capsys):
