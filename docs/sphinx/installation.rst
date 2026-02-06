@@ -57,5 +57,5 @@ If you have the main ``scitex`` package installed, the linter is also available 
 
 .. code-block:: bash
 
-    scitex linter lint script.py
+    scitex linter check script.py
     scitex linter python experiment.py

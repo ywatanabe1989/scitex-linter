@@ -8,7 +8,7 @@ Lint a File
 
 .. code-block:: bash
 
-    scitex-linter lint script.py
+    scitex-linter check script.py
 
 The output shows issues grouped by severity:
 
@@ -31,10 +31,10 @@ Filter by severity:
 .. code-block:: bash
 
     # Only show errors
-    scitex-linter lint script.py --severity error
+    scitex-linter check script.py --severity error
 
     # Show warnings and above (default: info)
-    scitex-linter lint script.py --severity warning
+    scitex-linter check script.py --severity warning
 
 Lint then Execute
 -----------------
@@ -64,20 +64,20 @@ List all 35 rules:
 
 .. code-block:: bash
 
-    scitex-linter list-rules
+    scitex-linter rule
 
 Filter by category:
 
 .. code-block:: bash
 
-    scitex-linter list-rules --category path
-    scitex-linter list-rules --category structure,import
+    scitex-linter rule --category path
+    scitex-linter rule --category structure,import
 
 JSON output:
 
 .. code-block:: bash
 
-    scitex-linter list-rules --json
+    scitex-linter rule --json
 
 flake8 Integration
 ------------------

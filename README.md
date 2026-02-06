@@ -41,20 +41,20 @@ pip install scitex-linter
 
 ```bash
 # Lint a file
-scitex-linter lint script.py
+scitex-linter check script.py
 
 # Lint then execute
 scitex-linter python experiment.py --strict
 
 # List all 35 rules
-scitex-linter list-rules
+scitex-linter rule
 ```
 
 ## Four Interfaces
 
 | Interface | For | Description |
 |-----------|-----|-------------|
-| 🖥️ **CLI** | Terminal users | `scitex-linter lint`, `scitex-linter python` |
+| 🖥️ **CLI** | Terminal users | `scitex-linter check`, `scitex-linter python` |
 | 🐍 **Python API** | Programmatic use | `from scitex_linter.checker import lint_file` |
 | 🔌 **flake8 Plugin** | CI pipelines | `flake8 --select STX` |
 | 🔧 **MCP Server** | AI agents | 3 tools for Claude/GPT integration |
@@ -68,12 +68,12 @@ scitex-linter list-rules
 scitex-linter --help                              # Show all commands
 scitex-linter --help-recursive                    # Show help for all subcommands
 
-# Lint - Check for SciTeX pattern violations
-scitex-linter lint script.py                      # Lint a file
-scitex-linter lint ./src/                         # Lint a directory
-scitex-linter lint script.py --severity error     # Only errors
-scitex-linter lint script.py --category path      # Only path rules
-scitex-linter lint script.py --json               # JSON output for CI
+# Check - Check for SciTeX pattern violations
+scitex-linter check script.py                      # Check a file
+scitex-linter check ./src/                         # Check a directory
+scitex-linter check script.py --severity error     # Only errors
+scitex-linter check script.py --category path      # Only path rules
+scitex-linter check script.py --json               # JSON output for CI
 
 # Python - Lint then execute
 scitex-linter python experiment.py                # Lint and run
@@ -81,9 +81,9 @@ scitex-linter python experiment.py --strict       # Abort on errors
 scitex-linter python experiment.py -- --lr 0.001  # Pass script args
 
 # Rules - Browse available rules
-scitex-linter list-rules                          # List all 35 rules
-scitex-linter list-rules --category stats         # Filter by category
-scitex-linter list-rules --json                   # JSON output
+scitex-linter rule                          # List all 35 rules
+scitex-linter rule --category stats         # Filter by category
+scitex-linter rule --json                   # JSON output
 
 # MCP - AI agent server
 scitex-linter mcp start                           # Start MCP server (stdio)
@@ -136,7 +136,7 @@ Integrates with existing flake8 workflows, pre-commit hooks, and CI pipelines.
 
 | Tool | Description |
 |------|-------------|
-| `linter_lint` | Lint a Python file for SciTeX compliance |
+| `linter_check` | Check a Python file for SciTeX compliance |
 | `linter_list_rules` | List all available rules |
 | `linter_check_source` | Lint source code string |
 

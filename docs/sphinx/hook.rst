@@ -8,8 +8,8 @@ How It Works
 
 When Claude Code writes or edits a ``.py`` file, the hook:
 
-1. Runs ``scitex-linter lint`` with ``--severity error`` — **blocks** Claude on errors (exit code 2)
-2. Runs ``scitex-linter lint`` with ``--severity warning`` — shows warnings but **does not block**
+1. Runs ``scitex-linter check`` with ``--severity error`` — **blocks** Claude on errors (exit code 2)
+2. Runs ``scitex-linter check`` with ``--severity warning`` — shows warnings but **does not block**
 3. Runs ``ruff check --fix`` (or ``flake8``) for standard Python linting
 
 This ensures Claude follows SciTeX patterns automatically.

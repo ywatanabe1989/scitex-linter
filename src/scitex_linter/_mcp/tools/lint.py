@@ -7,10 +7,10 @@ def register_lint_tools(mcp) -> None:
     """Register lint-related MCP tools."""
 
     @mcp.tool()
-    def linter_lint(
+    def linter_check(
         path: str, severity: str = "info", category: Optional[str] = None
     ) -> dict:
-        """[linter] Lint a Python file for SciTeX pattern compliance."""
+        """[linter] Check a Python file for SciTeX pattern compliance."""
         from ...checker import lint_file
         from ...formatter import to_json
         from ...rules import SEVERITY_ORDER

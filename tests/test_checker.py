@@ -479,7 +479,7 @@ if __name__ == "__main__":
             f.write(src)
             f.flush()
             try:
-                code = cli_main(["lint", f.name, "--no-color"])
+                code = cli_main(["check", f.name, "--no-color"])
                 assert code == 0
             finally:
                 os.unlink(f.name)
@@ -500,7 +500,7 @@ if __name__ == "__main__":
             f.write(src)
             f.flush()
             try:
-                code = cli_main(["lint", f.name, "--no-color"])
+                code = cli_main(["check", f.name, "--no-color"])
                 assert code == 2
             finally:
                 os.unlink(f.name)
