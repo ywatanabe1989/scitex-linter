@@ -7,7 +7,6 @@ from pathlib import Path
 from . import rules
 from .rules import Rule
 
-# Shortcuts for Phase 1 rules
 S001, S002, S003 = rules.S001, rules.S002, rules.S003
 S004, S005, S006 = rules.S004, rules.S005, rules.S006
 I001, I002, I003 = rules.I001, rules.I002, rules.I003
@@ -495,6 +494,12 @@ def lint_source(source: str, filepath: str = "<stdin>", config=None) -> list:
     lines = source.splitlines()
     checker = SciTeXChecker(lines, filepath=filepath, config=config)
     checker.visit(tree)
+    if config and "FM" in config.enable:
+        from ._fm_checker import FMChecker
+
+        fm = FMChecker(lines, config)
+        fm.visit(tree)
+        checker.issues.extend(fm.issues)
     return checker.get_issues()
 
 
