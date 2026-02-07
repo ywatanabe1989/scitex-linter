@@ -1,7 +1,7 @@
 Rules Reference
 ===============
 
-SciTeX Linter enforces 35 rules across 7 categories. Rules use the ``STX-`` prefix.
+SciTeX Linter enforces 45 rules across 8 categories. Rules use the ``STX-`` prefix.
 
 Category S: Structure
 ---------------------
@@ -28,6 +28,9 @@ Category S: Structure
    * - STX-S005
      - warning
      - Missing ``import scitex as stx``
+   * - STX-S006
+     - warning
+     - ``@stx.session`` function missing explicit INJECTED parameters
 
 Category I: Imports
 -------------------
@@ -174,6 +177,48 @@ Category PA: Path Handling
      - info
      - Path without ``./`` prefix in ``stx.io`` call — use ``./`` for explicit relative intent
 
+Category FM: Figure/Millimeter (opt-in)
+----------------------------------------
+
+These rules detect inch-based matplotlib anti-patterns and suggest mm-based alternatives.
+FM rules require ``figrecipe`` or ``scitex[plt]`` to be installed, and must be explicitly
+enabled via ``enable = ["FM"]`` in config or ``SCITEX_LINTER_ENABLE=FM``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 10 75
+
+   * - Rule
+     - Severity
+     - Description
+   * - STX-FM001
+     - warning
+     - ``figsize=`` detected — inch-based figure sizing is imprecise for publications
+   * - STX-FM002
+     - warning
+     - ``tight_layout()`` detected — layout is unpredictable across plot types
+   * - STX-FM003
+     - warning
+     - ``bbox_inches="tight"`` detected — can crop important elements unpredictably
+   * - STX-FM004
+     - info
+     - ``constrained_layout=True`` detected — conflicts with mm-based layout control
+   * - STX-FM005
+     - info
+     - ``subplots_adjust()`` with hardcoded fractions — fragile across figure sizes
+   * - STX-FM006
+     - info
+     - ``plt.savefig()`` detected — no provenance tracking
+   * - STX-FM007
+     - info
+     - ``rcParams`` direct modification detected — hard to maintain across figures
+   * - STX-FM008
+     - warning
+     - ``set_size_inches()`` detected — bypasses mm-based layout control
+   * - STX-FM009
+     - warning
+     - ``ax.set_position()`` detected — conflicts with mm-based layout control
+
 Severity Summary
 ----------------
 
@@ -188,8 +233,8 @@ Severity Summary
      - 3
      - Must fix. Exit code 2. Blocks execution in ``--strict`` mode.
    * - warning
-     - 21
+     - 25
      - Should fix. Exit code 1. Does not block execution.
    * - info
-     - 11
+     - 17
      - Suggestions. Exit code 0.

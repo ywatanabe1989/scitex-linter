@@ -49,10 +49,34 @@ scitex_linter.cli
    :undoc-members:
    :show-inheritance:
 
+scitex_linter.config
+~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: scitex_linter.config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 scitex_linter.flake8_plugin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: scitex_linter.flake8_plugin
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scitex_linter._fm_checker
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: scitex_linter._fm_checker
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+scitex_linter._packages
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: scitex_linter._packages
    :members:
    :undoc-members:
    :show-inheritance:
