@@ -42,6 +42,7 @@ class LinterConfig:
         ]
     )
     library_dirs: list[str] = field(default_factory=lambda: ["src", "tests", "apps"])
+    script_dirs: list[str] = field(default_factory=lambda: ["scripts"])
     disable: list[str] = field(default_factory=list)
     enable: list[str] = field(default_factory=list)
     per_rule_severity: dict[str, str] = field(default_factory=dict)
@@ -172,6 +173,13 @@ def _load_env() -> dict:
         config["library_dirs"] = [
             x.strip()
             for x in os.environ["SCITEX_LINTER_LIBRARY_DIRS"].split(",")
+            if x.strip()
+        ]
+
+    if "SCITEX_LINTER_SCRIPT_DIRS" in os.environ:
+        config["script_dirs"] = [
+            x.strip()
+            for x in os.environ["SCITEX_LINTER_SCRIPT_DIRS"].split(",")
             if x.strip()
         ]
 

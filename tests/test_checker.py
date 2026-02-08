@@ -141,6 +141,78 @@ if __name__ == "__main__":
 """
         assert "STX-S003" not in _rule_ids(src)
 
+    def test_scripts_dir_exempt(self):
+        """Utility scripts in scripts/ directory should be exempt from S003."""
+        src = """
+import argparse
+
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
+"""
+        assert "STX-S003" not in _rule_ids(src, filepath="scripts/python/tool.py")
+
+    def test_from_argparse_scripts_dir_exempt(self):
+        """from argparse import ... in scripts/ should be exempt."""
+        src = """
+from argparse import ArgumentParser
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-S003" not in _rule_ids(src, filepath="scripts/python/tool.py")
+
+
+# =========================================================================
+# Script directory exemptions (S001, S003, S005)
+# =========================================================================
+
+
+class TestScriptDirExemption:
+    """Files in scripts/ directories should be exempt from session rules."""
+
+    def test_s001_exempt_in_scripts(self):
+        src = """
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
+"""
+        assert "STX-S001" not in _rule_ids(src, filepath="scripts/python/tool.py")
+
+    def test_s002_exempt_in_scripts(self):
+        src = """
+def helper():
+    pass
+"""
+        assert "STX-S002" not in _rule_ids(src, filepath="scripts/python/tool.py")
+
+    def test_s005_exempt_in_scripts(self):
+        src = """
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
+"""
+        assert "STX-S005" not in _rule_ids(src, filepath="scripts/python/tool.py")
+
+    def test_normal_script_still_checked(self):
+        """Files NOT in scripts/ should still be checked."""
+        src = """
+import argparse
+
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
+"""
+        assert "STX-S003" in _rule_ids(src, filepath="my_analysis.py")
+
 
 # =========================================================================
 # S004: Session function should return int

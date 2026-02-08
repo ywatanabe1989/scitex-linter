@@ -85,6 +85,12 @@ def is_script(filepath: str, config=None) -> bool:
         if lib_dir in parts:
             return False
 
+    # Check if file is inside a script directory (e.g., scripts/)
+    # These are utility scripts called by shell, not SciTeX session scripts
+    for script_dir in config.script_dirs:
+        if script_dir in parts:
+            return False
+
     return True
 
 
@@ -142,7 +148,7 @@ class SciTeXChecker(ast.NodeVisitor):
         if "matplotlib.pyplot" in module_name:
             self._add(I001, node.lineno, node.col_offset, line)
 
-        if module_name == "argparse":
+        if module_name == "argparse" and self._is_script:
             self._add(S003, node.lineno, node.col_offset, line)
 
         if module_name == "pickle":
@@ -178,7 +184,7 @@ class SciTeXChecker(ast.NodeVisitor):
                 self._add(I002, node.lineno, node.col_offset, line)
 
         # from argparse import *
-        if module == "argparse":
+        if module == "argparse" and self._is_script:
             self._add(S003, node.lineno, node.col_offset, line)
 
     # -- Call visitors (Phase 2) --
