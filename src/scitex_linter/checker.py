@@ -1,56 +1,30 @@
 """AST-based checker that detects SciTeX anti-patterns."""
 
+__all__ = ["Issue", "is_script", "lint_file", "lint_source"]
+
 import ast
 from dataclasses import dataclass, replace
 from pathlib import Path
 
 from . import rules
+from ._rule_tables import AXES_HINTS as _AXES_HINTS
+from ._rule_tables import AXES_SKIP as _AXES_SKIP
+from ._rule_tables import CALL_RULES as _CALL_RULES
+from ._rule_tables import (
+    I001,
+    I002,
+    I003,
+    I006,
+    I007,
+    S001,
+    S002,
+    S003,
+    S004,
+    S005,
+    S006,
+)
+from ._rule_tables import PRINT_RULE as _PRINT_RULE
 from .rules import Rule
-
-S001, S002, S003 = rules.S001, rules.S002, rules.S003
-S004, S005, S006 = rules.S004, rules.S005, rules.S006
-I001, I002, I003 = rules.I001, rules.I002, rules.I003
-I006, I007 = rules.I006, rules.I007
-
-# Phase 2: Call-level rule lookup table {(module_alias, func_name): Rule}
-# module_alias=None means match func_name on any object
-_CALL_RULES: dict = {
-    # IO rules
-    ("np", "save"): rules.IO001,
-    ("numpy", "save"): rules.IO001,
-    ("np", "load"): rules.IO002,
-    ("numpy", "load"): rules.IO002,
-    ("pd", "read_csv"): rules.IO003,
-    ("pandas", "read_csv"): rules.IO003,
-    (None, "to_csv"): rules.IO004,
-    ("pickle", "dump"): rules.IO005,
-    ("pickle", "dumps"): rules.IO005,
-    ("json", "dump"): rules.IO006,
-    ("plt", "savefig"): rules.IO007,
-    # Plot rules
-    (None, "show"): rules.P004,  # plt.show()
-    # Stats rules -- scipy.stats.X()
-    ("stats", "ttest_ind"): rules.ST001,
-    ("stats", "mannwhitneyu"): rules.ST002,
-    ("stats", "pearsonr"): rules.ST003,
-    ("stats", "f_oneway"): rules.ST004,
-    ("stats", "wilcoxon"): rules.ST005,
-    ("stats", "kruskal"): rules.ST006,
-    # Path rules
-    ("os", "makedirs"): rules.PA003,
-    ("os", "mkdir"): rules.PA003,
-    ("os", "chdir"): rules.PA004,
-}
-
-# Axes method suggestions {func_name: Rule}
-_AXES_HINTS: dict = {
-    "plot": rules.P001,
-    "scatter": rules.P002,
-    "bar": rules.P003,
-}
-
-# print() inside session
-_PRINT_RULE = rules.P005
 
 
 @dataclass
@@ -83,6 +57,12 @@ def is_script(filepath: str, config=None) -> bool:
     parts = path.parts
     for lib_dir in config.library_dirs:
         if lib_dir in parts:
+            return False
+
+    # Check if file is inside a script directory (e.g., scripts/)
+    # These are utility scripts called by shell, not SciTeX session scripts
+    for script_dir in config.script_dirs:
+        if script_dir in parts:
             return False
 
     return True
@@ -142,7 +122,7 @@ class SciTeXChecker(ast.NodeVisitor):
         if "matplotlib.pyplot" in module_name:
             self._add(I001, node.lineno, node.col_offset, line)
 
-        if module_name == "argparse":
+        if module_name == "argparse" and self._is_script:
             self._add(S003, node.lineno, node.col_offset, line)
 
         if module_name == "pickle":
@@ -178,7 +158,7 @@ class SciTeXChecker(ast.NodeVisitor):
                 self._add(I002, node.lineno, node.col_offset, line)
 
         # from argparse import *
-        if module == "argparse":
+        if module == "argparse" and self._is_script:
             self._add(S003, node.lineno, node.col_offset, line)
 
     # -- Call visitors (Phase 2) --
@@ -204,10 +184,10 @@ class SciTeXChecker(ast.NodeVisitor):
                     mod_name = func.value.attr  # use "stats" from scipy.stats
 
             # Check stx.io path patterns before skipping stx.* calls
-            if mod_name == "stx" or (
+            if mod_name in ("stx", "scitex") or (
                 isinstance(func.value, ast.Attribute)
                 and isinstance(func.value.value, ast.Name)
-                and func.value.value.id == "stx"
+                and func.value.value.id in ("stx", "scitex")
             ):
                 self._check_stx_io_path(node)
                 return
@@ -231,9 +211,9 @@ class SciTeXChecker(ast.NodeVisitor):
                     ):
                         return
 
-                # to_csv -- only flag on DataFrame-like objects (not stx)
-                if rule is rules.IO004:
-                    if mod_name in ("stx", "os", "sys", "Path"):
+                # to_csv / savefig -- skip on non-data/figure objects
+                if rule in (rules.IO004, rules.IO007):
+                    if mod_name in ("stx", "scitex", "os", "sys", "Path"):
                         return
 
                 line = self._get_source(node.lineno)
@@ -241,17 +221,7 @@ class SciTeXChecker(ast.NodeVisitor):
                 return
 
             # Axes hints: ax.plot(), ax.scatter(), ax.bar()
-            if func_name in _AXES_HINTS and mod_name not in (
-                "stx",
-                "os",
-                "sys",
-                "Path",
-                "math",
-                "np",
-                "numpy",
-                "pd",
-                "pandas",
-            ):
+            if func_name in _AXES_HINTS and mod_name not in _AXES_SKIP:
                 # Heuristic: if variable name looks like axes
                 if mod_name and (
                     mod_name.startswith("ax") or mod_name in ("axes", "subplot")
@@ -266,6 +236,7 @@ class SciTeXChecker(ast.NodeVisitor):
             if func_name == "mkdir" and mod_name not in (
                 "os",
                 "stx",
+                "scitex",
                 "sys",
             ):
                 # Heuristic: if it's called on something that looks like a Path
@@ -307,7 +278,7 @@ class SciTeXChecker(ast.NodeVisitor):
         if isinstance(func.value, ast.Attribute):
             if (
                 isinstance(func.value.value, ast.Name)
-                and func.value.value.id == "stx"
+                and func.value.value.id in ("stx", "scitex")
                 and func.value.attr == "io"
             ):
                 is_stx_io = True
@@ -369,7 +340,7 @@ class SciTeXChecker(ast.NodeVisitor):
             if isinstance(deco, ast.Attribute):
                 if (
                     isinstance(deco.value, ast.Name)
-                    and deco.value.id == "stx"
+                    and deco.value.id in ("stx", "scitex")
                     and deco.attr == "session"
                 ):
                     return True

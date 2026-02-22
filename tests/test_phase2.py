@@ -152,6 +152,59 @@ if __name__ == "__main__":
 """
         assert "STX-IO007" in _rule_ids(src)
 
+    def test_fig_savefig_fires(self):
+        src = """
+fig.savefig("plot.png", dpi=300, bbox_inches="tight")
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-IO007" in _rule_ids(src)
+
+    def test_fig_savefig_str_path_fires(self):
+        src = """
+fig.savefig(str(out_path), dpi=300)
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-IO007" in _rule_ids(src)
+
+    def test_stx_io_save_not_flagged(self):
+        src = """
+import scitex as stx
+
+stx.io.save(fig, "plot.png")
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-IO007" not in _rule_ids(src)
+
+    def test_scitex_io_save_not_flagged(self):
+        """scitex.io.save() (unaliased) should not fire IO007."""
+        src = """
+import scitex
+
+scitex.io.save(fig, "plot.png")
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-IO007" not in _rule_ids(src)
+
+    def test_os_savefig_not_flagged(self):
+        """os.savefig doesn't exist but should not trigger IO007."""
+        src = """
+import os
+
+os.savefig("test")
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-IO007" not in _rule_ids(src)
+
 
 # =========================================================================
 # P001: ax.plot() hint
@@ -348,6 +401,18 @@ if __name__ == "__main__":
 import scitex as stx
 
 stx.stats.ttest_ind(a, b)
+
+if __name__ == "__main__":
+    pass
+"""
+        assert "STX-ST001" not in _rule_ids(src)
+
+    def test_scitex_stats_clean(self):
+        """scitex.stats.ttest_ind() (unaliased) should not fire."""
+        src = """
+import scitex
+
+scitex.stats.ttest_ind(a, b)
 
 if __name__ == "__main__":
     pass

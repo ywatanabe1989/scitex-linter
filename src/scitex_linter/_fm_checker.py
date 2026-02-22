@@ -16,11 +16,12 @@ def _is_exempt_call(node):
     func = node.func
     if not isinstance(func, ast.Attribute):
         return False
-    if isinstance(func.value, ast.Name) and func.value.id in ("stx", "fr"):
+    if isinstance(func.value, ast.Name) and func.value.id in ("stx", "scitex", "fr"):
         return True
     if isinstance(func.value, ast.Attribute):
         if isinstance(func.value.value, ast.Name) and func.value.value.id in (
             "stx",
+            "scitex",
             "fr",
         ):
             return True

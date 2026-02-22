@@ -3,7 +3,7 @@
 SciTeX Linter - AST-based Python Linter
 ========================================
 
-**SciTeX Linter** is an AST-based Python linter that enforces `SciTeX <https://scitex.ai>`_ reproducible research patterns. It provides four interfaces: CLI, Python API, flake8 plugin, and MCP server for AI agents.
+**SciTeX Linter** is an AST-based Python linter that enforces `SciTeX <https://scitex.ai>`_ reproducible research patterns. It provides six interfaces: CLI, Format (auto-fix), Python API, flake8 plugin, MCP server for AI agents, and Claude Code Hook.
 
 .. toctree::
    :maxdepth: 2
@@ -29,8 +29,8 @@ SciTeX Linter - AST-based Python Linter
 Key Features
 ------------
 
-- **35 Rules** across 7 categories: Structure, Import, I/O, Plot, Stats, Path
-- **Four Interfaces**: CLI, Python API, flake8 plugin (STX prefix), MCP server
+- **45 Rules** across 8 categories: Structure, Import, I/O, Plot, Stats, Path, Figure
+- **Six Interfaces**: CLI, Format (auto-fix), Python API, flake8 plugin (STX prefix), MCP server, Claude Code Hook
 - **Lint + Execute**: ``scitex-linter python script.py`` lints then runs your script
 - **Claude Code Hook**: Auto-lints Python files on every Write/Edit
 - **Severity Filtering**: ``--severity error`` to focus on blockers only

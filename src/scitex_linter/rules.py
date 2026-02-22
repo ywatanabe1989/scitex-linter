@@ -3,6 +3,8 @@
 Thin re-export module: actual definitions live in _rules/ sub-modules.
 """
 
+__all__ = ["ALL_RULES", "Rule", "SEVERITY_ORDER"]
+
 from ._rules import (  # noqa: F401
     ALL_RULES,
     FM001,

@@ -60,7 +60,7 @@ IO007 = Rule(
     id="STX-IO007",
     severity="warning",
     category="io",
-    message="`plt.savefig()` detected — use `stx.io.save(fig, path)` for metadata embedding",
-    suggestion="Replace `plt.savefig(path)` with `stx.io.save(fig, path)`.",
+    message="`.savefig()` detected — use `stx.io.save(fig, path)` for metadata embedding",
+    suggestion="Replace `fig.savefig(path)` with `stx.io.save(fig, path)`.",
     requires="scitex",
 )

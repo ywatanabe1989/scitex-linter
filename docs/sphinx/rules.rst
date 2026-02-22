@@ -94,7 +94,7 @@ Category IO: I/O Calls
      - ``json.dump()`` detected — use ``stx.io.save()`` for provenance tracking
    * - STX-IO007
      - warning
-     - ``plt.savefig()`` detected — use ``stx.io.save(fig, path)`` for metadata embedding
+     - ``.savefig()`` detected — use ``stx.io.save(fig, path)`` for metadata embedding
 
 Category P: Plotting
 --------------------
