@@ -86,6 +86,7 @@ class SciTeXChecker(ast.NodeVisitor):
         self._has_stx_import = False
         self._has_main_guard = False
         self._has_session_decorator = False
+        self._has_module_decorator = False
         self._session_func_returns_int = False
         self._imports: dict = {}  # alias -> full module path
         self._is_script = is_script(filepath, self.config)
@@ -329,6 +330,8 @@ class SciTeXChecker(ast.NodeVisitor):
             self._has_session_decorator = True
             self._check_session_return(node)
             self._check_injected_params(node)
+        elif self._has_module_deco(node):
+            self._has_module_decorator = True
         self.generic_visit(node)
 
     visit_AsyncFunctionDef = visit_FunctionDef
@@ -347,6 +350,31 @@ class SciTeXChecker(ast.NodeVisitor):
             # @session (bare)
             if isinstance(deco, ast.Name) and deco.id == "session":
                 return True
+        return False
+
+    def _has_module_deco(self, node: ast.FunctionDef) -> bool:
+        """Check if function has @stx.module(...) decorator."""
+        for deco in node.decorator_list:
+            # @stx.module(...) — Call wrapping Attribute
+            if isinstance(deco, ast.Call) and isinstance(deco.func, ast.Attribute):
+                if (
+                    isinstance(deco.func.value, ast.Name)
+                    and deco.func.value.id in ("stx", "scitex")
+                    and deco.func.attr == "module"
+                ):
+                    return True
+            # @stx.module (bare, no parens)
+            if isinstance(deco, ast.Attribute):
+                if (
+                    isinstance(deco.value, ast.Name)
+                    and deco.value.id in ("stx", "scitex")
+                    and deco.attr == "module"
+                ):
+                    return True
+            # @module(...) (bare call)
+            if isinstance(deco, ast.Call) and isinstance(deco.func, ast.Name):
+                if deco.func.id == "module":
+                    return True
         return False
 
     def _check_session_return(self, node: ast.FunctionDef) -> None:
@@ -413,7 +441,9 @@ class SciTeXChecker(ast.NodeVisitor):
         if not self._has_main_guard:
             self._add(S002, 1, 0, "")
 
-        if self._has_main_guard and not self._has_session_decorator:
+        if self._has_main_guard and not (
+            self._has_session_decorator or self._has_module_decorator
+        ):
             self._add(S001, 1, 0, "")
 
         if self._has_main_guard and not self._has_stx_import:

@@ -6,10 +6,9 @@ S001 = Rule(
     id="STX-S001",
     severity="error",
     category="structure",
-    message="Missing @stx.session decorator on main function",
+    message="Missing @stx.session or @stx.module decorator on main function",
     suggestion=(
-        "Add @stx.session to enable reproducible session tracking, "
-        "auto-CLI, and provenance.\n"
+        "Add @stx.session (for scripts) or @stx.module (for cloud modules).\n"
         "  @stx.session\n"
         "  def main(...):\n"
         "      return 0"

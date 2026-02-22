@@ -41,6 +41,16 @@ class LinterConfig:
             "conftest.py",
             "setup.py",
             "manage.py",
+            "settings.py",
+            "settings_*.py",
+            "urls.py",
+            "apps.py",
+            "admin.py",
+            "models.py",
+            "views.py",
+            "wsgi.py",
+            "asgi.py",
+            "conf.py",
         ]
     )
     library_dirs: list[str] = field(default_factory=lambda: ["src", "tests", "apps"])
