@@ -416,10 +416,13 @@ def main(argv: list = None) -> int:
 
     subparsers = parser.add_subparsers(dest="command")
 
+    from ._cmd_api import register as _register_api
+
     _register_check(subparsers)
     _register_format(subparsers)
     _register_python(subparsers)
     _register_rule(subparsers)
+    _register_api(subparsers)
     _register_mcp(subparsers)
 
     # Split on -- to capture script args for the 'python' subcommand

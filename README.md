@@ -46,19 +46,20 @@ scitex-linter check script.py
 # Lint then execute
 scitex-linter python experiment.py --strict
 
-# List all 35 rules
+# List all 45 rules
 scitex-linter rule
 ```
 
-## Five Interfaces
+## Six Interfaces
 
 | Interface | For | Description |
 |-----------|-----|-------------|
 | 🖥️ **CLI** | Terminal users | `scitex-linter check`, `scitex-linter python` |
-| ✨ **Format** | Auto-fix | `scitex-linter format` — auto-fix SciTeX issues |
-| 🐍 **Python API** | Programmatic use | `from scitex_linter.checker import lint_file` |
+| ✨ **Format** | Auto-fix | `scitex-linter format` — savefig, np.save/load, pd.read_csv |
+| 🐍 **Python API** | Programmatic use | `scitex-linter api` or `from scitex_linter.checker import lint_file` |
 | 🔌 **flake8 Plugin** | CI pipelines | `flake8 --select STX` |
 | 🔧 **MCP Server** | AI agents | 3 tools for Claude/GPT integration |
+| 📋 **Claude Code Hook** | AI coding | Auto-lint on every file write/edit |
 
 <details>
 <summary><strong>🖥️ CLI Commands</strong></summary>
@@ -88,9 +89,13 @@ scitex-linter python experiment.py --strict       # Abort on errors
 scitex-linter python experiment.py -- --lr 0.001  # Pass script args
 
 # Rules - Browse available rules
-scitex-linter rule                          # List all 35 rules
+scitex-linter rule                          # List all 45 rules
 scitex-linter rule --category stats         # Filter by category
 scitex-linter rule --json                   # JSON output
+
+# API - Inspect public Python API
+scitex-linter api                           # Tree view of 12 public APIs
+scitex-linter api --json                    # JSON output
 
 # MCP - AI agent server
 scitex-linter mcp start                           # Start MCP server (stdio)
@@ -164,16 +169,17 @@ Install MCP extra: `pip install scitex-linter[mcp]`
 
 </details>
 
-## 35 Rules Across 7 Categories
+## 45 Rules Across 8 Categories
 
 | Category | Rules | Severity | What It Enforces |
 |----------|------:|----------|-----------------|
-| **S** Structure | 5 | error/warning | `@stx.session`, `__main__` guard, no argparse |
+| **S** Structure | 6 | error/warning | `@stx.session`, `__main__` guard, INJECTED params |
 | **I** Import | 7 | warning/info | Use `stx.plt`, `stx.stats`, `stx.io` instead of raw libs |
 | **IO** I/O Calls | 7 | warning | Use `stx.io.save()`/`stx.io.load()` for provenance |
 | **P** Plot | 5 | info | Use `stx.plt` tracked methods, `logger` over `print()` |
 | **ST** Stats | 6 | warning | Use `stx.stats` for auto effect size + CI + power |
 | **PA** Path | 5 | warning/info | Relative paths with `./`, no `open()`, no `os.chdir()` |
+| **FM** Figure | 9 | warning/info | mm-based layout, `stx.io.save()` for figures (opt-in) |
 
 <details>
 <summary><strong>Example Output</strong></summary>
@@ -200,7 +206,7 @@ script.py: 2 issues (1 error, 1 warning)
 
 <br>
 
-See [Rules Reference](https://scitex-linter.readthedocs.io/en/latest/rules.html) for all 35 rules with descriptions and suggestions.
+See [Rules Reference](https://scitex-linter.readthedocs.io/en/latest/rules.html) for all 45 rules with descriptions and suggestions.
 
 </details>
 
@@ -280,7 +286,7 @@ Zero lint issues. Fully reproducible. Auto-CLI from function signature.
 <p align="center">
   <a href="https://scitex.ai" target="_blank"><img src="docs/scitex-icon-navy-inverted.png" alt="SciTeX" width="40"/></a>
   <br>
-  AGPL-3.0 · ywatanabe@scitex.ai
+  AGPL-3.0
 </p>
 
 <!-- EOF -->

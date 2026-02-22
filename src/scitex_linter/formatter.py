@@ -1,5 +1,7 @@
 """Output formatting for terminal and JSON."""
 
+__all__ = ["format_issue", "format_summary", "to_json"]
+
 from .checker import Issue
 
 # ANSI colors

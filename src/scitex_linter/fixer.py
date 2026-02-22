@@ -2,7 +2,10 @@
 
 Currently handles:
   - S006: Insert missing INJECTED parameters into @stx.session functions.
+  - IO001-IO003, IO007: Replace np.save/load, pd.read_csv, savefig with stx.io.
 """
+
+__all__ = ["fix_file", "fix_source"]
 
 import ast
 import re
@@ -26,7 +29,7 @@ def _has_session_decorator(node: ast.FunctionDef) -> bool:
         if isinstance(deco, ast.Attribute):
             if (
                 isinstance(deco.value, ast.Name)
-                and deco.value.id == "stx"
+                and deco.value.id in ("stx", "scitex")
                 and deco.attr == "session"
             ):
                 return True
@@ -55,12 +58,12 @@ def _is_injected_value(default_node: ast.expr) -> bool:
         if isinstance(inner, ast.Attribute):
             if (
                 isinstance(inner.value, ast.Name)
-                and inner.value.id == "stx"
+                and inner.value.id in ("stx", "scitex")
                 and inner.attr == "session"
             ):
                 return True
         # stx.INJECTED
-        if isinstance(inner, ast.Name) and inner.id == "stx":
+        if isinstance(inner, ast.Name) and inner.id in ("stx", "scitex"):
             return True
     return False
 
@@ -72,7 +75,7 @@ def _is_canonical_injected(default_node: ast.expr) -> bool:
         if isinstance(inner, ast.Attribute):
             if (
                 isinstance(inner.value, ast.Name)
-                and inner.value.id == "stx"
+                and inner.value.id in ("stx", "scitex")
                 and inner.attr == "session"
             ):
                 return True
@@ -299,13 +302,89 @@ def _split_params(params_text: str) -> list:
 
 
 # =========================================================================
+# Source-level fix for IO rules (IO001-IO003, IO007)
+# =========================================================================
+
+
+def _source_offset(source: str, lineno: int, col_offset: int) -> int:
+    """Convert (lineno, col_offset) to byte offset in source string."""
+    lines = source.splitlines(keepends=True)
+    offset = sum(len(lines[i]) for i in range(lineno - 1))
+    return offset + col_offset
+
+
+def _fix_io_in_source(source: str, filepath: str = "<stdin>") -> str:
+    """Fix IO violations: savefig->stx.io.save, np.save/load, pd.read_csv."""
+    try:
+        tree = ast.parse(source, filename=filepath)
+    except SyntaxError:
+        return source
+
+    replacements = []  # (start_offset, end_offset, new_text)
+
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Attribute):
+            continue
+        func = node.func
+        fname = func.attr
+        if not isinstance(func.value, ast.Name):
+            continue
+        obj = func.value.id
+        if obj in ("stx", "scitex"):
+            continue
+
+        seg = ast.get_source_segment(source, node)
+        if seg is None:
+            continue
+
+        new = None
+        if fname == "savefig" and node.args:
+            arg0 = ast.get_source_segment(source, node.args[0])
+            if arg0:
+                new = f"stx.io.save({obj}, {arg0})"
+        elif fname == "save" and obj in ("np", "numpy") and len(node.args) >= 2:
+            arg0 = ast.get_source_segment(source, node.args[0])
+            arg1 = ast.get_source_segment(source, node.args[1])
+            if arg0 and arg1:
+                new = f"stx.io.save({arg1}, {arg0})"
+        elif fname == "load" and obj in ("np", "numpy") and node.args:
+            arg0 = ast.get_source_segment(source, node.args[0])
+            if arg0:
+                new = f"stx.io.load({arg0})"
+        elif fname == "read_csv" and obj in ("pd", "pandas") and node.args:
+            arg0 = ast.get_source_segment(source, node.args[0])
+            if arg0:
+                new = f"stx.io.load({arg0})"
+
+        if new:
+            start = _source_offset(source, node.lineno, node.col_offset)
+            replacements.append((start, start + len(seg), new))
+
+    if not replacements:
+        return source
+
+    # Apply in reverse offset order to preserve positions
+    replacements.sort(key=lambda x: x[0], reverse=True)
+    for start, end, new in replacements:
+        source = source[:start] + new + source[end:]
+
+    # Ensure `import scitex as stx` is present if fixes were applied
+    if "import scitex" not in source:
+        source = "import scitex as stx\n" + source
+
+    return source
+
+
+# =========================================================================
 # Public API
 # =========================================================================
 
 
 def fix_source(source: str, filepath: str = "<stdin>", config=None) -> str:
     """Auto-fix SciTeX issues in source code. Returns fixed source."""
-    return _fix_s006_in_source(source, filepath, config=config)
+    source = _fix_s006_in_source(source, filepath, config=config)
+    source = _fix_io_in_source(source, filepath)
+    return source
 
 
 def fix_file(filepath: str, write: bool = True, config=None) -> tuple:

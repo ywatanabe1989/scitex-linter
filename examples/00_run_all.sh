@@ -23,6 +23,10 @@ echo
 bash "$SCRIPT_DIR/06_format.sh"
 
 echo
+echo "=== Notebook example ==="
+echo "See examples/07_notebook_usage.ipynb (open in Jupyter)"
+
+echo
 echo "=== All examples completed ==="
 
 # EOF

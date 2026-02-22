@@ -405,6 +405,58 @@ class TestFixFile:
 
 
 # =========================================================================
+# TestFixIO: IO auto-fix (savefig, np.save/load, pd.read_csv)
+# =========================================================================
+
+
+class TestFixIO:
+    def test_fig_savefig_to_stx_io_save(self):
+        src = 'fig.savefig("plot.png", dpi=300, bbox_inches="tight")\n'
+        fixed = fix_source(src)
+        assert 'stx.io.save(fig, "plot.png")' in fixed
+
+    def test_plt_savefig_to_stx_io_save(self):
+        src = 'import matplotlib.pyplot as plt\nplt.savefig("fig.png")\n'
+        fixed = fix_source(src)
+        assert 'stx.io.save(plt, "fig.png")' in fixed
+
+    def test_np_save_to_stx_io_save(self):
+        src = 'import numpy as np\nnp.save("data.npy", arr)\n'
+        fixed = fix_source(src)
+        assert 'stx.io.save(arr, "data.npy")' in fixed
+
+    def test_np_load_to_stx_io_load(self):
+        src = 'import numpy as np\ndata = np.load("data.npy")\n'
+        fixed = fix_source(src)
+        assert 'stx.io.load("data.npy")' in fixed
+
+    def test_pd_read_csv_to_stx_io_load(self):
+        src = 'import pandas as pd\ndf = pd.read_csv("data.csv")\n'
+        fixed = fix_source(src)
+        assert 'stx.io.load("data.csv")' in fixed
+
+    def test_stx_import_added_when_missing(self):
+        src = 'fig.savefig("plot.png")\n'
+        fixed = fix_source(src)
+        assert "import scitex as stx" in fixed
+
+    def test_stx_import_not_duplicated(self):
+        src = 'import scitex as stx\nfig.savefig("plot.png")\n'
+        fixed = fix_source(src)
+        assert fixed.count("import scitex") == 1
+
+    def test_stx_calls_not_touched(self):
+        src = 'import scitex as stx\nstx.io.save(fig, "plot.png")\n'
+        fixed = fix_source(src)
+        assert fixed == src
+
+    def test_savefig_with_variable_path(self):
+        src = "fig.savefig(str(out_path), dpi=300)\n"
+        fixed = fix_source(src)
+        assert "stx.io.save(fig, str(out_path))" in fixed
+
+
+# =========================================================================
 # TestFormatCLI: placeholder for post-integration tests
 # =========================================================================
 

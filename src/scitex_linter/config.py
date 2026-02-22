@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+__all__ = ["LinterConfig", "load_config"]
+
 import fnmatch
 import os
 import sys

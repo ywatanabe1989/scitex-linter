@@ -8,7 +8,7 @@ Global Options
 
 .. code-block:: text
 
-    scitex-linter [-h] [-V] [--help-recursive] {check,python,rule,mcp} ...
+    scitex-linter [-h] [-V] [--help-recursive] {check,format,python,rule,api,mcp} ...
 
 ``-V, --version``
     Show version and exit.
@@ -38,7 +38,7 @@ Check Python files for SciTeX pattern compliance.
     Minimum severity to report (default: ``info``).
 
 ``--category``
-    Filter by category (comma-separated): ``structure``, ``import``, ``io``, ``plot``, ``stats``, ``path``.
+    Filter by category (comma-separated): ``structure``, ``import``, ``io``, ``plot``, ``stats``, ``path``, ``figure``.
 
 **Exit codes:**
 
@@ -58,6 +58,40 @@ Check Python files for SciTeX pattern compliance.
 
     # JSON output for CI
     scitex-linter check . --json --no-color
+
+scitex-linter format
+--------------------
+
+Auto-fix SciTeX pattern issues in Python files.
+
+.. code-block:: text
+
+    scitex-linter format <path> [--check] [--diff]
+
+``path``
+    Python file or directory to format.
+
+``--check``
+    Dry run — exit 1 if changes would be made (no files modified).
+
+``--diff``
+    Show a unified diff of changes.
+
+Supported auto-fixes: ``fig.savefig()`` to ``stx.io.save()``, ``np.save/load`` to ``stx.io``,
+``pd.read_csv`` to ``stx.io.load()``, and missing INJECTED parameters.
+
+**Examples:**
+
+.. code-block:: bash
+
+    # Fix in place
+    scitex-linter format script.py
+
+    # Dry run
+    scitex-linter format script.py --check
+
+    # Show diff
+    scitex-linter format script.py --diff
 
 scitex-linter python
 --------------------
@@ -107,6 +141,22 @@ List all available lint rules.
 
 ``--severity {error,warning,info}``
     Filter by exact severity level.
+
+scitex-linter api
+-----------------
+
+List the public Python API.
+
+.. code-block:: text
+
+    scitex-linter api [--json]
+
+``--json``
+    Output as JSON.
+
+Displays a tree view of all public functions, classes, and variables across
+``scitex_linter.checker``, ``scitex_linter.fixer``, ``scitex_linter.formatter``,
+``scitex_linter.rules``, and ``scitex_linter.config``.
 
 scitex-linter mcp
 ------------------
