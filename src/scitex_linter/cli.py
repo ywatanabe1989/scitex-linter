@@ -243,6 +243,19 @@ def _register_mcp(subparsers) -> None:
     start_p.set_defaults(func=_cmd_mcp_start)
 
     list_p = mcp_sub.add_parser("list-tools", help="List available MCP tools")
+    list_p.add_argument(
+        "-v",
+        "--verbose",
+        action="count",
+        default=0,
+        help="Verbosity: -v sig, -vv +desc, -vvv full",
+    )
+    list_p.add_argument(
+        "-c",
+        "--compact",
+        action="store_true",
+        help="Compact signatures",
+    )
     list_p.set_defaults(func=_cmd_mcp_list_tools)
 
     doctor_p = mcp_sub.add_parser("doctor", help="Check MCP server health")
@@ -279,14 +292,47 @@ def _cmd_mcp_start(args) -> int:
 
 
 def _cmd_mcp_list_tools(args) -> int:
-    tools = [
-        ("linter_check", "Check a Python file for SciTeX pattern compliance"),
-        ("linter_list_rules", "List all available lint rules"),
-        ("linter_check_source", "Lint Python source code string"),
-    ]
-    for name, desc in tools:
-        print(f"  {name:30s} {desc}")
-    print(f"\n  {len(tools)} tools")
+
+    try:
+        from ._server import mcp as mcp_server
+    except ImportError:
+        print("fastmcp required. pip install scitex-linter[mcp]", file=sys.stderr)
+        return 1
+    tools_dict = getattr(mcp_server._tool_manager, "_tools", {})
+    v, c = args.verbose, args.compact
+    C = sys.stdout.isatty()
+    g, w, cy, y, r = (
+        ("\033[92m", "\033[1;37m", "\033[96m", "\033[93m", "\033[0m")
+        if C
+        else ("",) * 5
+    )
+    print(f"{cy}SciTeX Linter MCP{r}\nTools: {len(tools_dict)}\n")
+    for name in sorted(tools_dict):
+        t = tools_dict[name]
+        if v == 0:
+            print(f"  {name}")
+        else:
+            ps = []
+            if hasattr(t, "parameters") and t.parameters:
+                for p, i in t.parameters.get("properties", {}).items():
+                    pt = i.get("type", "any")
+                    if p in t.parameters.get("required", []):
+                        ps.append(f"{w}{p}{r}: {cy}{pt}{r}")
+                    else:
+                        d = (
+                            repr(i.get("default"))
+                            if i.get("default") is not None
+                            else "None"
+                        )
+                        ps.append(f"{w}{p}{r}: {cy}{pt}{r} = {y}{d}{r}")
+            print(f"  {g}{name}{r}({', '.join(ps)})")
+            if v >= 2 and t.description:
+                desc = t.description.split("\n")[0]
+                print(f"    {desc}")
+                if v >= 3:
+                    for line in t.description.strip().split("\n")[1:]:
+                        print(f"    {line}")
+                print()
     return 0
 
 
