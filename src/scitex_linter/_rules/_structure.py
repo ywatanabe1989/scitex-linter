@@ -11,7 +11,11 @@ S001 = Rule(
         "Add @stx.session (for scripts) or @stx.module (for cloud modules).\n"
         "  @stx.session\n"
         "  def main(...):\n"
-        "      return 0"
+        "      return 0\n"
+        "If this is library code (not a script), add its directory to library_dirs:\n"
+        "  [tool.scitex-linter]\n"
+        '  library_dirs = ["src", "tests", "apps", "config"]\n'
+        "  Or: SCITEX_LINTER_LIBRARY_DIRS=src,tests,apps,config"
     ),
     requires="scitex",
 )
@@ -21,7 +25,13 @@ S002 = Rule(
     severity="error",
     category="structure",
     message="Missing `if __name__ == '__main__'` guard",
-    suggestion="Add `if __name__ == '__main__': main()` at the end of the script.",
+    suggestion=(
+        "Add `if __name__ == '__main__': main()` at the end of the script.\n"
+        "If this is library code (not a script), add its directory to library_dirs:\n"
+        "  [tool.scitex-linter]\n"
+        '  library_dirs = ["src", "tests", "apps", "config"]\n'
+        "  Or: SCITEX_LINTER_LIBRARY_DIRS=src,tests,apps,config"
+    ),
 )
 
 S003 = Rule(
