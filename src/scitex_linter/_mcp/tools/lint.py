@@ -10,7 +10,7 @@ def register_lint_tools(mcp) -> None:
     def linter_check(
         path: str, severity: str = "info", category: Optional[str] = None
     ) -> dict:
-        """[linter] Check a Python file for SciTeX pattern compliance."""
+        """Check a Python file for SciTeX pattern compliance."""
         from ...checker import lint_file
         from ...config import load_config
         from ...formatter import to_json
@@ -34,7 +34,7 @@ def register_lint_tools(mcp) -> None:
     def linter_list_rules(
         category: Optional[str] = None, severity: Optional[str] = None
     ) -> dict:
-        """[linter] List all available lint rules."""
+        """List all available lint rules."""
         from ...rules import ALL_RULES
 
         rules_list = list(ALL_RULES.values())
@@ -61,7 +61,7 @@ def register_lint_tools(mcp) -> None:
 
     @mcp.tool()
     def linter_check_source(source: str, filepath: str = "<stdin>") -> dict:
-        """[linter] Lint Python source code string for SciTeX pattern compliance."""
+        """Lint Python source code string for SciTeX pattern compliance."""
         from ...checker import lint_source
         from ...config import load_config
         from ...formatter import to_json
