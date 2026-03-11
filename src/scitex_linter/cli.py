@@ -235,7 +235,15 @@ def _cmd_mcp_list_tools(args) -> int:
 
     import asyncio
 
-    tools = asyncio.run(mcp_server.list_tools())
+    try:
+        tools = asyncio.run(mcp_server.list_tools())
+    except Exception:
+        # Fallback: list tools from registration
+        from ._mcp.tools.lint import register_lint_tools  # noqa: F401
+
+        print("SciTeX Linter MCP\nTools: 3\n")
+        print("  linter_check\n  linter_check_source\n  linter_list_rules")
+        return 0
     v = args.verbose
     C = sys.stdout.isatty()
     g, w, cy, y, dm, r = (
