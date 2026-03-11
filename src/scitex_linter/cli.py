@@ -227,24 +227,21 @@ def _cmd_mcp_start(args) -> int:
 
 
 def _cmd_mcp_list_tools(args) -> int:
+    _KNOWN_TOOLS = ["linter_check", "linter_check_source", "linter_list_rules"]
+    tools = []
+
     try:
+        import asyncio
+
         from ._server import mcp as mcp_server
-    except ImportError:
-        print("fastmcp required. pip install scitex-linter[mcp]", file=sys.stderr)
-        return 1
 
-    import asyncio
-
-    try:
         tools = asyncio.run(mcp_server.list_tools())
     except Exception:
-        tools = []
+        pass
 
     if not tools:
-        # Fallback: list known tools when async discovery fails
-        _names = ["linter_check", "linter_check_source", "linter_list_rules"]
-        print(f"SciTeX Linter MCP\nTools: {len(_names)}\n")
-        for n in _names:
+        print(f"SciTeX Linter MCP\nTools: {len(_KNOWN_TOOLS)}\n")
+        for n in _KNOWN_TOOLS:
             print(f"  {n}")
         return 0
     v = args.verbose
