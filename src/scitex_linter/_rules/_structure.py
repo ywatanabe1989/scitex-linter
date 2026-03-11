@@ -85,3 +85,32 @@ S006 = Rule(
     ),
     requires="scitex",
 )
+
+S007 = Rule(
+    id="STX-S007",
+    severity="warning",
+    category="structure",
+    message="load_configs() result should be assigned to an UPPER_CASE variable",
+    suggestion=(
+        "Use UPPER_CASE for config variables — they hold project constants:\n"
+        "  CONFIG = load_configs()          # good\n"
+        "  config = load_configs()          # bad — looks like a local variable"
+    ),
+)
+
+S008 = Rule(
+    id="STX-S008",
+    severity="info",
+    category="structure",
+    message="Magic number in module scope — consider centralizing in config/",
+    suggestion=(
+        "Move hard-coded values to config/*.yaml and load with load_configs():\n"
+        "  # config/MODEL.yaml\n"
+        "  HIDDEN_DIM: 256\n"
+        "  DROPOUT: 0.3\n"
+        "\n"
+        "  # script.py\n"
+        "  CONFIG = load_configs()\n"
+        "  CONFIG.MODEL.HIDDEN_DIM    # 256"
+    ),
+)

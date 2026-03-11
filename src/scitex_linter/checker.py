@@ -41,10 +41,10 @@ def is_script(filepath: str, config=None) -> bool:
     Uses config.library_patterns and config.library_dirs to determine
     which files are library modules (exempt from script-only rules).
     """
-    from .config import LinterConfig, matches_library_pattern
+    from .config import load_config, matches_library_pattern
 
     if config is None:
-        config = LinterConfig()
+        config = load_config(start_path=filepath)
 
     path = Path(filepath)
     name = path.name
@@ -72,11 +72,11 @@ class SciTeXChecker(ast.NodeVisitor):
     """AST visitor detecting non-SciTeX patterns."""
 
     def __init__(self, source_lines: list, filepath: str = "<stdin>", config=None):
-        from .config import LinterConfig
+        from .config import load_config
 
         self.source_lines = source_lines
         self.filepath = filepath
-        self.config = config or LinterConfig()
+        self.config = config or load_config(start_path=filepath)
         self.issues: list = []
         # Package availability for rule gating
         from ._packages import detect as _detect_pkgs
@@ -90,6 +90,19 @@ class SciTeXChecker(ast.NodeVisitor):
         self._session_func_returns_int = False
         self._imports: dict = {}  # alias -> full module path
         self._is_script = is_script(filepath, self.config)
+        self._func_depth = 0  # >0 means inside a function body
+        from ._plugin_loader import load_plugins
+
+        _plugins = load_plugins()
+        # Filter plugin rules by config.enable (FM rules need opt-in)
+        _enabled = set(self.config.enable) if self.config else set()
+        _CAT_ENABLE = {"figure": "FM"}  # categories requiring opt-in
+        self._plugin_call_rules = {
+            k: r
+            for k, r in _plugins["call_rules"].items()
+            if r.category not in _CAT_ENABLE or _CAT_ENABLE[r.category] in _enabled
+        }
+        self._plugin_checkers = _plugins["checkers"]
 
     # -- Import visitors --
 
@@ -162,6 +175,14 @@ class SciTeXChecker(ast.NodeVisitor):
         if module == "argparse" and self._is_script:
             self._add(S003, node.lineno, node.col_offset, line)
 
+    # -- Assignment visitors --
+
+    def visit_Assign(self, node: ast.Assign) -> None:
+        from ._naming_checker import check_assignment
+
+        check_assignment(self, node)
+        self.generic_visit(node)
+
     # -- Call visitors (Phase 2) --
 
     def visit_Call(self, node: ast.Call) -> None:
@@ -203,6 +224,14 @@ class SciTeXChecker(ast.NodeVisitor):
             if rule is None:
                 rule = _CALL_RULES.get((None, func_name))
 
+            # Fallback to plugin-contributed rules
+            if rule is None:
+                rule = self._plugin_call_rules.get((mod_name, func_name))
+            if rule is None and resolved != mod_name:
+                rule = self._plugin_call_rules.get((resolved, func_name))
+            if rule is None:
+                rule = self._plugin_call_rules.get((None, func_name))
+
             # Special cases
             if rule is not None:
                 # plt.show() -- only flag if mod resolves to matplotlib
@@ -215,6 +244,19 @@ class SciTeXChecker(ast.NodeVisitor):
                 # to_csv / savefig -- skip on non-data/figure objects
                 if rule in (rules.IO004, rules.IO007):
                     if mod_name in ("stx", "scitex", "os", "sys", "Path"):
+                        return
+
+                # FM rules: exempt stx.*/fr.*/figrecipe.* calls
+                if rule.category == "figure":
+                    _exempt = ("stx", "scitex", "fr", "figrecipe")
+                    if mod_name in _exempt:
+                        return
+                    # Check root of chained call: fr.fig.set_size_inches()
+                    if (
+                        isinstance(func.value, ast.Attribute)
+                        and isinstance(func.value.value, ast.Name)
+                        and func.value.value.id in _exempt
+                    ):
                         return
 
                 line = self._get_source(node.lineno)
@@ -254,70 +296,12 @@ class SciTeXChecker(ast.NodeVisitor):
                 line = self._get_source(node.lineno)
                 self._add(rules.PA002, node.lineno, node.col_offset, line)
 
-    # -- stx.io path checking --
+    # -- stx.io path checking (delegated to _path_checker) --
 
     def _check_stx_io_path(self, node: ast.Call) -> None:
-        """Check path arguments in stx.io.save() / stx.io.load() calls."""
-        func = node.func
-        if not isinstance(func, ast.Attribute):
-            return
+        from ._path_checker import check_stx_io_path
 
-        func_name = func.attr
-
-        # Determine which positional arg holds the path
-        # stx.io.save(obj, path, ...) -> index 1
-        # stx.io.load(path, ...) -> index 0
-        if func_name == "save":
-            path_idx = 1
-        elif func_name == "load":
-            path_idx = 0
-        else:
-            return
-
-        # Check if this is stx.io.save/load (not stx.plt.save, etc.)
-        is_stx_io = False
-        if isinstance(func.value, ast.Attribute):
-            if (
-                isinstance(func.value.value, ast.Name)
-                and func.value.value.id in ("stx", "scitex")
-                and func.value.attr == "io"
-            ):
-                is_stx_io = True
-        # Also: io.save(...) if io was imported from stx
-        elif isinstance(func.value, ast.Name):
-            resolved = self._imports.get(func.value.id, "")
-            if "scitex" in resolved and "io" in resolved:
-                is_stx_io = True
-
-        if not is_stx_io:
-            return
-
-        # Extract path string from positional args or 'path' kwarg
-        path_str = None
-        if len(node.args) > path_idx:
-            arg = node.args[path_idx]
-            if isinstance(arg, ast.Constant) and isinstance(arg.value, str):
-                path_str = arg.value
-        else:
-            for kw in node.keywords:
-                if kw.arg == "path":
-                    if isinstance(kw.value, ast.Constant) and isinstance(
-                        kw.value.value, str
-                    ):
-                        path_str = kw.value.value
-                    break
-
-        if path_str is None:
-            return
-
-        line = self._get_source(node.lineno)
-
-        # PA001: absolute path
-        if path_str.startswith("/"):
-            self._add(rules.PA001, node.lineno, node.col_offset, line)
-        # PA005: missing ./ prefix (bare relative path)
-        elif not path_str.startswith("./") and not path_str.startswith("../"):
-            self._add(rules.PA005, node.lineno, node.col_offset, line)
+        check_stx_io_path(self, node)
 
     # -- Function/decorator visitors --
 
@@ -332,7 +316,9 @@ class SciTeXChecker(ast.NodeVisitor):
             self._check_injected_params(node)
         elif self._has_module_deco(node):
             self._has_module_decorator = True
+        self._func_depth += 1
         self.generic_visit(node)
+        self._func_depth -= 1
 
     visit_AsyncFunctionDef = visit_FunctionDef
 
@@ -494,6 +480,23 @@ def lint_source(source: str, filepath: str = "<stdin>", config=None) -> list:
         fm = FMChecker(lines, config)
         fm.visit(tree)
         checker.issues.extend(fm.issues)
+
+    # Plugin-contributed checkers (respect opt-in gating)
+    from ._plugin_loader import load_plugins
+
+    _enabled = set(config.enable) if config else set()
+    for checker_cls in load_plugins()["checkers"]:
+        # Gate FM-category checkers behind config.enable=["FM"]
+        cat = getattr(checker_cls, "category", None)
+        if cat == "figure" and "FM" not in _enabled:
+            continue
+        try:
+            extra = checker_cls(lines, config)
+            extra.visit(tree)
+            checker.issues.extend(extra.issues)
+        except Exception:
+            pass
+
     return checker.get_issues()
 
 

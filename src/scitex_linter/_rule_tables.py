@@ -5,6 +5,7 @@ from . import rules
 # Convenience aliases used by checker.py
 S001, S002, S003 = rules.S001, rules.S002, rules.S003
 S004, S005, S006 = rules.S004, rules.S005, rules.S006
+S007, S008 = rules.S007, rules.S008
 I001, I002, I003 = rules.I001, rules.I002, rules.I003
 I006, I007 = rules.I006, rules.I007
 

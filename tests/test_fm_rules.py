@@ -15,7 +15,7 @@ def _rule_ids(source, filepath="script.py", enable_fm=False):
     Returns:
         List of rule IDs found
     """
-    config = LinterConfig(enable=["FM"]) if enable_fm else None
+    config = LinterConfig(enable=["FM"]) if enable_fm else LinterConfig(enable=[])
     return [i.rule.id for i in lint_source(source, filepath=filepath, config=config)]
 
 

@@ -46,7 +46,7 @@ scitex-linter check script.py
 # Lint then execute
 scitex-linter python experiment.py --strict
 
-# List all 45 rules
+# List all 47 rules
 scitex-linter rule
 ```
 
@@ -89,7 +89,7 @@ scitex-linter python experiment.py --strict       # Abort on errors
 scitex-linter python experiment.py -- --lr 0.001  # Pass script args
 
 # Rules - Browse available rules
-scitex-linter rule                          # List all 45 rules
+scitex-linter rule                          # List all 47 rules
 scitex-linter rule --category stats         # Filter by category
 scitex-linter rule --json                   # JSON output
 
@@ -206,7 +206,7 @@ script.py: 2 issues (1 error, 1 warning)
 
 <br>
 
-See [Rules Reference](https://scitex-linter.readthedocs.io/en/latest/rules.html) for all 45 rules with descriptions and suggestions.
+See [Rules Reference](https://scitex-linter.readthedocs.io/en/latest/rules.html) for all 47 rules with descriptions and suggestions.
 
 </details>
 
@@ -270,6 +270,35 @@ if __name__ == "__main__":
 ```
 
 Zero lint issues. Fully reproducible. Auto-CLI from function signature.
+
+## Lint Rules
+
+Detected by [scitex-linter](https://github.com/ywatanabe1989/scitex-linter) when this package is installed.
+
+| Rule | Severity | Message |
+|------|----------|---------|
+| `STX-S001` | error | Missing @stx.session or @stx.module decorator on main function |
+| `STX-S002` | error | Missing `if __name__ == '__main__'` guard |
+| `STX-S003` | error | argparse detected — @stx.session auto-generates CLI from function signature |
+| `STX-S004` | warning | @stx.session function should return an integer exit code |
+| `STX-S005` | warning | Missing `import scitex as stx` |
+| `STX-S006` | warning | @stx.session function missing explicit INJECTED parameters |
+| `STX-S007` | warning | load_configs() result should be assigned to an UPPER_CASE variable |
+| `STX-S008` | info | Magic number in module scope — consider centralizing in config/ |
+| `STX-I001` | warning | Use `stx.plt` instead of importing matplotlib.pyplot directly |
+| `STX-I002` | warning | Use `stx.stats` instead of importing scipy.stats directly |
+| `STX-I003` | warning | Use `stx.io` instead of pickle for file I/O |
+| `STX-I004` | warning | Use `stx.io` for CSV/DataFrame I/O instead of pandas I/O functions |
+| `STX-I005` | warning | Use `stx.io` for array I/O instead of numpy save/load |
+| `STX-I006` | info | Use `rngg` (injected by @stx.session) for reproducible randomness |
+| `STX-I007` | warning | Use `logger` (injected by @stx.session) instead of logging module |
+| `STX-PA001` | warning | Absolute path in `stx.io` call — use relative paths for reproducibility |
+| `STX-PA002` | warning | `open()` detected — use `stx.io.save()`/`stx.io.load()` which includes auto-logging |
+| `STX-PA003` | info | `os.makedirs()`/`mkdir()` detected — `stx.io.save()` creates directories automatically |
+| `STX-PA004` | warning | `os.chdir()` detected — scripts should be run from project root |
+| `STX-PA005` | info | Path without `./` prefix in `stx.io` call — use `./` for explicit relative intent |
+
+Additional rules are contributed by downstream packages via the `scitex_linter.plugins` entry point. Install a package to activate its rules automatically.
 
 ## Documentation
 

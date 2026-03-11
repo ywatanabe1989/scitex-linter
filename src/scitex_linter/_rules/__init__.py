@@ -10,7 +10,7 @@ from ._io import IO001, IO002, IO003, IO004, IO005, IO006, IO007
 from ._path import PA001, PA002, PA003, PA004, PA005
 from ._plot import P001, P002, P003, P004, P005
 from ._stats import ST001, ST002, ST003, ST004, ST005, ST006
-from ._structure import S001, S002, S003, S004, S005, S006
+from ._structure import S001, S002, S003, S004, S005, S006, S007, S008
 
 ALL_RULES = {
     r.id: r
@@ -21,6 +21,8 @@ ALL_RULES = {
         S004,
         S005,
         S006,
+        S007,
+        S008,
         I001,
         I002,
         I003,
@@ -75,6 +77,8 @@ __all__ = [
     "S004",
     "S005",
     "S006",
+    "S007",
+    "S008",
     "I001",
     "I002",
     "I003",

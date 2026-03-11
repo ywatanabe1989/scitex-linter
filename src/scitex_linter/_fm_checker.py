@@ -107,6 +107,8 @@ _SUGGESTIONS = {
 class FMChecker(ast.NodeVisitor):
     """AST visitor for FM (Figure/Millimeter) rules."""
 
+    category = "figure"
+
     def __init__(self, source_lines, config):
         self.source_lines = source_lines
         self.config = config
