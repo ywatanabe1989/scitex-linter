@@ -474,7 +474,7 @@ def lint_source(source: str, filepath: str = "<stdin>", config=None) -> list:
     lines = source.splitlines()
     checker = SciTeXChecker(lines, filepath=filepath, config=config)
     checker.visit(tree)
-    if config and "FM" in config.enable and checker._available.get("figrecipe"):
+    if config and "FM" in config.enable:
         from ._fm_checker import FMChecker
 
         fm = FMChecker(lines, config)
