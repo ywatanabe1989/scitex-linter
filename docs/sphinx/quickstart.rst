@@ -60,7 +60,7 @@ Pass arguments to the script after ``--``:
 Browse Rules
 ------------
 
-List all 45 rules:
+List all 47 rules:
 
 .. code-block:: bash
 

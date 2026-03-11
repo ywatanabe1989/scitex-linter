@@ -107,13 +107,17 @@ _SUGGESTIONS = {
 class FMChecker(ast.NodeVisitor):
     """AST visitor for FM (Figure/Millimeter) rules."""
 
+    category = "figure"
+
     def __init__(self, source_lines, config):
         self.source_lines = source_lines
         self.config = config
         self.issues = []
         pkgs = _detect_pkgs()
         has_fr = pkgs.get("figrecipe", False)
-        self._active = has_fr
+        # Always active when FM rules enabled in config (detect patterns
+        # regardless of whether figrecipe is installed)
+        self._active = True
         has_stx = pkgs.get("scitex", False)
         if has_fr and has_stx:
             self._ctx = "both"

@@ -5,8 +5,9 @@ Usage:
     scitex-linter format <path> [--check] [--diff]
     scitex-linter python <script.py> [--strict] [-- script_args...]
     scitex-linter rule [--json] [--category] [--severity]
+    scitex-linter list-python-apis [-v|-vv|-vvv] [--json]
     scitex-linter mcp start
-    scitex-linter mcp list-tools
+    scitex-linter mcp list-tools [-v|-vv|-vvv]
     scitex-linter --help-recursive
 """
 
@@ -17,6 +18,8 @@ from pathlib import Path
 
 from . import __version__
 from ._cmd_format import register as _register_format
+from ._cmd_rules import register_rule as _register_rule
+from ._cmd_rules import register_rules as _register_rules
 from .checker import lint_file
 from .config import load_config
 from .formatter import format_issue, format_summary, to_json
@@ -159,68 +162,6 @@ def _cmd_python(args) -> int:
 
 
 # =========================================================================
-# Subcommand: rule
-# =========================================================================
-
-
-def _register_rule(subparsers) -> None:
-    p = subparsers.add_parser(
-        "rule",
-        help="List all lint rules",
-        description="List all available SciTeX lint rules.",
-    )
-    p.add_argument("--json", action="store_true", dest="as_json", help="Output as JSON")
-    p.add_argument(
-        "--category",
-        help="Filter by category (comma-separated: structure,import,io,plot,stats)",
-    )
-    p.add_argument(
-        "--severity",
-        choices=["error", "warning", "info"],
-        help="Filter by severity",
-    )
-    p.set_defaults(func=_cmd_rule)
-
-
-def _cmd_rule(args) -> int:
-    categories = set(args.category.split(",")) if args.category else None
-    rules_list = list(ALL_RULES.values())
-
-    if categories:
-        rules_list = [r for r in rules_list if r.category in categories]
-    if args.severity:
-        rules_list = [r for r in rules_list if r.severity == args.severity]
-
-    if args.as_json:
-        data = [
-            {
-                "id": r.id,
-                "severity": r.severity,
-                "category": r.category,
-                "message": r.message,
-                "suggestion": r.suggestion,
-            }
-            for r in rules_list
-        ]
-        print(json.dumps(data, indent=2))
-        return 0
-
-    use_color = sys.stdout.isatty()
-    sev_color = {"error": "\033[91m", "warning": "\033[93m", "info": "\033[94m"}
-    reset = "\033[0m"
-
-    for r in rules_list:
-        if use_color:
-            c = sev_color.get(r.severity, "")
-            print(f"  {c}{r.id}{reset}  [{r.severity}]  {r.message}")
-        else:
-            print(f"  {r.id}  [{r.severity}]  {r.message}")
-
-    print(f"\n  {len(rules_list)} rules")
-    return 0
-
-
-# =========================================================================
 # Subcommand: mcp
 # =========================================================================
 
@@ -249,12 +190,6 @@ def _register_mcp(subparsers) -> None:
         action="count",
         default=0,
         help="Verbosity: -v sig, -vv +desc, -vvv full",
-    )
-    list_p.add_argument(
-        "-c",
-        "--compact",
-        action="store_true",
-        help="Compact signatures",
     )
     list_p.set_defaults(func=_cmd_mcp_list_tools)
 
@@ -292,46 +227,55 @@ def _cmd_mcp_start(args) -> int:
 
 
 def _cmd_mcp_list_tools(args) -> int:
+    _KNOWN_TOOLS = ["linter_check", "linter_check_source", "linter_list_rules"]
+    tools = []
 
     try:
+        import asyncio
+
         from ._server import mcp as mcp_server
-    except ImportError:
-        print("fastmcp required. pip install scitex-linter[mcp]", file=sys.stderr)
-        return 1
-    tools_dict = getattr(mcp_server._tool_manager, "_tools", {})
-    v, c = args.verbose, args.compact
+
+        tools = asyncio.run(mcp_server.list_tools())
+    except Exception:
+        pass
+
+    if not tools:
+        print(f"SciTeX Linter MCP\nTools: {len(_KNOWN_TOOLS)}\n")
+        for n in _KNOWN_TOOLS:
+            print(f"  {n}")
+        return 0
+    v = args.verbose
     C = sys.stdout.isatty()
-    g, w, cy, y, r = (
-        ("\033[92m", "\033[1;37m", "\033[96m", "\033[93m", "\033[0m")
+    g, w, cy, y, dm, r = (
+        ("\033[92m", "\033[1;37m", "\033[96m", "\033[93m", "\033[2m", "\033[0m")
         if C
-        else ("",) * 5
+        else ("",) * 6
     )
-    print(f"{cy}SciTeX Linter MCP{r}\nTools: {len(tools_dict)}\n")
-    for name in sorted(tools_dict):
-        t = tools_dict[name]
+    print(f"{cy}SciTeX Linter MCP{r}\nTools: {len(tools)}\n")
+    for t in sorted(tools, key=lambda t: t.name):
         if v == 0:
-            print(f"  {name}")
+            print(f"  {t.name}")
         else:
             ps = []
-            if hasattr(t, "parameters") and t.parameters:
-                for p, i in t.parameters.get("properties", {}).items():
-                    pt = i.get("type", "any")
-                    if p in t.parameters.get("required", []):
-                        ps.append(f"{w}{p}{r}: {cy}{pt}{r}")
-                    else:
-                        d = (
-                            repr(i.get("default"))
-                            if i.get("default") is not None
-                            else "None"
-                        )
-                        ps.append(f"{w}{p}{r}: {cy}{pt}{r} = {y}{d}{r}")
-            print(f"  {g}{name}{r}({', '.join(ps)})")
+            params = t.parameters or {}
+            for p, i in params.get("properties", {}).items():
+                pt = i.get("type", "any")
+                if p in params.get("required", []):
+                    ps.append(f"{w}{p}{r}: {cy}{pt}{r}")
+                else:
+                    d = (
+                        repr(i.get("default"))
+                        if i.get("default") is not None
+                        else "None"
+                    )
+                    ps.append(f"{w}{p}{r}: {cy}{pt}{r} = {y}{d}{r}")
+            print(f"  {g}{t.name}{r}({', '.join(ps)})")
             if v >= 2 and t.description:
                 desc = t.description.split("\n")[0]
-                print(f"    {desc}")
+                print(f"       {dm}{desc}{r}")
                 if v >= 3:
                     for line in t.description.strip().split("\n")[1:]:
-                        print(f"    {line}")
+                        print(f"       {dm}{line}{r}")
                 print()
     return 0
 
@@ -468,6 +412,7 @@ def main(argv: list = None) -> int:
     _register_format(subparsers)
     _register_python(subparsers)
     _register_rule(subparsers)
+    _register_rules(subparsers)
     _register_api(subparsers)
     _register_mcp(subparsers)
 

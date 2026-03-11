@@ -46,6 +46,8 @@ from ._rules import (  # noqa: F401
     S004,
     S005,
     S006,
+    S007,
+    S008,
     SEVERITY_ORDER,
     ST001,
     ST002,

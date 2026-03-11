@@ -1,7 +1,7 @@
 Rules Reference
 ===============
 
-SciTeX Linter enforces 45 rules across 8 categories. Rules use the ``STX-`` prefix.
+SciTeX Linter enforces 47 rules across 8 categories. Rules use the ``STX-`` prefix.
 
 Category S: Structure
 ---------------------

@@ -34,10 +34,10 @@ def register_lint_tools(mcp) -> None:
     def linter_list_rules(
         category: Optional[str] = None, severity: Optional[str] = None
     ) -> dict:
-        """List all available lint rules."""
-        from ...rules import ALL_RULES
+        """List all available lint rules (built-in + plugin-contributed)."""
+        from ... import list_rules
 
-        rules_list = list(ALL_RULES.values())
+        rules_list = list_rules()
 
         if category:
             cats = set(category.split(","))

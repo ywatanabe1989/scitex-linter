@@ -77,7 +77,9 @@ def load_config(start_path: str | None = None) -> LinterConfig:
     Priority: env vars > pyproject.toml > defaults
 
     Args:
-        start_path: Starting directory for pyproject.toml search (defaults to cwd)
+        start_path: File or directory to start pyproject.toml search from.
+            If a file path, searches from its parent directory.
+            Defaults to cwd.
 
     Returns:
         Merged configuration
@@ -85,8 +87,13 @@ def load_config(start_path: str | None = None) -> LinterConfig:
     # Start with defaults
     config_dict = {}
 
-    # Load from pyproject.toml
-    start_dir = Path(start_path).resolve() if start_path else Path.cwd()
+    # Load from pyproject.toml — resolve file paths to their directory
+    if start_path:
+        start_dir = Path(start_path).resolve()
+        if start_dir.is_file():
+            start_dir = start_dir.parent
+    else:
+        start_dir = Path.cwd()
     pyproject_config = _load_pyproject(start_dir)
     config_dict.update(pyproject_config)
 
