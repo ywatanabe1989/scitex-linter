@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "scitex-linter"
-version = "0.3.0"
+version = "0.3.1"
 description = "AST-based linter enforcing SciTeX reproducible research patterns"
 readme = "README.md"
 license = {text = "AGPL-3.0"}
@@ -16,7 +16,7 @@ Documentation = "https://scitex-linter.readthedocs.io"
 Repository = "https://github.com/ywatanabe1989/scitex-linter"
 
 [project.optional-dependencies]
-mcp = ["fastmcp"]
+mcp = ["fastmcp>=2.0.0"]
 docs = [
     "sphinx>=7.0",
     "sphinx-rtd-theme>=2.0",
@@ -37,6 +37,9 @@ all = [
 
 [project.scripts]
 scitex-linter = "scitex_linter.cli:main"
+
+[project.entry-points."scitex_dev.docs"]
+scitex-linter = "scitex_linter"
 
 [project.entry-points."flake8.extension"]
 STX = "scitex_linter.flake8_plugin:SciTeXFlake8Checker"
