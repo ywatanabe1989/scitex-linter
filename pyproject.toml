@@ -16,7 +16,7 @@ Documentation = "https://scitex-linter.readthedocs.io"
 Repository = "https://github.com/ywatanabe1989/scitex-linter"
 
 [project.optional-dependencies]
-mcp = ["fastmcp"]
+mcp = ["fastmcp>=2.0.0"]
 docs = [
     "sphinx>=7.0",
     "sphinx-rtd-theme>=2.0",
