@@ -1,6 +1,6 @@
 """SciTeX Linter — enforce reproducible research patterns via AST analysis."""
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 
 def list_rules(category: str = None) -> list:
