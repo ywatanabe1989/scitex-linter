@@ -17,6 +17,7 @@ import sys
 from pathlib import Path
 
 from . import __version__
+from ._cmd_completion import register as _register_completion
 from ._cmd_format import register as _register_format
 from ._cmd_rules import register_rule as _register_rule
 from ._cmd_rules import register_rules as _register_rules
@@ -415,6 +416,7 @@ def main(argv: list = None) -> int:
     _register_rules(subparsers)
     _register_api(subparsers)
     _register_mcp(subparsers)
+    _register_completion(subparsers)
 
     # Split on -- to capture script args for the 'python' subcommand
     raw = argv if argv is not None else sys.argv[1:]
