@@ -1,10 +1,10 @@
 <!-- ---
-!-- Timestamp: 2026-02-06 20:53:45
+!-- Timestamp: 2026-03-14 12:00:00
 !-- Author: ywatanabe
 !-- File: /home/ywatanabe/proj/scitex-linter/README.md
 !-- --- -->
 
-# SciTeX Linter
+# SciTeX Linter (<code>scitex-linter</code>)
 
 <p align="center">
   <a href="https://scitex.ai">
@@ -12,32 +12,37 @@
   </a>
 </p>
 
+<p align="center"><b>AST-based Python linter enforcing reproducible research patterns</b></p>
+
 <p align="center">
   <a href="https://badge.fury.io/py/scitex-linter"><img src="https://badge.fury.io/py/scitex-linter.svg" alt="PyPI version"></a>
   <a href="https://pypi.org/project/scitex-linter/"><img src="https://img.shields.io/pypi/pyversions/scitex-linter.svg" alt="Python Versions"></a>
   <a href="https://scitex-linter.readthedocs.io/"><img src="https://readthedocs.org/projects/scitex-linter/badge/?version=latest" alt="Documentation"></a>
-  <a href="https://github.com/ywatanabe1989/scitex-linter/blob/main/LICENSE"><img src="https://img.shields.io/github/license/ywatanabe1989/scitex-linter" alt="License"></a>
+  <a href="https://github.com/ywatanabe1989/scitex-linter/actions/workflows/python-tests.yml"><img src="https://github.com/ywatanabe1989/scitex-linter/actions/workflows/python-tests.yml/badge.svg" alt="Tests"></a>
+  <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue.svg" alt="License: AGPL-3.0"></a>
 </p>
 
 <p align="center">
-  <a href="https://scitex.ai">scitex.ai</a> · <a href="https://scitex-linter.readthedocs.io/">docs</a> · <code>pip install scitex-linter</code>
+  <a href="https://scitex-linter.readthedocs.io/">Full Documentation</a> · <code>pip install scitex-linter</code>
 </p>
 
 ---
 
-**AST-based Python linter enforcing [SciTeX](https://scitex.ai) reproducible research patterns.**
+## Problem
 
-Part of the [SciTeX](https://scitex.ai) ecosystem — guides both human researchers and AI agents toward reproducible science.
+SciTeX scripts follow strict patterns for reproducibility — `@scitex.session` decorators, `scitex.io` for provenance-tracked I/O, `scitex.stats` for complete statistical reporting, and relative paths for portability. Deviations from these patterns silently undermine reproducibility, and manual code review does not scale across large research projects or AI-generated code.
 
-## Why SciTeX Linter?
+## Solution
 
-SciTeX scripts follow strict patterns for reproducibility: `@stx.session` decorators, `stx.io` for provenance-tracked I/O, `stx.stats` for complete statistical reporting, and relative paths for portability. SciTeX Linter enforces these patterns at the AST level — catching issues before they become irreproducible results.
+SciTeX Linter analyzes Python source code at the AST (Abstract Syntax Tree) level to detect violations of SciTeX patterns before they become irreproducible results. It provides 47 rules across 7 categories, covering structure, imports, I/O, plotting, statistics, paths, and figure layout. The linter integrates into terminal workflows, CI pipelines, and AI agent toolchains — ensuring both human researchers and AI assistants produce reproducible science.
 
-## Quick Start
+## Installation
 
 ```bash
 pip install scitex-linter
 ```
+
+## Quick Start
 
 ```bash
 # Lint a file
@@ -46,71 +51,19 @@ scitex-linter check script.py
 # Lint then execute
 scitex-linter python experiment.py --strict
 
+# Auto-fix issues
+scitex-linter format script.py
+
 # List all 47 rules
 scitex-linter rule
 ```
 
-## Six Interfaces
+## Three Interfaces
 
-| Interface | For | Description |
-|-----------|-----|-------------|
-| 🖥️ **CLI** | Terminal users | `scitex-linter check`, `scitex-linter python` |
-| ✨ **Format** | Auto-fix | `scitex-linter format` — savefig, np.save/load, pd.read_csv |
-| 🐍 **Python API** | Programmatic use | `scitex-linter api` or `from scitex_linter.checker import lint_file` |
-| 🔌 **flake8 Plugin** | CI pipelines | `flake8 --select STX` |
-| 🔧 **MCP Server** | AI agents | 3 tools for Claude/GPT integration |
-| 📋 **Claude Code Hook** | AI coding | Auto-lint on every file write/edit |
-
-<details>
-<summary><strong>🖥️ CLI Commands</strong></summary>
-
-<br>
-
-```bash
-scitex-linter --help                              # Show all commands
-scitex-linter --help-recursive                    # Show help for all subcommands
-
-# Check - Check for SciTeX pattern violations
-scitex-linter check script.py                      # Check a file
-scitex-linter check ./src/                         # Check a directory
-scitex-linter check script.py --severity error     # Only errors
-scitex-linter check script.py --category path      # Only path rules
-scitex-linter check script.py --json               # JSON output for CI
-
-# Format - Auto-fix SciTeX pattern issues
-scitex-linter format script.py                     # Fix in place
-scitex-linter format script.py --check             # Dry run (exit 1 if changes needed)
-scitex-linter format script.py --diff              # Show diff of changes
-scitex-linter format ./src/                        # Format a directory
-
-# Python - Lint then execute
-scitex-linter python experiment.py                # Lint and run
-scitex-linter python experiment.py --strict       # Abort on errors
-scitex-linter python experiment.py -- --lr 0.001  # Pass script args
-
-# Rules - Browse available rules
-scitex-linter rule                          # List all 47 rules
-scitex-linter rule --category stats         # Filter by category
-scitex-linter rule --json                   # JSON output
-
-# API - Inspect public Python API
-scitex-linter api                           # Tree view of 12 public APIs
-scitex-linter api --json                    # JSON output
-
-# MCP - AI agent server
-scitex-linter mcp start                           # Start MCP server (stdio)
-scitex-linter mcp list-tools                      # List MCP tools
-```
-
-</details>
-
-<details>
-<summary><strong>🐍 Python API</strong></summary>
-
-<br>
+### Python API
 
 ```python
-from scitex_linter.checker import lint_file
+from scitex_linter.checker import lint_file, lint_source
 from scitex_linter.formatter import format_issue
 
 # Lint a file
@@ -119,100 +72,76 @@ for issue in issues:
     print(format_issue(issue, "script.py"))
 
 # Check source code directly
-from scitex_linter.checker import lint_source
 issues = lint_source("import argparse\npass\n")
 ```
 
-</details>
-
 <details>
-<summary><strong>🔌 flake8 Plugin</strong></summary>
+<summary>Full API reference</summary>
 
 <br>
 
-SciTeX Linter registers as a flake8 plugin with the `STX` prefix:
+```
+scitex_linter
+  list_rules(category=None) -> list[Rule]
+
+scitex_linter.checker
+  lint_file(filepath, config=None) -> list[Issue]
+  lint_source(source, filepath, config=None) -> list[Issue]
+  is_script(filepath, config=None) -> bool
+
+scitex_linter.fixer
+  fix_source(source, filepath, config=None) -> str
+  fix_file(filepath, write=True, config=None) -> tuple
+
+scitex_linter.formatter
+  format_issue(issue, filepath, color=False) -> str
+  format_summary(issues, filepath, color=False) -> str
+  to_json(issues, filepath) -> list[dict]
+```
+
+</details>
+
+### CLI Commands
+
+```bash
+scitex-linter --help                              # Show all commands
+scitex-linter --help-recursive                    # Show help for all subcommands
+
+# Check
+scitex-linter check script.py                      # Check a file
+scitex-linter check ./src/                         # Check a directory
+scitex-linter check script.py --severity error     # Only errors
+scitex-linter check script.py --category path      # Only path rules
+scitex-linter check script.py --json               # JSON output for CI
+
+# Format (auto-fix)
+scitex-linter format script.py                     # Fix in place
+scitex-linter format script.py --check             # Dry run (exit 1 if changes needed)
+scitex-linter format script.py --diff              # Show diff of changes
+
+# Lint then execute
+scitex-linter python experiment.py                 # Lint and run
+scitex-linter python experiment.py --strict        # Abort on errors
+scitex-linter python experiment.py -- --lr 0.001   # Pass script args
+
+# Rules
+scitex-linter rule                                 # List all 47 rules
+scitex-linter rule --category stats                # Filter by category
+scitex-linter rule --json                          # JSON output
+```
+
+<details>
+<summary>Additional integrations</summary>
+
+<br>
+
+**flake8 plugin** — registers with the `STX` prefix for CI pipelines:
 
 ```bash
 flake8 --select STX script.py
-flake8 --select STX ./src/ --format=json
 ```
 
-Integrates with existing flake8 workflows, pre-commit hooks, and CI pipelines.
-
-</details>
-
-<details>
-<summary><strong>🔧 MCP Server — 3 Tools for AI Agents</strong></summary>
-
-<br>
-
-| Tool | Description |
-|------|-------------|
-| `linter_check` | Check a Python file for SciTeX compliance |
-| `linter_list_rules` | List all available rules |
-| `linter_check_source` | Lint source code string |
-
-**Claude Desktop** (`~/.config/Claude/claude_desktop_config.json`):
-
-```json
-{
-  "mcpServers": {
-    "scitex-linter": {
-      "command": "scitex-linter",
-      "args": ["mcp", "start"]
-    }
-  }
-}
-```
-
-Install MCP extra: `pip install scitex-linter[mcp]`
-
-</details>
-
-## 45 Rules Across 8 Categories
-
-| Category | Rules | Severity | What It Enforces |
-|----------|------:|----------|-----------------|
-| **S** Structure | 6 | error/warning | `@stx.session`, `__main__` guard, INJECTED params |
-| **I** Import | 7 | warning/info | Use `stx.plt`, `stx.stats`, `stx.io` instead of raw libs |
-| **IO** I/O Calls | 7 | warning | Use `stx.io.save()`/`stx.io.load()` for provenance |
-| **P** Plot | 5 | info | Use `stx.plt` tracked methods, `logger` over `print()` |
-| **ST** Stats | 6 | warning | Use `stx.stats` for auto effect size + CI + power |
-| **PA** Path | 5 | warning/info | Relative paths with `./`, no `open()`, no `os.chdir()` |
-| **FM** Figure | 9 | warning/info | mm-based layout, `stx.io.save()` for figures (opt-in) |
-
-<details>
-<summary><strong>Example Output</strong></summary>
-
-<br>
-
-```
-script.py:1   STX-S003  [error]    argparse detected — @stx.session auto-generates CLI
-  Suggestion: Remove `import argparse` and define parameters as function arguments:
-    @stx.session
-    def main(data_path: str, threshold: float = 0.5):
-        # Auto-generates: --data-path, --threshold
-
-script.py:5   STX-PA001 [warning]  Absolute path in `stx.io` call — use relative paths
-  Suggestion: Use `stx.io.save(obj, './relative/path.ext')` — paths resolve to script_out/.
-
-script.py: 2 issues (1 error, 1 warning)
-```
-
-</details>
-
-<details>
-<summary><strong>Full Rules Reference</strong></summary>
-
-<br>
-
-See [Rules Reference](https://scitex-linter.readthedocs.io/en/latest/rules.html) for all 47 rules with descriptions and suggestions.
-
-</details>
-
-## Claude Code Hook
-
-SciTeX Linter works as a **post-tool-use hook** for Claude Code, automatically linting every Python file Claude writes or edits:
+**Claude Code hook** — auto-lints every Python file Claude writes or edits:
 
 ```bash
 # In ~/.claude/to_claude/hooks/post-tool-use/run_lint.sh
@@ -220,12 +149,142 @@ SciTeX Linter works as a **post-tool-use hook** for Claude Code, automatically l
 # Warnings (exit 1) → Claude sees feedback
 ```
 
-This ensures AI-generated code follows SciTeX patterns from the start.
+</details>
+
+### MCP Server
+
+Three tools for AI agents (Claude, GPT, etc.):
+
+| Tool | Description |
+|------|-------------|
+| `linter_check` | Check a Python file for SciTeX compliance |
+| `linter_check_source` | Lint source code string |
+| `linter_list_rules` | List all available rules |
+
+```bash
+scitex-linter mcp start          # Start server (stdio)
+scitex-linter mcp list-tools     # List available tools
+scitex-linter mcp doctor         # Health check
+scitex-linter mcp installation   # Show Claude Desktop config
+```
+
+Install MCP extra: `pip install scitex-linter[mcp]`
+
+## 47 Rules Across 7 Categories
+
+| Category | Count | Severity | What It Enforces |
+|----------|------:|----------|-----------------|
+| **S** Structure | 8 | error/warning/info | `@scitex.session`, `__main__` guard, INJECTED params |
+| **I** Import | 7 | warning/info | Use `scitex.plt`, `scitex.stats`, `scitex.io` instead of raw libs |
+| **IO** I/O Calls | 7 | warning | Use `scitex.io.save()`/`scitex.io.load()` for provenance |
+| **P** Plot | 5 | info | Use `scitex.plt` tracked methods, `logger` over `print()` |
+| **ST** Stats | 6 | warning | Use `scitex.stats` for auto effect size + CI + power |
+| **PA** Path | 5 | warning/info | Relative paths with `./`, no `open()`, no `os.chdir()` |
+| **FM** Figure | 9 | warning/info | mm-based layout, `scitex.io.save()` for figures |
+
+<p align="center"><sub><b>Table 1.</b> Rule categories. Run <code>scitex-linter rule</code> for the full list, or see the <a href="https://scitex-linter.readthedocs.io/en/latest/rules.html">Rules Reference</a>.</sub></p>
+
+<details>
+<summary>Example output</summary>
+
+<br>
+
+```
+script.py:1   STX-S003  [error]    argparse detected — @scitex.session auto-generates CLI
+  Suggestion: Remove `import argparse` and define parameters as function arguments:
+    @scitex.session
+    def main(data_path: str, threshold: float = 0.5):
+        # Auto-generates: --data-path, --threshold
+
+script.py:5   STX-PA001 [warning]  Absolute path in `scitex.io` call — use relative paths
+  Suggestion: Use `scitex.io.save(obj, './relative/path.ext')` — paths resolve to script_out/.
+
+script.py: 2 issues (1 error, 1 warning)
+```
+
+</details>
+
+<details>
+<summary>Full rules listing</summary>
+
+<br>
+
+| Rule | Severity | Message |
+|------|----------|---------|
+| `STX-S001` | error | Missing `@scitex.session` or `@scitex.module` decorator on main function |
+| `STX-S002` | error | Missing `if __name__ == '__main__'` guard |
+| `STX-S003` | error | argparse detected — `@scitex.session` auto-generates CLI from function signature |
+| `STX-S004` | warning | `@scitex.session` function should return an integer exit code |
+| `STX-S005` | warning | Missing `import scitex` |
+| `STX-S006` | warning | `@scitex.session` function missing explicit INJECTED parameters |
+| `STX-S007` | warning | `load_configs()` result should be assigned to an UPPER_CASE variable |
+| `STX-S008` | info | Magic number in module scope — consider centralizing in config/ |
+| `STX-I001` | warning | Use `scitex.plt` instead of importing matplotlib.pyplot directly |
+| `STX-I002` | warning | Use `scitex.stats` instead of importing scipy.stats directly |
+| `STX-I003` | warning | Use `scitex.io` instead of pickle for file I/O |
+| `STX-I004` | warning | Use `scitex.io` for CSV/DataFrame I/O instead of pandas I/O functions |
+| `STX-I005` | warning | Use `scitex.io` for array I/O instead of numpy save/load |
+| `STX-I006` | info | Use `rngg` (injected by `@scitex.session`) for reproducible randomness |
+| `STX-I007` | warning | Use `logger` (injected by `@scitex.session`) instead of logging module |
+| `STX-IO001` | warning | Use `scitex.io.save()` instead of `np.save()` / `np.savez()` |
+| `STX-IO002` | warning | Use `scitex.io.load()` instead of `np.load()` / `np.loadtxt()` |
+| `STX-IO003` | warning | Use `scitex.io.save()` instead of `pd.to_csv()` / `to_excel()` |
+| `STX-IO004` | warning | Use `scitex.io.load()` instead of `pd.read_csv()` / `read_excel()` |
+| `STX-IO005` | warning | Use `scitex.io.save()` instead of `pickle.dump()` |
+| `STX-IO006` | warning | Use `scitex.io.load()` instead of `pickle.load()` |
+| `STX-IO007` | warning | Use `scitex.io.save()` instead of `plt.savefig()` |
+| `STX-P001` | info | Use `scitex.plt.subplots()` instead of `plt.subplots()` |
+| `STX-P002` | info | Use `scitex.plt.figure()` instead of `plt.figure()` |
+| `STX-P003` | info | Use `scitex.plt.show()` instead of `plt.show()` |
+| `STX-P004` | info | Use `logger` instead of `print()` for output |
+| `STX-P005` | info | Use `scitex.plt` methods for consistent plotting |
+| `STX-ST001` | warning | Use `scitex.stats.ttest_ind()` for complete statistical reporting |
+| `STX-ST002` | warning | Use `scitex.stats.ttest_1samp()` for complete statistical reporting |
+| `STX-ST003` | warning | Use `scitex.stats.mannwhitneyu()` for complete statistical reporting |
+| `STX-ST004` | warning | Use `scitex.stats.wilcoxon()` for complete statistical reporting |
+| `STX-ST005` | warning | Use `scitex.stats.chi2_contingency()` for complete statistical reporting |
+| `STX-ST006` | warning | Use `scitex.stats.f_oneway()` for complete statistical reporting |
+| `STX-PA001` | warning | Absolute path in `scitex.io` call — use relative paths for reproducibility |
+| `STX-PA002` | warning | `open()` detected — use `scitex.io.save()`/`scitex.io.load()` which includes auto-logging |
+| `STX-PA003` | info | `os.makedirs()`/`mkdir()` detected — `scitex.io.save()` creates directories automatically |
+| `STX-PA004` | warning | `os.chdir()` detected — scripts should be run from project root |
+| `STX-PA005` | info | Path without `./` prefix in `scitex.io` call — use `./` for explicit relative intent |
+| `STX-FM001` | warning | Use `scitex.io.save()` instead of `fig.savefig()` |
+| `STX-FM002` | info | Use `scitex.plt.subplots()` for mm-based figure layout |
+| `STX-FM003` | info | Use mm units for figure dimensions |
+| `STX-FM004` | warning | `tight_layout()` conflicts with mm-based layout |
+| `STX-FM005` | warning | `constrained_layout` conflicts with mm-based layout |
+| `STX-FM006` | warning | `subplots_adjust()` conflicts with mm-based layout |
+| `STX-FM007` | info | `rcParams` direct modification detected — hard to maintain across figures |
+| `STX-FM008` | warning | `set_size_inches()` detected — bypasses mm-based layout control |
+| `STX-FM009` | warning | `ax.set_position()` detected — conflicts with mm-based layout control |
+
+Additional rules are contributed by downstream packages via the `scitex_linter.plugins` entry point.
+
+</details>
+
+## What a Clean Script Looks Like
+
+```python
+import scitex
+
+@scitex.session
+def main(data_path="./data.csv", threshold=0.5):
+    df = scitex.io.load(data_path)
+    results = scitex.stats.ttest_ind(df["group_a"], df["group_b"])
+    scitex.io.save(results, "./results.csv")
+    return 0
+
+if __name__ == "__main__":
+    main()
+```
+
+Zero lint issues. Fully reproducible. Auto-CLI from function signature.
 
 ## Configuration
 
 <details>
-<summary><strong>Configure via pyproject.toml or environment variables</strong></summary>
+<summary>Configure via pyproject.toml or environment variables</summary>
 
 <br>
 
@@ -253,56 +312,20 @@ Priority: CLI flags > env vars > pyproject.toml > defaults
 
 </details>
 
-## What a Clean Script Looks Like
+## Part of SciTeX
 
-```python
-import scitex as stx
+SciTeX Linter is part of [SciTeX](https://scitex.ai). When used inside the orchestrator package `scitex`, the linter automatically enforces patterns for all SciTeX modules — `scitex.io`, `scitex.stats`, `scitex.plt`, and `scitex.session` — ensuring consistency across the entire research pipeline.
 
-@stx.session
-def main(data_path="./data.csv", threshold=0.5):
-    df = stx.io.load(data_path)
-    results = stx.stats.ttest_ind(df["group_a"], df["group_b"])
-    stx.io.save(results, "./results.csv")
-    return 0
+The SciTeX ecosystem follows the Four Freedoms for researchers, inspired by [the Free Software Definition](https://www.gnu.org/philosophy/free-sw.en.html):
 
-if __name__ == "__main__":
-    main()
-```
-
-Zero lint issues. Fully reproducible. Auto-CLI from function signature.
-
-## Lint Rules
-
-Detected by [scitex-linter](https://github.com/ywatanabe1989/scitex-linter) when this package is installed.
-
-| Rule | Severity | Message |
-|------|----------|---------|
-| `STX-S001` | error | Missing @stx.session or @stx.module decorator on main function |
-| `STX-S002` | error | Missing `if __name__ == '__main__'` guard |
-| `STX-S003` | error | argparse detected — @stx.session auto-generates CLI from function signature |
-| `STX-S004` | warning | @stx.session function should return an integer exit code |
-| `STX-S005` | warning | Missing `import scitex as stx` |
-| `STX-S006` | warning | @stx.session function missing explicit INJECTED parameters |
-| `STX-S007` | warning | load_configs() result should be assigned to an UPPER_CASE variable |
-| `STX-S008` | info | Magic number in module scope — consider centralizing in config/ |
-| `STX-I001` | warning | Use `stx.plt` instead of importing matplotlib.pyplot directly |
-| `STX-I002` | warning | Use `stx.stats` instead of importing scipy.stats directly |
-| `STX-I003` | warning | Use `stx.io` instead of pickle for file I/O |
-| `STX-I004` | warning | Use `stx.io` for CSV/DataFrame I/O instead of pandas I/O functions |
-| `STX-I005` | warning | Use `stx.io` for array I/O instead of numpy save/load |
-| `STX-I006` | info | Use `rngg` (injected by @stx.session) for reproducible randomness |
-| `STX-I007` | warning | Use `logger` (injected by @stx.session) instead of logging module |
-| `STX-PA001` | warning | Absolute path in `stx.io` call — use relative paths for reproducibility |
-| `STX-PA002` | warning | `open()` detected — use `stx.io.save()`/`stx.io.load()` which includes auto-logging |
-| `STX-PA003` | info | `os.makedirs()`/`mkdir()` detected — `stx.io.save()` creates directories automatically |
-| `STX-PA004` | warning | `os.chdir()` detected — scripts should be run from project root |
-| `STX-PA005` | info | Path without `./` prefix in `stx.io` call — use `./` for explicit relative intent |
-
-Additional rules are contributed by downstream packages via the `scitex_linter.plugins` entry point. Install a package to activate its rules automatically.
+- **Freedom 0** — Run research for any purpose
+- **Freedom 1** — Study and modify the research pipeline
+- **Freedom 2** — Redistribute results and methods
+- **Freedom 3** — Distribute modified versions to advance science
 
 ## Documentation
 
-📚 **[Full Documentation on Read the Docs](https://scitex-linter.readthedocs.io/)**
+[Full Documentation on Read the Docs](https://scitex-linter.readthedocs.io/)
 
 - [Installation](https://scitex-linter.readthedocs.io/en/latest/installation.html)
 - [Quick Start](https://scitex-linter.readthedocs.io/en/latest/quickstart.html)

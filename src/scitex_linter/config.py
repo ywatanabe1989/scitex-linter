@@ -54,7 +54,7 @@ class LinterConfig:
         ]
     )
     library_dirs: list[str] = field(
-        default_factory=lambda: ["src", "tests", "apps", "config"]
+        default_factory=lambda: ["src", "tests", "apps", "config", "docs"]
     )
     script_dirs: list[str] = field(default_factory=lambda: ["scripts"])
     disable: list[str] = field(default_factory=list)

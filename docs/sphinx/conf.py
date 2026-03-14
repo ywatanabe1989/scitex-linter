@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.abspath("../../src"))
 project = "SciTeX Linter"
 copyright = "2025, Yusuke Watanabe"
 author = "Yusuke Watanabe"
-release = "0.2.1"
+release = "0.3.1"
 
 # -- General configuration ---------------------------------------------------
 

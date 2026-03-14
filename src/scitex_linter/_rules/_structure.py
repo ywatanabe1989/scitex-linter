@@ -14,8 +14,8 @@ S001 = Rule(
         "      return 0\n"
         "If this is library code (not a script), add its directory to library_dirs:\n"
         "  [tool.scitex-linter]\n"
-        '  library_dirs = ["src", "tests", "apps", "config"]\n'
-        "  Or: SCITEX_LINTER_LIBRARY_DIRS=src,tests,apps,config"
+        '  library_dirs = ["src", "tests", "apps", "config", "docs"]\n'
+        "  Or: SCITEX_LINTER_LIBRARY_DIRS=src,tests,apps,config,docs"
     ),
     requires="scitex",
 )
@@ -29,8 +29,8 @@ S002 = Rule(
         "Add `if __name__ == '__main__': main()` at the end of the script.\n"
         "If this is library code (not a script), add its directory to library_dirs:\n"
         "  [tool.scitex-linter]\n"
-        '  library_dirs = ["src", "tests", "apps", "config"]\n'
-        "  Or: SCITEX_LINTER_LIBRARY_DIRS=src,tests,apps,config"
+        '  library_dirs = ["src", "tests", "apps", "config", "docs"]\n'
+        "  Or: SCITEX_LINTER_LIBRARY_DIRS=src,tests,apps,config,docs"
     ),
 )
 
