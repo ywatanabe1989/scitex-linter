@@ -418,6 +418,14 @@ def main(argv: list = None) -> int:
     _register_mcp(subparsers)
     _register_completion(subparsers)
 
+    # Skills subcommand (from scitex-dev)
+    try:
+        from scitex_dev.cli import register_skills_subcommand
+
+        register_skills_subcommand(subparsers, package="scitex-linter")
+    except ImportError:
+        pass
+
     # Split on -- to capture script args for the 'python' subcommand
     raw = argv if argv is not None else sys.argv[1:]
     script_args = []
