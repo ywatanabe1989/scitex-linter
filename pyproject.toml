@@ -9,7 +9,8 @@ description = "AST-based linter enforcing SciTeX reproducible research patterns"
 readme = "README.md"
 license = {text = "AGPL-3.0"}
 requires-python = ">=3.8"
-authors = [{name = "ywatanabe"}]
+dependencies = ["scitex-dev"]
+authors = [{name = "Yusuke Watanabe", email = "ywatanabe@scitex.ai"}]
 
 [project.urls]
 Documentation = "https://scitex-linter.readthedocs.io"
@@ -41,11 +42,17 @@ scitex-linter = "scitex_linter.cli:main"
 [project.entry-points."scitex_dev.docs"]
 scitex-linter = "scitex_linter"
 
+[project.entry-points."scitex_dev.skills"]
+scitex-linter = "scitex_linter"
+
 [project.entry-points."flake8.extension"]
 STX = "scitex_linter.flake8_plugin:SciTeXFlake8Checker"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+scitex_linter = ["skills/*.md", "skills/references/*.md"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
