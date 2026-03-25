@@ -1,5 +1,4 @@
 ---
-name: scitex-linter
 description: SciTeX code convention checker with pluggable rules for imports, naming, path handling, and package-specific patterns.
 allowed-tools: mcp__scitex__linter_*
 ---
