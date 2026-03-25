@@ -1,5 +1,4 @@
 ---
-name: rule-catalog
 description: All built-in linter rules by category — IO, stats, plot.
 ---
 
