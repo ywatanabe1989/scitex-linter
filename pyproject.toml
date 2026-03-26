@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "scitex-linter"
-version = "0.3.2"
+version = "0.3.3"
 description = "AST-based linter enforcing SciTeX reproducible research patterns"
 readme = "README.md"
 license = {text = "AGPL-3.0"}
@@ -52,7 +52,7 @@ STX = "scitex_linter.flake8_plugin:SciTeXFlake8Checker"
 where = ["src"]
 
 [tool.setuptools.package-data]
-scitex_linter = ["skills/*.md", "skills/references/*.md"]
+scitex_linter = ["skills/*.md", "skills/references/*.md", "_skills/**/*.md"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
