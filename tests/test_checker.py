@@ -576,3 +576,40 @@ if __name__ == "__main__":
                 assert code == 2
             finally:
                 os.unlink(f.name)
+
+
+# =========================================================================
+# stx-allow: inline comment directives
+# =========================================================================
+
+
+class TestStxAllow:
+    def test_bare_stx_allow_suppresses_all(self):
+        src = """
+import matplotlib.pyplot as plt  # stx-allow
+"""
+        assert "STX-I001" not in _rule_ids(src, filepath="lib.py")
+
+    def test_stx_allow_with_specific_rule(self):
+        src = """
+import matplotlib.pyplot as plt  # stx-allow: STX-I001
+"""
+        assert "STX-I001" not in _rule_ids(src, filepath="lib.py")
+
+    def test_stx_allow_wrong_rule_does_not_suppress(self):
+        src = """
+import matplotlib.pyplot as plt  # stx-allow: STX-S003
+"""
+        assert "STX-I001" in _rule_ids(src, filepath="lib.py")
+
+    def test_stx_allow_multiple_rules(self):
+        src = """
+import matplotlib.pyplot as plt  # stx-allow: STX-I001, STX-S003
+"""
+        assert "STX-I001" not in _rule_ids(src, filepath="lib.py")
+
+    def test_no_stx_allow_fires_normally(self):
+        src = """
+import matplotlib.pyplot as plt
+"""
+        assert "STX-I001" in _rule_ids(src, filepath="lib.py")

@@ -3,6 +3,7 @@
 __all__ = ["Issue", "is_script", "lint_file", "lint_source"]
 
 import ast
+import re
 from dataclasses import dataclass, replace
 from pathlib import Path
 
@@ -66,6 +67,30 @@ def is_script(filepath: str, config=None) -> bool:
             return False
 
     return True
+
+
+_STX_ALLOW_RE = re.compile(r"#\s*stx-allow\b(?::?\s*(.+))?")
+
+
+def _is_allowed_by_comment(source_line: str, rule_id: str) -> bool:
+    """Check if a source line has a ``# stx-allow`` comment suppressing *rule_id*.
+
+    Supported forms::
+
+        x = 1  # stx-allow                     → suppresses ALL rules on this line
+        x = 1  # stx-allow: STX-S003           → suppresses STX-S003
+        x = 1  # stx-allow: STX-S003, STX-I001 → suppresses both
+    """
+    if not source_line:
+        return False
+    m = _STX_ALLOW_RE.search(source_line)
+    if m is None:
+        return False
+    ids_str = m.group(1)
+    if not ids_str:
+        return True  # bare ``# stx-allow`` suppresses everything
+    allowed = {s.strip() for s in ids_str.split(",")}
+    return rule_id in allowed
 
 
 class SciTeXChecker(ast.NodeVisitor):
@@ -445,6 +470,8 @@ class SciTeXChecker(ast.NodeVisitor):
         if rule.requires and rule.requires not in self._available:
             return
         if rule.id in self.config.disable:
+            return
+        if _is_allowed_by_comment(source_line, rule.id):
             return
         sev = self.config.per_rule_severity.get(rule.id)
         if sev:
