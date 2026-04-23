@@ -15,11 +15,11 @@ runtime; which one a user has depends on their install choice.
 ```python
 # Standalone — pip install scitex-linter
 import scitex_linter
-scitex_linter.lint_file(...)
+scitex_linter.list_rules(...)
 
 # Umbrella — pip install scitex
 import scitex.linter
-scitex.linter.lint_file(...)
+scitex.linter.list_rules(...)
 ```
 
 `pip install scitex-linter` alone does NOT expose the `scitex` namespace;
