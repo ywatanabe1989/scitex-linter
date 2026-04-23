@@ -28,6 +28,14 @@
 
 ---
 
+## Problem and Solution
+
+
+| # | Problem | Solution |
+|---|---------|----------|
+| 1 | **Project conventions live in wiki pages** -- new contributors violate them for weeks before the code review catches it | **47 codified rules** -- `STX-IO*` (save/load), `STX-S*` (session), `STX-FM*` (filenames), `STX-PA*` (path), etc. run pre-commit and block the PR |
+| 2 | **`ruff`/`flake8` don't know about scitex idioms** -- `stx.io.save` usage, CONFIGS naming, matplotlib prefs, import hygiene are all invisible to standard linters | **Complements ruff/flake8** -- scitex-linter is a pluggable pre-commit hook focused on ecosystem conventions; runs alongside your existing linters |
+
 ## Problem
 
 SciTeX scripts follow strict patterns for reproducibility — `@scitex.session` decorators, `scitex.io` for provenance-tracked I/O, `scitex.stats` for complete statistical reporting, and relative paths for portability. Deviations from these patterns silently undermine reproducibility, and manual code review does not scale across large research projects or AI-generated code.
