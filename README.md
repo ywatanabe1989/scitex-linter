@@ -28,6 +28,8 @@
 
 ---
 
+> **Interfaces:** Python ⭐ · CLI ⭐⭐ · MCP ⭐ · Skills ⭐⭐ · Hook ⭐⭐⭐ (primary) · HTTP —
+
 ## Problem and Solution
 
 
