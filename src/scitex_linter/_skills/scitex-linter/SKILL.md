@@ -63,3 +63,8 @@ scitex-linter list-rules
 | `linter_check` | Check files for convention violations |
 | `linter_check_source` | Check source code string |
 | `linter_list_rules` | List available rules |
+
+
+## Environment
+
+- [12_env-vars.md](12_env-vars.md) — SCITEX_* env vars read by scitex-linter at runtime
