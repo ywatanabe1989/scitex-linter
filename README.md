@@ -28,6 +28,16 @@
 
 ---
 
+> **Interfaces:** Python ⭐ · CLI ⭐⭐ · MCP ⭐ · Skills ⭐⭐ · Hook ⭐⭐⭐ (primary) · HTTP —
+
+## Problem and Solution
+
+
+| # | Problem | Solution |
+|---|---------|----------|
+| 1 | **Project conventions live in wiki pages** -- new contributors violate them for weeks before the code review catches it | **47 codified rules** -- `STX-IO*` (save/load), `STX-S*` (session), `STX-FM*` (filenames), `STX-PA*` (path), etc. run pre-commit and block the PR |
+| 2 | **`ruff`/`flake8` don't know about scitex idioms** -- `stx.io.save` usage, CONFIGS naming, matplotlib prefs, import hygiene are all invisible to standard linters | **Complements ruff/flake8** -- scitex-linter is a pluggable pre-commit hook focused on ecosystem conventions; runs alongside your existing linters |
+
 ## Problem
 
 SciTeX scripts follow strict patterns for reproducibility — `@scitex.session` decorators, `scitex.io` for provenance-tracked I/O, `scitex.stats` for complete statistical reporting, and relative paths for portability. Deviations from these patterns silently undermine reproducibility, and manual code review does not scale across large research projects or AI-generated code.
@@ -58,9 +68,12 @@ scitex-linter format script.py
 scitex-linter rule
 ```
 
-## Three Interfaces
+## Four Interfaces
 
-### Python API
+<details>
+<summary><strong>Python API</strong></summary>
+
+<br>
 
 ```python
 from scitex_linter.checker import lint_file, lint_source
@@ -101,7 +114,12 @@ scitex_linter.formatter
 
 </details>
 
-### CLI Commands
+</details>
+
+<details>
+<summary><strong>CLI Commands</strong></summary>
+
+<br>
 
 ```bash
 scitex-linter --help                              # Show all commands
@@ -151,7 +169,12 @@ flake8 --select STX script.py
 
 </details>
 
-### MCP Server
+</details>
+
+<details>
+<summary><strong>MCP Server</strong></summary>
+
+<br>
 
 Three tools for AI agents (Claude, GPT, etc.):
 
@@ -169,6 +192,30 @@ scitex-linter mcp installation   # Show Claude Desktop config
 ```
 
 Install MCP extra: `pip install scitex-linter[mcp]`
+
+</details>
+
+<details>
+<summary><strong>Skills — for AI Agent Discovery</strong></summary>
+
+<br>
+
+Skills provide workflow-oriented guides that AI agents query to discover capabilities and usage patterns.
+
+```bash
+scitex-linter skills list              # List available skill pages
+scitex-linter skills get SKILL         # Show main skill page
+scitex-dev skills export --package scitex-linter  # Export to Claude Code
+```
+
+| Skill | Content |
+|-------|---------|
+| `quick-start` | Basic usage |
+| `rule-catalog` | All built-in rules |
+| `cli-reference` | CLI commands |
+| `mcp-tools` | MCP tools for AI agents |
+
+</details>
 
 ## 47 Rules Across 7 Categories
 

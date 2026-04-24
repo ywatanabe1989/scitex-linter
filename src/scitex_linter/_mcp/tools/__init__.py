@@ -14,7 +14,7 @@ def _register_skills_tools(mcp) -> None:
 
     @mcp.tool()
     def linter_skills_list() -> dict:
-        """List available skill pages for scitex-linter."""
+        """Use when you need to see what detailed docs exist for scitex-linter (47 SciTeX convention rules across 7 categories: FM filenames, I imports, IO save/load, P plot, PA path, S style, ST structure)."""
         try:
             from scitex_dev.skills import list_skills
 
@@ -25,7 +25,7 @@ def _register_skills_tools(mcp) -> None:
 
     @mcp.tool()
     def linter_skills_get(name: str = None) -> dict:
-        """Get a skill page for scitex-linter."""
+        """Use when you need to read a specific scitex-linter skill page covering the 47 SciTeX convention rules across 7 categories (FM filenames, I imports, IO save/load, P plot, PA path, S style, ST structure)."""
         try:
             from scitex_dev.skills import get_skill
 

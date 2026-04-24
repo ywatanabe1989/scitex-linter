@@ -3,6 +3,7 @@
 __all__ = ["Issue", "is_script", "lint_file", "lint_source"]
 
 import ast
+import re
 from dataclasses import dataclass, replace
 from pathlib import Path
 
@@ -66,6 +67,30 @@ def is_script(filepath: str, config=None) -> bool:
             return False
 
     return True
+
+
+_STX_ALLOW_RE = re.compile(r"#\s*stx-allow\b(?::?\s*(.+))?")
+
+
+def _is_allowed_by_comment(source_line: str, rule_id: str) -> bool:
+    """Check if a source line has a ``# stx-allow`` comment suppressing *rule_id*.
+
+    Supported forms::
+
+        x = 1  # stx-allow                     → suppresses ALL rules on this line
+        x = 1  # stx-allow: STX-S003           → suppresses STX-S003
+        x = 1  # stx-allow: STX-S003, STX-I001 → suppresses both
+    """
+    if not source_line:
+        return False
+    m = _STX_ALLOW_RE.search(source_line)
+    if m is None:
+        return False
+    ids_str = m.group(1)
+    if not ids_str:
+        return True  # bare ``# stx-allow`` suppresses everything
+    allowed = {s.strip() for s in ids_str.split(",")}
+    return rule_id in allowed
 
 
 class SciTeXChecker(ast.NodeVisitor):
@@ -446,6 +471,8 @@ class SciTeXChecker(ast.NodeVisitor):
             return
         if rule.id in self.config.disable:
             return
+        if _is_allowed_by_comment(source_line, rule.id):
+            return
         sev = self.config.per_rule_severity.get(rule.id)
         if sev:
             rule = replace(rule, severity=sev)
@@ -501,9 +528,17 @@ def lint_source(source: str, filepath: str = "<stdin>", config=None) -> list:
 
 
 def lint_file(filepath: str, config=None) -> list:
-    """Lint a Python file and return list of Issues."""
+    """Lint a Python file or Jupyter notebook; returns list of Issues.
+
+    `.ipynb` files are routed to `_ipynb.lint_ipynb`, which extracts
+    code cells and calls back into `lint_source` per cell.
+    """
     path = Path(filepath)
     if not path.exists() or not path.is_file():
         return []
+    if path.suffix == ".ipynb":
+        from ._ipynb import lint_ipynb
+
+        return lint_ipynb(path, config=config)
     source = path.read_text(encoding="utf-8")
     return lint_source(source, filepath=str(path), config=config)

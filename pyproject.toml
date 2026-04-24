@@ -4,10 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "scitex-linter"
-version = "0.3.1"
+version = "0.3.5"
 description = "AST-based linter enforcing SciTeX reproducible research patterns"
 readme = "README.md"
-license = {text = "AGPL-3.0"}
+license = "AGPL-3.0-only"
+classifiers = [
+    "License :: OSI Approved :: GNU Affero General Public License v3",
+]
 requires-python = ">=3.8"
 dependencies = ["scitex-dev"]
 authors = [{name = "Yusuke Watanabe", email = "ywatanabe@scitex.ai"}]
@@ -52,7 +55,7 @@ STX = "scitex_linter.flake8_plugin:SciTeXFlake8Checker"
 where = ["src"]
 
 [tool.setuptools.package-data]
-scitex_linter = ["skills/*.md", "skills/references/*.md"]
+scitex_linter = ["skills/*.md", "skills/references/*.md", "_skills/**/*.md"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

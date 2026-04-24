@@ -1,5 +1,4 @@
 ---
-name: quick-start
 description: Basic linter usage — check files, list rules.
 ---
 

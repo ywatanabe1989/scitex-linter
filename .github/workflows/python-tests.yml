@@ -8,6 +8,9 @@ on:
     branches: [main, develop]
     paths: ["src/**", "tests/**", "pyproject.toml"]
 
+  schedule:
+    - cron: "0 7 * * *"  # nightly 07:00 UTC
+  workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

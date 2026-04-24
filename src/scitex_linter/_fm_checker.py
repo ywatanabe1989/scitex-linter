@@ -136,6 +136,10 @@ class FMChecker(ast.NodeVisitor):
 
         if rule.id in self.config.disable:
             return
+        from .checker import _is_allowed_by_comment
+
+        if _is_allowed_by_comment(source_line, rule.id):
+            return
         # Swap suggestion based on available packages
         suggestion = rule.suggestion
         variants = _SUGGESTIONS.get(rule.id)
