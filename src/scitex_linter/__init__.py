@@ -1,7 +1,8 @@
 """SciTeX Linter — enforce reproducible research patterns via AST analysis."""
 
 try:
-    from importlib.metadata import version as _v, PackageNotFoundError
+    from importlib.metadata import PackageNotFoundError
+    from importlib.metadata import version as _v
     try:
         __version__ = _v("scitex-linter")
     except PackageNotFoundError:
