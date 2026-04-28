@@ -80,8 +80,6 @@ class TestIpynbLinting:
             ],
         )
         issues = lint_file(str(nb))
-        # At least one issue should tag the second cell
-        cell_refs = [getattr(i, "source_line", "") for i in issues]
         # Filepath is prefixed onto issues via lint_source; the only way
         # to verify here is that at least some issues came out of the np.save.
         assert any(i.rule.id == "STX-IO001" for i in issues)
