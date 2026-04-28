@@ -3,6 +3,7 @@
 try:
     from importlib.metadata import PackageNotFoundError
     from importlib.metadata import version as _v
+
     try:
         __version__ = _v("scitex-linter")
     except PackageNotFoundError:
@@ -10,6 +11,8 @@ try:
     del _v, PackageNotFoundError
 except ImportError:  # pragma: no cover — only on ancient Pythons
     __version__ = "0.0.0+local"
+
+
 def list_rules(category: str = None) -> list:
     """Return all rules (built-in + plugin), optionally filtered by category.
 
