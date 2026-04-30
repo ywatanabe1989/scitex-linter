@@ -1,6 +1,16 @@
 """SciTeX Linter — enforce reproducible research patterns via AST analysis."""
 
-__version__ = "0.3.3"
+try:
+    from importlib.metadata import PackageNotFoundError
+    from importlib.metadata import version as _v
+
+    try:
+        __version__ = _v("scitex-linter")
+    except PackageNotFoundError:
+        __version__ = "0.0.0+local"
+    del _v, PackageNotFoundError
+except ImportError:  # pragma: no cover — only on ancient Pythons
+    __version__ = "0.0.0+local"
 
 
 def list_rules(category: str = None) -> list:

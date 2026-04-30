@@ -6,6 +6,17 @@
 
 # SciTeX Linter (<code>scitex-linter</code>)
 
+<!-- scitex-badges:start -->
+[![PyPI](https://img.shields.io/pypi/v/scitex-linter.svg)](https://pypi.org/project/scitex-linter/)
+[![Python](https://img.shields.io/pypi/pyversions/scitex-linter.svg)](https://pypi.org/project/scitex-linter/)
+[![Tests](https://github.com/ywatanabe1989/scitex-linter/actions/workflows/test.yml/badge.svg)](https://github.com/ywatanabe1989/scitex-linter/actions/workflows/test.yml)
+[![Install Test](https://github.com/ywatanabe1989/scitex-linter/actions/workflows/install-test.yml/badge.svg)](https://github.com/ywatanabe1989/scitex-linter/actions/workflows/install-test.yml)
+[![Coverage](https://codecov.io/gh/ywatanabe1989/scitex-linter/graph/badge.svg)](https://codecov.io/gh/ywatanabe1989/scitex-linter)
+[![Docs](https://readthedocs.org/projects/scitex-linter/badge/?version=latest)](https://scitex-linter.readthedocs.io/en/latest/)
+[![License: AGPL v3](https://img.shields.io/badge/license-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+<!-- scitex-badges:end -->
+
+
 <p align="center">
   <a href="https://scitex.ai">
     <img src="docs/scitex-logo-banner.png" alt="SciTeX Linter" width="400">
