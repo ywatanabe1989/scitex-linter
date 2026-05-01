@@ -16,46 +16,18 @@
 [![License: AGPL v3](https://img.shields.io/badge/license-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 <!-- scitex-badges:end -->
 
-
-<p align="center">
-  <a href="https://scitex.ai">
-    <img src="docs/scitex-logo-banner.png" alt="SciTeX Linter" width="400">
-  </a>
-</p>
-
-<p align="center"><b>AST-based Python linter enforcing reproducible research patterns</b></p>
-
-<p align="center">
-  <a href="https://badge.fury.io/py/scitex-linter"><img src="https://badge.fury.io/py/scitex-linter.svg" alt="PyPI version"></a>
-  <a href="https://pypi.org/project/scitex-linter/"><img src="https://img.shields.io/pypi/pyversions/scitex-linter.svg" alt="Python Versions"></a>
-  <a href="https://scitex-linter.readthedocs.io/"><img src="https://readthedocs.org/projects/scitex-linter/badge/?version=latest" alt="Documentation"></a>
-  <a href="https://github.com/ywatanabe1989/scitex-linter/actions/workflows/python-tests.yml"><img src="https://github.com/ywatanabe1989/scitex-linter/actions/workflows/python-tests.yml/badge.svg" alt="Tests"></a>
-  <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue.svg" alt="License: AGPL-3.0"></a>
-</p>
-
 <p align="center">
   <a href="https://scitex-linter.readthedocs.io/">Full Documentation</a> · <code>pip install scitex-linter</code>
 </p>
 
 ---
 
-> **Interfaces:** Python ⭐ · CLI ⭐⭐ · MCP ⭐ · Skills ⭐⭐ · Hook ⭐⭐⭐ (primary) · HTTP —
-
 ## Problem and Solution
-
 
 | # | Problem | Solution |
 |---|---------|----------|
 | 1 | **Project conventions live in wiki pages** -- new contributors violate them for weeks before the code review catches it | **47 codified rules** -- `STX-IO*` (save/load), `STX-S*` (session), `STX-FM*` (filenames), `STX-PA*` (path), etc. run pre-commit and block the PR |
 | 2 | **`ruff`/`flake8` don't know about scitex idioms** -- `stx.io.save` usage, CONFIGS naming, matplotlib prefs, import hygiene are all invisible to standard linters | **Complements ruff/flake8** -- scitex-linter is a pluggable pre-commit hook focused on ecosystem conventions; runs alongside your existing linters |
-
-## Problem
-
-SciTeX scripts follow strict patterns for reproducibility — `@scitex.session` decorators, `scitex.io` for provenance-tracked I/O, `scitex.stats` for complete statistical reporting, and relative paths for portability. Deviations from these patterns silently undermine reproducibility, and manual code review does not scale across large research projects or AI-generated code.
-
-## Solution
-
-SciTeX Linter analyzes Python source code at the AST (Abstract Syntax Tree) level to detect violations of SciTeX patterns before they become irreproducible results. It provides 47 rules across 7 categories, covering structure, imports, I/O, plotting, statistics, paths, and figure layout. The linter integrates into terminal workflows, CI pipelines, and AI agent toolchains — ensuring both human researchers and AI assistants produce reproducible science.
 
 ## Installation
 
@@ -207,7 +179,7 @@ Install MCP extra: `pip install scitex-linter[mcp]`
 </details>
 
 <details>
-<summary><strong>Skills — for AI Agent Discovery</strong></summary>
+<summary><strong>Skills</strong></summary>
 
 <br>
 
@@ -372,7 +344,9 @@ Priority: CLI flags > env vars > pyproject.toml > defaults
 
 ## Part of SciTeX
 
-SciTeX Linter is part of [SciTeX](https://scitex.ai). When used inside the orchestrator package `scitex`, the linter automatically enforces patterns for all SciTeX modules — `scitex.io`, `scitex.stats`, `scitex.plt`, and `scitex.session` — ensuring consistency across the entire research pipeline.
+`scitex-linter` is part of [**SciTeX**](https://scitex.ai). Install via
+the umbrella with `pip install scitex[linter]` to use as
+`scitex.linter` (Python) or `scitex linter ...` (CLI).
 
 The SciTeX ecosystem follows the Four Freedoms for researchers, inspired by [the Free Software Definition](https://www.gnu.org/philosophy/free-sw.en.html):
 

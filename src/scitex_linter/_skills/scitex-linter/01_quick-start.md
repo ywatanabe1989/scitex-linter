@@ -1,5 +1,7 @@
 ---
 description: Basic linter usage — check files, list rules.
+name: quick-start
+tags: [scitex-linter, scitex-package]
 ---
 
 # Quick Start

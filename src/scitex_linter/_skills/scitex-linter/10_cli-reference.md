@@ -1,5 +1,7 @@
 ---
 description: CLI commands for scitex-linter.
+name: cli-reference
+tags: [scitex-linter, scitex-package]
 ---
 
 # CLI Reference

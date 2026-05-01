@@ -1,5 +1,7 @@
 ---
 description: All built-in linter rules by category — IO, stats, plot.
+name: rule-catalog
+tags: [scitex-linter, scitex-package]
 ---
 
 # Rule Catalog

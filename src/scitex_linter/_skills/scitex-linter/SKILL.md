@@ -9,6 +9,8 @@ interfaces:
   skills: 2
   hook: 3
   http: 0
+name: scitex-linter
+tags: [scitex-linter, scitex-package]
 ---
 
 # scitex-linter

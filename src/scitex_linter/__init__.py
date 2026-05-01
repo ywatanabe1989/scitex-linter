@@ -1,5 +1,7 @@
 """SciTeX Linter — enforce reproducible research patterns via AST analysis."""
 
+from __future__ import annotations
+
 try:
     from importlib.metadata import PackageNotFoundError
     from importlib.metadata import version as _v
@@ -39,4 +41,4 @@ def list_rules(category: str = None) -> list:
     return rules
 
 
-__all__ = ["list_rules"]
+__all__ = ["__version__", "list_rules"]

@@ -1,5 +1,7 @@
 ---
 description: MCP tools for AI agents — check code, list rules.
+name: mcp-tools
+tags: [scitex-linter, scitex-package]
 ---
 
 # MCP Tools
