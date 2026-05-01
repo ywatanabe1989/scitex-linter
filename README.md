@@ -344,7 +344,9 @@ Priority: CLI flags > env vars > pyproject.toml > defaults
 
 ## Part of SciTeX
 
-SciTeX Linter is part of [SciTeX](https://scitex.ai). When used inside the orchestrator package `scitex`, the linter automatically enforces patterns for all SciTeX modules — `scitex.io`, `scitex.stats`, `scitex.plt`, and `scitex.session` — ensuring consistency across the entire research pipeline.
+`scitex-linter` is part of [**SciTeX**](https://scitex.ai). Install via
+the umbrella with `pip install scitex[linter]` to use as
+`scitex.linter` (Python) or `scitex linter ...` (CLI).
 
 The SciTeX ecosystem follows the Four Freedoms for researchers, inspired by [the Free Software Definition](https://www.gnu.org/philosophy/free-sw.en.html):
 
