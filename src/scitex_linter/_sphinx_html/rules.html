@@ -1,0 +1,562 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rules Reference &mdash; SciTeX Linter v0.2.1</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=37f418d5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CLI Reference" href="cli.html" />
+    <link rel="prev" title="Quick Start" href="quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SciTeX Linter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-from-pypi">Install from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-from-source">Install from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#verification">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#via-scitex">Via SciTeX</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#lint-a-file">Lint a File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#severity-levels">Severity Levels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#lint-then-execute">Lint then Execute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#browse-rules">Browse Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#flake8-integration">flake8 Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#what-a-clean-script-looks-like">What a Clean Script Looks Like</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Rules Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#category-s-structure">Category S: Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#category-i-imports">Category I: Imports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#category-io-i-o-calls">Category IO: I/O Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#category-p-plotting">Category P: Plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#category-st-statistics">Category ST: Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#category-pa-path-handling">Category PA: Path Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#category-fm-figure-millimeter-opt-in">Category FM: Figure/Millimeter (opt-in)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#severity-summary">Severity Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">CLI Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#global-options">Global Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#scitex-linter-check">scitex-linter check</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#scitex-linter-format">scitex-linter format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#scitex-linter-python">scitex-linter python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#scitex-linter-rule">scitex-linter rule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#scitex-linter-api">scitex-linter api</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#scitex-linter-mcp">scitex-linter mcp</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hook.html">Claude Code Hook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hook.html#how-it-works">How It Works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hook.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hook.html#command-detection">Command Detection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hook.html#exit-codes">Exit Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hook.html#example-output">Example Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hook.html#disabling">Disabling</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/scitex_linter.html">scitex_linter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.list_rules"><code class="docutils literal notranslate"><span class="pre">list_rules()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/scitex_linter.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter.checker">scitex_linter.checker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.checker.Issue"><code class="docutils literal notranslate"><span class="pre">Issue</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.checker.is_script"><code class="docutils literal notranslate"><span class="pre">is_script()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.checker.lint_file"><code class="docutils literal notranslate"><span class="pre">lint_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.checker.lint_source"><code class="docutils literal notranslate"><span class="pre">lint_source()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter.rules">scitex_linter.rules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.rules.Rule"><code class="docutils literal notranslate"><span class="pre">Rule</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter.formatter">scitex_linter.formatter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.formatter.format_issue"><code class="docutils literal notranslate"><span class="pre">format_issue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.formatter.format_summary"><code class="docutils literal notranslate"><span class="pre">format_summary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.formatter.to_json"><code class="docutils literal notranslate"><span class="pre">to_json()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter.runner">scitex_linter.runner</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.runner._is_git_root"><code class="docutils literal notranslate"><span class="pre">_is_git_root()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.runner.run_script"><code class="docutils literal notranslate"><span class="pre">run_script()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter.cli">scitex_linter.cli</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.cli._collect_files"><code class="docutils literal notranslate"><span class="pre">_collect_files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.cli._print_help_recursive"><code class="docutils literal notranslate"><span class="pre">_print_help_recursive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter.config">scitex_linter.config</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.config.LinterConfig"><code class="docutils literal notranslate"><span class="pre">LinterConfig</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.config.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.config._load_env"><code class="docutils literal notranslate"><span class="pre">_load_env()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.config._load_pyproject"><code class="docutils literal notranslate"><span class="pre">_load_pyproject()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter.flake8_plugin">scitex_linter.flake8_plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.flake8_plugin.SciTeXFlake8Checker"><code class="docutils literal notranslate"><span class="pre">SciTeXFlake8Checker</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter._fm_checker">scitex_linter._fm_checker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter._fm_checker._is_exempt_call"><code class="docutils literal notranslate"><span class="pre">_is_exempt_call()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter._fm_checker._has_kwarg"><code class="docutils literal notranslate"><span class="pre">_has_kwarg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter._fm_checker.FMChecker"><code class="docutils literal notranslate"><span class="pre">FMChecker</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter._packages">scitex_linter._packages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter._packages._can_import"><code class="docutils literal notranslate"><span class="pre">_can_import()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter._packages.detect"><code class="docutils literal notranslate"><span class="pre">detect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter._packages.reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SciTeX Linter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Rules Reference</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ywatanabe1989/scitex-linter/blob/main/docs/sphinx/rules.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rules-reference">
+<h1>Rules Reference<a class="headerlink" href="#rules-reference" title="Link to this heading"></a></h1>
+<p>SciTeX Linter enforces 47 rules across 8 categories. Rules use the <code class="docutils literal notranslate"><span class="pre">STX-</span></code> prefix.</p>
+<section id="category-s-structure">
+<h2>Category S: Structure<a class="headerlink" href="#category-s-structure" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 10.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Rule</p></th>
+<th class="head"><p>Severity</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>STX-S001</p></td>
+<td><p>error</p></td>
+<td><p>Missing <code class="docutils literal notranslate"><span class="pre">&#64;stx.session</span></code> decorator on main function</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-S002</p></td>
+<td><p>error</p></td>
+<td><p>Missing <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">'__main__'</span></code> guard</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-S003</p></td>
+<td><p>error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">argparse</span></code> detected — <code class="docutils literal notranslate"><span class="pre">&#64;stx.session</span></code> auto-generates CLI from function signature</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-S004</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&#64;stx.session</span></code> function should return an integer exit code</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-S005</p></td>
+<td><p>warning</p></td>
+<td><p>Missing <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">scitex</span> <span class="pre">as</span> <span class="pre">stx</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-S006</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&#64;stx.session</span></code> function missing explicit INJECTED parameters</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="category-i-imports">
+<h2>Category I: Imports<a class="headerlink" href="#category-i-imports" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 10.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Rule</p></th>
+<th class="head"><p>Severity</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>STX-I001</p></td>
+<td><p>warning</p></td>
+<td><p>Use <code class="docutils literal notranslate"><span class="pre">stx.plt</span></code> instead of importing <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> directly</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-I002</p></td>
+<td><p>warning</p></td>
+<td><p>Use <code class="docutils literal notranslate"><span class="pre">stx.stats</span></code> instead of importing <code class="docutils literal notranslate"><span class="pre">scipy.stats</span></code> directly</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-I003</p></td>
+<td><p>warning</p></td>
+<td><p>Use <code class="docutils literal notranslate"><span class="pre">stx.io</span></code> instead of <code class="docutils literal notranslate"><span class="pre">pickle</span></code> for file I/O</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-I004</p></td>
+<td><p>warning</p></td>
+<td><p>Use <code class="docutils literal notranslate"><span class="pre">stx.io</span></code> for CSV/DataFrame I/O instead of pandas I/O functions</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-I005</p></td>
+<td><p>warning</p></td>
+<td><p>Use <code class="docutils literal notranslate"><span class="pre">stx.io</span></code> for array I/O instead of numpy save/load</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-I006</p></td>
+<td><p>info</p></td>
+<td><p>Use <code class="docutils literal notranslate"><span class="pre">rngg</span></code> (injected by <code class="docutils literal notranslate"><span class="pre">&#64;stx.session</span></code>) for reproducible randomness</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-I007</p></td>
+<td><p>warning</p></td>
+<td><p>Use <code class="docutils literal notranslate"><span class="pre">logger</span></code> (injected by <code class="docutils literal notranslate"><span class="pre">&#64;stx.session</span></code>) instead of logging module</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="category-io-i-o-calls">
+<h2>Category IO: I/O Calls<a class="headerlink" href="#category-io-i-o-calls" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 10.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Rule</p></th>
+<th class="head"><p>Severity</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>STX-IO001</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">np.save()</span></code> detected — use <code class="docutils literal notranslate"><span class="pre">stx.io.save()</span></code> for provenance tracking</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-IO002</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">np.load()</span></code> detected — use <code class="docutils literal notranslate"><span class="pre">stx.io.load()</span></code> for provenance tracking</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-IO003</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pd.read_csv()</span></code> detected — use <code class="docutils literal notranslate"><span class="pre">stx.io.load()</span></code> for provenance tracking</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-IO004</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.to_csv()</span></code> detected — use <code class="docutils literal notranslate"><span class="pre">stx.io.save()</span></code> for provenance tracking</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-IO005</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pickle.dump()</span></code> detected — use <code class="docutils literal notranslate"><span class="pre">stx.io.save()</span></code> for provenance tracking</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-IO006</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">json.dump()</span></code> detected — use <code class="docutils literal notranslate"><span class="pre">stx.io.save()</span></code> for provenance tracking</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-IO007</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.savefig()</span></code> detected — use <code class="docutils literal notranslate"><span class="pre">stx.io.save(fig,</span> <span class="pre">path)</span></code> for metadata embedding</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="category-p-plotting">
+<h2>Category P: Plotting<a class="headerlink" href="#category-p-plotting" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 10.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Rule</p></th>
+<th class="head"><p>Severity</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>STX-P001</p></td>
+<td><p>info</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ax.plot()</span></code> — consider <code class="docutils literal notranslate"><span class="pre">ax.stx_line()</span></code> for automatic CSV data export</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-P002</p></td>
+<td><p>info</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ax.scatter()</span></code> — consider <code class="docutils literal notranslate"><span class="pre">ax.stx_scatter()</span></code> for automatic CSV data export</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-P003</p></td>
+<td><p>info</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ax.bar()</span></code> — consider <code class="docutils literal notranslate"><span class="pre">ax.stx_bar()</span></code> for automatic sample size annotation</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-P004</p></td>
+<td><p>info</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">plt.show()</span></code> is non-reproducible in batch/CI environments</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-P005</p></td>
+<td><p>info</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">print()</span></code> inside <code class="docutils literal notranslate"><span class="pre">&#64;stx.session</span></code> — use <code class="docutils literal notranslate"><span class="pre">logger</span></code> for tracked logging</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="category-st-statistics">
+<h2>Category ST: Statistics<a class="headerlink" href="#category-st-statistics" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 10.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Rule</p></th>
+<th class="head"><p>Severity</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>STX-ST001</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scipy.stats.ttest_ind()</span></code> — use <code class="docutils literal notranslate"><span class="pre">stx.stats.ttest_ind()</span></code> for auto effect size + CI</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-ST002</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scipy.stats.mannwhitneyu()</span></code> — use <code class="docutils literal notranslate"><span class="pre">stx.stats.mannwhitneyu()</span></code> for auto effect size</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-ST003</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scipy.stats.pearsonr()</span></code> — use <code class="docutils literal notranslate"><span class="pre">stx.stats.pearsonr()</span></code> for auto CI + power</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-ST004</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scipy.stats.f_oneway()</span></code> — use <code class="docutils literal notranslate"><span class="pre">stx.stats.anova_oneway()</span></code> for post-hoc + effect sizes</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-ST005</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scipy.stats.wilcoxon()</span></code> — use <code class="docutils literal notranslate"><span class="pre">stx.stats.wilcoxon()</span></code> for auto effect size</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-ST006</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scipy.stats.kruskal()</span></code> — use <code class="docutils literal notranslate"><span class="pre">stx.stats.kruskal()</span></code> for post-hoc + effect sizes</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="category-pa-path-handling">
+<h2>Category PA: Path Handling<a class="headerlink" href="#category-pa-path-handling" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 10.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Rule</p></th>
+<th class="head"><p>Severity</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>STX-PA001</p></td>
+<td><p>warning</p></td>
+<td><p>Absolute path in <code class="docutils literal notranslate"><span class="pre">stx.io</span></code> call — use relative paths for reproducibility</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-PA002</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">open()</span></code> detected — use <code class="docutils literal notranslate"><span class="pre">stx.io.save()</span></code>/<code class="docutils literal notranslate"><span class="pre">stx.io.load()</span></code> which includes auto-logging</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-PA003</p></td>
+<td><p>info</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">os.makedirs()</span></code>/<code class="docutils literal notranslate"><span class="pre">mkdir()</span></code> detected — <code class="docutils literal notranslate"><span class="pre">stx.io.save()</span></code> creates directories automatically</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-PA004</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">os.chdir()</span></code> detected — scripts should be run from project root</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-PA005</p></td>
+<td><p>info</p></td>
+<td><p>Path without <code class="docutils literal notranslate"><span class="pre">./</span></code> prefix in <code class="docutils literal notranslate"><span class="pre">stx.io</span></code> call — use <code class="docutils literal notranslate"><span class="pre">./</span></code> for explicit relative intent</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="category-fm-figure-millimeter-opt-in">
+<h2>Category FM: Figure/Millimeter (opt-in)<a class="headerlink" href="#category-fm-figure-millimeter-opt-in" title="Link to this heading"></a></h2>
+<p>These rules detect inch-based matplotlib anti-patterns and suggest mm-based alternatives.
+FM rules require <code class="docutils literal notranslate"><span class="pre">figrecipe</span></code> or <code class="docutils literal notranslate"><span class="pre">scitex[plt]</span></code> to be installed, and must be explicitly
+enabled via <code class="docutils literal notranslate"><span class="pre">enable</span> <span class="pre">=</span> <span class="pre">[&quot;FM&quot;]</span></code> in config or <code class="docutils literal notranslate"><span class="pre">SCITEX_LINTER_ENABLE=FM</span></code>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 10.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Rule</p></th>
+<th class="head"><p>Severity</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>STX-FM001</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">figsize=</span></code> detected — inch-based figure sizing is imprecise for publications</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-FM002</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tight_layout()</span></code> detected — layout is unpredictable across plot types</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-FM003</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bbox_inches=&quot;tight&quot;</span></code> detected — can crop important elements unpredictably</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-FM004</p></td>
+<td><p>info</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">constrained_layout=True</span></code> detected — conflicts with mm-based layout control</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-FM005</p></td>
+<td><p>info</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">subplots_adjust()</span></code> with hardcoded fractions — fragile across figure sizes</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-FM006</p></td>
+<td><p>info</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">plt.savefig()</span></code> detected — no provenance tracking</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-FM007</p></td>
+<td><p>info</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rcParams</span></code> direct modification detected — hard to maintain across figures</p></td>
+</tr>
+<tr class="row-odd"><td><p>STX-FM008</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">set_size_inches()</span></code> detected — bypasses mm-based layout control</p></td>
+</tr>
+<tr class="row-even"><td><p>STX-FM009</p></td>
+<td><p>warning</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ax.set_position()</span></code> detected — conflicts with mm-based layout control</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="severity-summary">
+<h2>Severity Summary<a class="headerlink" href="#severity-summary" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 10.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Severity</p></th>
+<th class="head"><p>Count</p></th>
+<th class="head"><p>Behavior</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>error</p></td>
+<td><p>3</p></td>
+<td><p>Must fix. Exit code 2. Blocks execution in <code class="docutils literal notranslate"><span class="pre">--strict</span></code> mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p>warning</p></td>
+<td><p>25</p></td>
+<td><p>Should fix. Exit code 1. Does not block execution.</p></td>
+</tr>
+<tr class="row-even"><td><p>info</p></td>
+<td><p>17</p></td>
+<td><p>Suggestions. Exit code 0.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quick Start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cli.html" class="btn btn-neutral float-right" title="CLI Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Yusuke Watanabe.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

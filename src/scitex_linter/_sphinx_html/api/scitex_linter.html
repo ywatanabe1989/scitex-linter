@@ -1,0 +1,696 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scitex_linter &mdash; SciTeX Linter v0.2.1</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=37f418d5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Claude Code Hook" href="../hook.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            SciTeX Linter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#install-from-pypi">Install from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#install-from-source">Install from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#verification">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#via-scitex">Via SciTeX</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#lint-a-file">Lint a File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#severity-levels">Severity Levels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#lint-then-execute">Lint then Execute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#browse-rules">Browse Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#flake8-integration">flake8 Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#what-a-clean-script-looks-like">What a Clean Script Looks Like</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rules.html">Rules Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../rules.html#category-s-structure">Category S: Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rules.html#category-i-imports">Category I: Imports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rules.html#category-io-i-o-calls">Category IO: I/O Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rules.html#category-p-plotting">Category P: Plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rules.html#category-st-statistics">Category ST: Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rules.html#category-pa-path-handling">Category PA: Path Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rules.html#category-fm-figure-millimeter-opt-in">Category FM: Figure/Millimeter (opt-in)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rules.html#severity-summary">Severity Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">CLI Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html#global-options">Global Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html#scitex-linter-check">scitex-linter check</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html#scitex-linter-format">scitex-linter format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html#scitex-linter-python">scitex-linter python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html#scitex-linter-rule">scitex-linter rule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html#scitex-linter-api">scitex-linter api</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cli.html#scitex-linter-mcp">scitex-linter mcp</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../hook.html">Claude Code Hook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../hook.html#how-it-works">How It Works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hook.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hook.html#command-detection">Command Detection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hook.html#exit-codes">Exit Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hook.html#example-output">Example Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hook.html#disabling">Disabling</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">scitex_linter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_linter.list_rules"><code class="docutils literal notranslate"><span class="pre">list_rules()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-scitex_linter.checker">scitex_linter.checker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.checker.Issue"><code class="docutils literal notranslate"><span class="pre">Issue</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.checker.is_script"><code class="docutils literal notranslate"><span class="pre">is_script()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.checker.lint_file"><code class="docutils literal notranslate"><span class="pre">lint_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.checker.lint_source"><code class="docutils literal notranslate"><span class="pre">lint_source()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-scitex_linter.rules">scitex_linter.rules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.rules.Rule"><code class="docutils literal notranslate"><span class="pre">Rule</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-scitex_linter.formatter">scitex_linter.formatter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.formatter.format_issue"><code class="docutils literal notranslate"><span class="pre">format_issue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.formatter.format_summary"><code class="docutils literal notranslate"><span class="pre">format_summary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.formatter.to_json"><code class="docutils literal notranslate"><span class="pre">to_json()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-scitex_linter.runner">scitex_linter.runner</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.runner._is_git_root"><code class="docutils literal notranslate"><span class="pre">_is_git_root()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.runner.run_script"><code class="docutils literal notranslate"><span class="pre">run_script()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-scitex_linter.cli">scitex_linter.cli</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.cli._collect_files"><code class="docutils literal notranslate"><span class="pre">_collect_files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.cli._print_help_recursive"><code class="docutils literal notranslate"><span class="pre">_print_help_recursive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-scitex_linter.config">scitex_linter.config</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.config.LinterConfig"><code class="docutils literal notranslate"><span class="pre">LinterConfig</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.config.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.config._load_env"><code class="docutils literal notranslate"><span class="pre">_load_env()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.config._load_pyproject"><code class="docutils literal notranslate"><span class="pre">_load_pyproject()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-scitex_linter.flake8_plugin">scitex_linter.flake8_plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.flake8_plugin.SciTeXFlake8Checker"><code class="docutils literal notranslate"><span class="pre">SciTeXFlake8Checker</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-scitex_linter._fm_checker">scitex_linter._fm_checker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter._fm_checker._is_exempt_call"><code class="docutils literal notranslate"><span class="pre">_is_exempt_call()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter._fm_checker._has_kwarg"><code class="docutils literal notranslate"><span class="pre">_has_kwarg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter._fm_checker.FMChecker"><code class="docutils literal notranslate"><span class="pre">FMChecker</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-scitex_linter._packages">scitex_linter._packages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter._packages._can_import"><code class="docutils literal notranslate"><span class="pre">_can_import()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter._packages.detect"><code class="docutils literal notranslate"><span class="pre">detect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter._packages.reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SciTeX Linter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">scitex_linter</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ywatanabe1989/scitex-linter/blob/main/docs/sphinx/api/scitex_linter.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-scitex_linter">
+<span id="scitex-linter"></span><h1>scitex_linter<a class="headerlink" href="#module-scitex_linter" title="Link to this heading"></a></h1>
+<p>SciTeX Linter — enforce reproducible research patterns via AST analysis.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.list_rules">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.</span></span><span class="sig-name descname"><span class="pre">list_rules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter.html#list_rules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.list_rules" title="Link to this definition"></a></dt>
+<dd><p>Return all rules (built-in + plugin), optionally filtered by category.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>category</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – If provided, only return rules whose category matches this value.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>All matching Rule objects from built-in definitions and loaded plugins.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a> of <a class="reference internal" href="#scitex_linter.rules.Rule" title="scitex_linter.rules.Rule">Rule</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<section id="module-scitex_linter.checker">
+<span id="scitex-linter-checker"></span><h3>scitex_linter.checker<a class="headerlink" href="#module-scitex_linter.checker" title="Link to this heading"></a></h3>
+<p>AST-based checker that detects SciTeX anti-patterns.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="scitex_linter.checker.Issue">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scitex_linter.checker.</span></span><span class="sig-name descname"><span class="pre">Issue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_line</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/checker.html#Issue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.checker.Issue" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.checker.Issue.rule">
+<span class="sig-name descname"><span class="pre">rule</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#scitex_linter.rules.Rule" title="scitex_linter._rules._base.Rule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Rule</span></code></a></em><a class="headerlink" href="#scitex_linter.checker.Issue.rule" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.checker.Issue.line">
+<span class="sig-name descname"><span class="pre">line</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#scitex_linter.checker.Issue.line" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.checker.Issue.col">
+<span class="sig-name descname"><span class="pre">col</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#scitex_linter.checker.Issue.col" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.checker.Issue.source_line">
+<span class="sig-name descname"><span class="pre">source_line</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#scitex_linter.checker.Issue.source_line" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_linter.checker.Issue.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_line</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scitex_linter.checker.Issue.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.checker.is_script">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.checker.</span></span><span class="sig-name descname"><span class="pre">is_script</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/checker.html#is_script"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.checker.is_script" title="Link to this definition"></a></dt>
+<dd><p>Check if file is a script (not a library module).</p>
+<p>Uses config.library_patterns and config.library_dirs to determine
+which files are library modules (exempt from script-only rules).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.checker.lint_file">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.checker.</span></span><span class="sig-name descname"><span class="pre">lint_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/checker.html#lint_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.checker.lint_file" title="Link to this definition"></a></dt>
+<dd><p>Lint a Python file and return list of Issues.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.checker.lint_source">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.checker.</span></span><span class="sig-name descname"><span class="pre">lint_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;stdin&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/checker.html#lint_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.checker.lint_source" title="Link to this definition"></a></dt>
+<dd><p>Lint Python source code and return list of Issues.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-scitex_linter.rules">
+<span id="scitex-linter-rules"></span><h3>scitex_linter.rules<a class="headerlink" href="#module-scitex_linter.rules" title="Link to this heading"></a></h3>
+<p>Rule definitions for SciTeX linter.</p>
+<p>Thin re-export module: actual definitions live in _rules/ sub-modules.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="scitex_linter.rules.Rule">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scitex_linter.rules.</span></span><span class="sig-name descname"><span class="pre">Rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">severity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suggestion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requires</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/_rules/_base.html#Rule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.rules.Rule" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_linter.rules.Rule.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">severity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suggestion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requires</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scitex_linter.rules.Rule.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.rules.Rule.requires">
+<span class="sig-name descname"><span class="pre">requires</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#scitex_linter.rules.Rule.requires" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.rules.Rule.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#scitex_linter.rules.Rule.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.rules.Rule.severity">
+<span class="sig-name descname"><span class="pre">severity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#scitex_linter.rules.Rule.severity" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.rules.Rule.category">
+<span class="sig-name descname"><span class="pre">category</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#scitex_linter.rules.Rule.category" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.rules.Rule.message">
+<span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#scitex_linter.rules.Rule.message" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.rules.Rule.suggestion">
+<span class="sig-name descname"><span class="pre">suggestion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#scitex_linter.rules.Rule.suggestion" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-scitex_linter.formatter">
+<span id="scitex-linter-formatter"></span><h3>scitex_linter.formatter<a class="headerlink" href="#module-scitex_linter.formatter" title="Link to this heading"></a></h3>
+<p>Output formatting for terminal and JSON.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.formatter.format_issue">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.formatter.</span></span><span class="sig-name descname"><span class="pre">format_issue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/formatter.html#format_issue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.formatter.format_issue" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.formatter.format_summary">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.formatter.</span></span><span class="sig-name descname"><span class="pre">format_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/formatter.html#format_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.formatter.format_summary" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.formatter.to_json">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.formatter.</span></span><span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/formatter.html#to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.formatter.to_json" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-scitex_linter.runner">
+<span id="scitex-linter-runner"></span><h3>scitex_linter.runner<a class="headerlink" href="#module-scitex_linter.runner" title="Link to this heading"></a></h3>
+<p>Run a Python script after linting it.</p>
+<p>Core function used by the <cite>scitex-linter python</cite> subcommand.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.runner._is_git_root">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.runner.</span></span><span class="sig-name descname"><span class="pre">_is_git_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/runner.html#_is_git_root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.runner._is_git_root" title="Link to this definition"></a></dt>
+<dd><p>Check if the current working directory is a git repository root.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.runner.run_script">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.runner.</span></span><span class="sig-name descname"><span class="pre">run_script</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">script_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/runner.html#run_script"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.runner.run_script" title="Link to this definition"></a></dt>
+<dd><p>Lint a script then execute it.</p>
+<p>Returns the subprocess return code, or 2 if strict mode blocks execution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-scitex_linter.cli">
+<span id="scitex-linter-cli"></span><h3>scitex_linter.cli<a class="headerlink" href="#module-scitex_linter.cli" title="Link to this heading"></a></h3>
+<p>CLI entry point for scitex-linter.</p>
+<dl class="simple">
+<dt>Usage:</dt><dd><p>scitex-linter check &lt;path&gt; [–json] [–severity] [–category] [–no-color]
+scitex-linter format &lt;path&gt; [–check] [–diff]
+scitex-linter python &lt;script.py&gt; [–strict] [– script_args…]
+scitex-linter rule [–json] [–category] [–severity]
+scitex-linter list-python-apis [-v|-vv|-vvv] [–json]
+scitex-linter mcp start
+scitex-linter mcp list-tools [-v|-vv|-vvv]
+scitex-linter –help-recursive</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.cli._collect_files">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.cli.</span></span><span class="sig-name descname"><span class="pre">_collect_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/cli.html#_collect_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.cli._collect_files" title="Link to this definition"></a></dt>
+<dd><p>Collect Python files from a path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.cli._print_help_recursive">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.cli.</span></span><span class="sig-name descname"><span class="pre">_print_help_recursive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subparsers_actions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/cli.html#_print_help_recursive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.cli._print_help_recursive" title="Link to this definition"></a></dt>
+<dd><p>Print help for all commands recursively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.cli.main">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.cli.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/cli.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.cli.main" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-scitex_linter.config">
+<span id="scitex-linter-config"></span><h3>scitex_linter.config<a class="headerlink" href="#module-scitex_linter.config" title="Link to this heading"></a></h3>
+<p>Configuration system for scitex-linter.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="scitex_linter.config.LinterConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scitex_linter.config.</span></span><span class="sig-name descname"><span class="pre">LinterConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">severity='info'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_dirs=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library_patterns=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library_dirs=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">script_dirs=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disable=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_rule_severity=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_injected=&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/config.html#LinterConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.config.LinterConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Configuration for scitex-linter behavior.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.config.LinterConfig.severity">
+<span class="sig-name descname"><span class="pre">severity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'info'</span></em><a class="headerlink" href="#scitex_linter.config.LinterConfig.severity" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.config.LinterConfig.exclude_dirs">
+<span class="sig-name descname"><span class="pre">exclude_dirs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#scitex_linter.config.LinterConfig.exclude_dirs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.config.LinterConfig.library_patterns">
+<span class="sig-name descname"><span class="pre">library_patterns</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#scitex_linter.config.LinterConfig.library_patterns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.config.LinterConfig.library_dirs">
+<span class="sig-name descname"><span class="pre">library_dirs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#scitex_linter.config.LinterConfig.library_dirs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.config.LinterConfig.script_dirs">
+<span class="sig-name descname"><span class="pre">script_dirs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#scitex_linter.config.LinterConfig.script_dirs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.config.LinterConfig.disable">
+<span class="sig-name descname"><span class="pre">disable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#scitex_linter.config.LinterConfig.disable" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.config.LinterConfig.enable">
+<span class="sig-name descname"><span class="pre">enable</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#scitex_linter.config.LinterConfig.enable" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.config.LinterConfig.per_rule_severity">
+<span class="sig-name descname"><span class="pre">per_rule_severity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">,</span> <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#scitex_linter.config.LinterConfig.per_rule_severity" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.config.LinterConfig.required_injected">
+<span class="sig-name descname"><span class="pre">required_injected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#scitex_linter.config.LinterConfig.required_injected" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_linter.config.LinterConfig.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">severity='info'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_dirs=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library_patterns=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library_dirs=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">script_dirs=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disable=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_rule_severity=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_injected=&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scitex_linter.config.LinterConfig.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.config.load_config">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.config.</span></span><span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/config.html#load_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.config.load_config" title="Link to this definition"></a></dt>
+<dd><p>Load configuration from defaults, pyproject.toml, and environment variables.</p>
+<p>Priority: env vars &gt; pyproject.toml &gt; defaults</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>start_path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – File or directory to start pyproject.toml search from.
+If a file path, searches from its parent directory.
+Defaults to cwd.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#scitex_linter.config.LinterConfig" title="scitex_linter.config.LinterConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinterConfig</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Merged configuration</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.config._load_env">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.config.</span></span><span class="sig-name descname"><span class="pre">_load_env</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/config.html#_load_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.config._load_env" title="Link to this definition"></a></dt>
+<dd><p>Load configuration from environment variables with <a class="reference internal" href="#scitex-linter">SCITEX_LINTER</a> prefix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Configuration dict with snake_case keys</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.config._load_pyproject">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.config.</span></span><span class="sig-name descname"><span class="pre">_load_pyproject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/config.html#_load_pyproject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.config._load_pyproject" title="Link to this definition"></a></dt>
+<dd><p>Walk up directories to find pyproject.toml with [tool.scitex-linter].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>start_dir</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a></span>) – Starting directory for search</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Configuration dict from [tool.scitex-linter], or empty dict if not found</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-scitex_linter.flake8_plugin">
+<span id="scitex-linter-flake8-plugin"></span><h3>scitex_linter.flake8_plugin<a class="headerlink" href="#module-scitex_linter.flake8_plugin" title="Link to this heading"></a></h3>
+<p>Flake8 plugin for SciTeX linter.</p>
+<dl class="simple">
+<dt>Usage:</dt><dd><p>pip install scitex-linter
+flake8 –select STX script.py</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="scitex_linter.flake8_plugin.SciTeXFlake8Checker">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scitex_linter.flake8_plugin.</span></span><span class="sig-name descname"><span class="pre">SciTeXFlake8Checker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;stdin&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/flake8_plugin.html#SciTeXFlake8Checker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.flake8_plugin.SciTeXFlake8Checker" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Flake8 checker wrapping the SciTeX AST visitor.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.flake8_plugin.SciTeXFlake8Checker.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'scitex-linter'</span></em><a class="headerlink" href="#scitex_linter.flake8_plugin.SciTeXFlake8Checker.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter.flake8_plugin.SciTeXFlake8Checker.version">
+<span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'0.1.0'</span></em><a class="headerlink" href="#scitex_linter.flake8_plugin.SciTeXFlake8Checker.version" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_linter.flake8_plugin.SciTeXFlake8Checker.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;stdin&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/flake8_plugin.html#SciTeXFlake8Checker.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.flake8_plugin.SciTeXFlake8Checker.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_linter.flake8_plugin.SciTeXFlake8Checker.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/flake8_plugin.html#SciTeXFlake8Checker.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.flake8_plugin.SciTeXFlake8Checker.run" title="Link to this definition"></a></dt>
+<dd><p>Yield (line, col, message, type) tuples for flake8.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-scitex_linter._fm_checker">
+<span id="scitex-linter-fm-checker"></span><h3>scitex_linter._fm_checker<a class="headerlink" href="#module-scitex_linter._fm_checker" title="Link to this heading"></a></h3>
+<p>FM (Figure/Millimeter) rule detection — opt-in category.</p>
+<p>Detects inch-based matplotlib patterns and suggests mm-based alternatives.
+Used as a second-pass AST visitor from lint_source when “FM” is enabled.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter._fm_checker._is_exempt_call">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter._fm_checker.</span></span><span class="sig-name descname"><span class="pre">_is_exempt_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/_fm_checker.html#_is_exempt_call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter._fm_checker._is_exempt_call" title="Link to this definition"></a></dt>
+<dd><p>Check if the call is on a stx.* or fr.* object (exempt from FM rules).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter._fm_checker._has_kwarg">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter._fm_checker.</span></span><span class="sig-name descname"><span class="pre">_has_kwarg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/_fm_checker.html#_has_kwarg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter._fm_checker._has_kwarg" title="Link to this definition"></a></dt>
+<dd><p>Check if call has a specific keyword argument.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scitex_linter._fm_checker.FMChecker">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scitex_linter._fm_checker.</span></span><span class="sig-name descname"><span class="pre">FMChecker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/_fm_checker.html#FMChecker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter._fm_checker.FMChecker" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/ast.html#ast.NodeVisitor" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeVisitor</span></code></a></p>
+<p>AST visitor for FM (Figure/Millimeter) rules.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scitex_linter._fm_checker.FMChecker.category">
+<span class="sig-name descname"><span class="pre">category</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'figure'</span></em><a class="headerlink" href="#scitex_linter._fm_checker.FMChecker.category" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_linter._fm_checker.FMChecker.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/_fm_checker.html#FMChecker.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter._fm_checker.FMChecker.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_linter._fm_checker.FMChecker.visit_Call">
+<span class="sig-name descname"><span class="pre">visit_Call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/_fm_checker.html#FMChecker.visit_Call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter._fm_checker.FMChecker.visit_Call" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_linter._fm_checker.FMChecker.visit_Assign">
+<span class="sig-name descname"><span class="pre">visit_Assign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/_fm_checker.html#FMChecker.visit_Assign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter._fm_checker.FMChecker.visit_Assign" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_linter._fm_checker.FMChecker._check_call">
+<span class="sig-name descname"><span class="pre">_check_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/_fm_checker.html#FMChecker._check_call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter._fm_checker.FMChecker._check_call" title="Link to this definition"></a></dt>
+<dd><p>Check Call nodes for FM001-FM006.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_linter._fm_checker.FMChecker._check_assign">
+<span class="sig-name descname"><span class="pre">_check_assign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/_fm_checker.html#FMChecker._check_assign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter._fm_checker.FMChecker._check_assign" title="Link to this definition"></a></dt>
+<dd><p>Check Assign nodes for FM007 (rcParams modification).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-scitex_linter._packages">
+<span id="scitex-linter-packages"></span><h3>scitex_linter._packages<a class="headerlink" href="#module-scitex_linter._packages" title="Link to this heading"></a></h3>
+<p>Detect available packages for conditional rule gating.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter._packages._can_import">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter._packages.</span></span><span class="sig-name descname"><span class="pre">_can_import</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/_packages.html#_can_import"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter._packages._can_import" title="Link to this definition"></a></dt>
+<dd><p>Check if a package is importable.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter._packages.detect">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter._packages.</span></span><span class="sig-name descname"><span class="pre">detect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/_packages.html#detect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter._packages.detect" title="Link to this definition"></a></dt>
+<dd><p>Detect available packages. Cached after first call.</p>
+<p>Returns dict with keys: “scitex”, “figrecipe”.
+“figrecipe” is True if either figrecipe or scitex.plt is importable.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter._packages.reset">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter._packages.</span></span><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/_packages.html#reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter._packages.reset" title="Link to this definition"></a></dt>
+<dd><p>Reset cache (for testing).</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../hook.html" class="btn btn-neutral float-left" title="Claude Code Hook" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Yusuke Watanabe.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

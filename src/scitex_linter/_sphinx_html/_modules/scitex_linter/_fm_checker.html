@@ -1,0 +1,463 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scitex_linter._fm_checker &mdash; SciTeX Linter v0.2.1</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=37f418d5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            SciTeX Linter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#install-from-pypi">Install from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#install-from-source">Install from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#verification">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#via-scitex">Via SciTeX</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#lint-a-file">Lint a File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#severity-levels">Severity Levels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#lint-then-execute">Lint then Execute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#browse-rules">Browse Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#flake8-integration">flake8 Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#what-a-clean-script-looks-like">What a Clean Script Looks Like</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../rules.html">Rules Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#category-s-structure">Category S: Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#category-i-imports">Category I: Imports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#category-io-i-o-calls">Category IO: I/O Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#category-p-plotting">Category P: Plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#category-st-statistics">Category ST: Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#category-pa-path-handling">Category PA: Path Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#category-fm-figure-millimeter-opt-in">Category FM: Figure/Millimeter (opt-in)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#severity-summary">Severity Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">CLI Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#global-options">Global Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#scitex-linter-check">scitex-linter check</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#scitex-linter-format">scitex-linter format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#scitex-linter-python">scitex-linter python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#scitex-linter-rule">scitex-linter rule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#scitex-linter-api">scitex-linter api</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#scitex-linter-mcp">scitex-linter mcp</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../hook.html">Claude Code Hook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hook.html#how-it-works">How It Works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hook.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hook.html#command-detection">Command Detection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hook.html#exit-codes">Exit Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hook.html#example-output">Example Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hook.html#disabling">Disabling</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/scitex_linter.html">scitex_linter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.list_rules"><code class="docutils literal notranslate"><span class="pre">list_rules()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/scitex_linter.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter.checker">scitex_linter.checker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.checker.Issue"><code class="docutils literal notranslate"><span class="pre">Issue</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.checker.is_script"><code class="docutils literal notranslate"><span class="pre">is_script()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.checker.lint_file"><code class="docutils literal notranslate"><span class="pre">lint_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.checker.lint_source"><code class="docutils literal notranslate"><span class="pre">lint_source()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter.rules">scitex_linter.rules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.rules.Rule"><code class="docutils literal notranslate"><span class="pre">Rule</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter.formatter">scitex_linter.formatter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.formatter.format_issue"><code class="docutils literal notranslate"><span class="pre">format_issue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.formatter.format_summary"><code class="docutils literal notranslate"><span class="pre">format_summary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.formatter.to_json"><code class="docutils literal notranslate"><span class="pre">to_json()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter.runner">scitex_linter.runner</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.runner._is_git_root"><code class="docutils literal notranslate"><span class="pre">_is_git_root()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.runner.run_script"><code class="docutils literal notranslate"><span class="pre">run_script()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter.cli">scitex_linter.cli</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.cli._collect_files"><code class="docutils literal notranslate"><span class="pre">_collect_files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.cli._print_help_recursive"><code class="docutils literal notranslate"><span class="pre">_print_help_recursive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter.config">scitex_linter.config</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.config.LinterConfig"><code class="docutils literal notranslate"><span class="pre">LinterConfig</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.config.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.config._load_env"><code class="docutils literal notranslate"><span class="pre">_load_env()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.config._load_pyproject"><code class="docutils literal notranslate"><span class="pre">_load_pyproject()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter.flake8_plugin">scitex_linter.flake8_plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.flake8_plugin.SciTeXFlake8Checker"><code class="docutils literal notranslate"><span class="pre">SciTeXFlake8Checker</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter._fm_checker">scitex_linter._fm_checker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter._fm_checker._is_exempt_call"><code class="docutils literal notranslate"><span class="pre">_is_exempt_call()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter._fm_checker._has_kwarg"><code class="docutils literal notranslate"><span class="pre">_has_kwarg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter._fm_checker.FMChecker"><code class="docutils literal notranslate"><span class="pre">FMChecker</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter._packages">scitex_linter._packages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter._packages._can_import"><code class="docutils literal notranslate"><span class="pre">_can_import()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter._packages.detect"><code class="docutils literal notranslate"><span class="pre">detect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter._packages.reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SciTeX Linter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../scitex_linter.html">scitex_linter</a></li>
+      <li class="breadcrumb-item active">scitex_linter._fm_checker</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scitex_linter._fm_checker</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;FM (Figure/Millimeter) rule detection — opt-in category.</span>
+
+<span class="sd">Detects inch-based matplotlib patterns and suggests mm-based alternatives.</span>
+<span class="sd">Used as a second-pass AST visitor from lint_source when &quot;FM&quot; is enabled.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">ast</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">rules</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._packages</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect</span> <span class="k">as</span> <span class="n">_detect_pkgs</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.checker</span><span class="w"> </span><span class="kn">import</span> <span class="n">Issue</span>
+
+
+<div class="viewcode-block" id="_is_exempt_call">
+<a class="viewcode-back" href="../../api/scitex_linter.html#scitex_linter._fm_checker._is_exempt_call">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_exempt_call</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the call is on a stx.* or fr.* object (exempt from FM rules).&quot;&quot;&quot;</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">func</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span> <span class="ow">and</span> <span class="n">func</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;stx&quot;</span><span class="p">,</span> <span class="s2">&quot;scitex&quot;</span><span class="p">,</span> <span class="s2">&quot;fr&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span> <span class="ow">and</span> <span class="n">func</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="s2">&quot;stx&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;scitex&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fr&quot;</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="_has_kwarg">
+<a class="viewcode-back" href="../../api/scitex_linter.html#scitex_linter._fm_checker._has_kwarg">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_has_kwarg</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if call has a specific keyword argument.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">keywords</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">kw</span><span class="o">.</span><span class="n">arg</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kw</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="ow">and</span> <span class="n">kw</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">value</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<span class="c1"># Suggestion variants: {rule_id: {context: suggestion}}</span>
+<span class="n">_SUGGESTIONS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;STX-FM001&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;both&quot;</span><span class="p">:</span> <span class="p">(</span>
+            <span class="s2">&quot;Use mm-based sizing: `stx.plt.subplots(axes_width_mm=40, axes_height_mm=28)` &quot;</span>
+            <span class="s2">&quot;or `fr.subplots(axes_width_mm=40, axes_height_mm=28)`.&quot;</span>
+        <span class="p">),</span>
+        <span class="s2">&quot;stx&quot;</span><span class="p">:</span> <span class="s2">&quot;Use mm-based sizing: `stx.plt.subplots(axes_width_mm=40, axes_height_mm=28)`.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fr&quot;</span><span class="p">:</span> <span class="s2">&quot;Use mm-based sizing: `fr.subplots(axes_width_mm=40, axes_height_mm=28)`.&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;STX-FM002&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;both&quot;</span><span class="p">:</span> <span class="p">(</span>
+            <span class="s2">&quot;Use mm-based margins: `stx.plt.subplots(margin_left_mm=15, margin_bottom_mm=12)` &quot;</span>
+            <span class="s2">&quot;or `fr.subplots(margin_left_mm=15, margin_bottom_mm=12)`.&quot;</span>
+        <span class="p">),</span>
+        <span class="s2">&quot;stx&quot;</span><span class="p">:</span> <span class="s2">&quot;Use mm-based margins: `stx.plt.subplots(margin_left_mm=15, margin_bottom_mm=12)`.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fr&quot;</span><span class="p">:</span> <span class="s2">&quot;Use mm-based margins: `fr.subplots(margin_left_mm=15, margin_bottom_mm=12)`.&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;STX-FM003&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;both&quot;</span><span class="p">:</span> <span class="s2">&quot;Use `stx.io.save(fig, &#39;./plot.png&#39;)` or `fr.save(fig, &#39;./plot.png&#39;)` for intelligent cropping.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;stx&quot;</span><span class="p">:</span> <span class="s2">&quot;Use `stx.io.save(fig, &#39;./plot.png&#39;)` which handles cropping intelligently.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fr&quot;</span><span class="p">:</span> <span class="s2">&quot;Use `fr.save(fig, &#39;./plot.png&#39;)` which handles cropping intelligently.&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;STX-FM004&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;both&quot;</span><span class="p">:</span> <span class="s2">&quot;Use mm-based layout from `stx.plt.subplots()` or `fr.subplots()` instead.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;stx&quot;</span><span class="p">:</span> <span class="s2">&quot;Use mm-based layout from `stx.plt.subplots()` instead of constrained_layout.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fr&quot;</span><span class="p">:</span> <span class="s2">&quot;Use mm-based layout from `fr.subplots()` instead of constrained_layout.&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;STX-FM005&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;both&quot;</span><span class="p">:</span> <span class="p">(</span>
+            <span class="s2">&quot;Use mm-based spacing: `stx.plt.subplots(space_w_mm=8, space_h_mm=10)` &quot;</span>
+            <span class="s2">&quot;or `fr.subplots(space_w_mm=8, space_h_mm=10)`.&quot;</span>
+        <span class="p">),</span>
+        <span class="s2">&quot;stx&quot;</span><span class="p">:</span> <span class="s2">&quot;Use mm-based spacing: `stx.plt.subplots(space_w_mm=8, space_h_mm=10)`.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fr&quot;</span><span class="p">:</span> <span class="s2">&quot;Use mm-based spacing: `fr.subplots(space_w_mm=8, space_h_mm=10)`.&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;STX-FM006&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;both&quot;</span><span class="p">:</span> <span class="s2">&quot;Use `stx.io.save(fig, &#39;./plot.png&#39;)` or `fr.save(fig, &#39;./plot.png&#39;)` for provenance tracking.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;stx&quot;</span><span class="p">:</span> <span class="s2">&quot;Use `stx.io.save(fig, &#39;./plot.png&#39;)` for provenance tracking.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fr&quot;</span><span class="p">:</span> <span class="s2">&quot;Use `fr.save(fig, &#39;./plot.png&#39;)` for recipe tracking.&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;STX-FM007&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;both&quot;</span><span class="p">:</span> <span class="s2">&quot;Use `stx.plt` style presets or `fr.load_style(&#39;SCITEX&#39;)` for consistent styling.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;stx&quot;</span><span class="p">:</span> <span class="s2">&quot;Use `stx.plt` style presets for consistent styling.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fr&quot;</span><span class="p">:</span> <span class="s2">&quot;Use `fr.load_style(&#39;SCITEX&#39;)` for consistent styling.&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;STX-FM008&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;both&quot;</span><span class="p">:</span> <span class="p">(</span>
+            <span class="s2">&quot;Use mm-based sizing: `stx.plt.subplots(axes_width_mm=40, axes_height_mm=28)` &quot;</span>
+            <span class="s2">&quot;or `fr.subplots(axes_width_mm=40, axes_height_mm=28)`.&quot;</span>
+        <span class="p">),</span>
+        <span class="s2">&quot;stx&quot;</span><span class="p">:</span> <span class="s2">&quot;Use mm-based sizing: `stx.plt.subplots(axes_width_mm=40, axes_height_mm=28)`.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fr&quot;</span><span class="p">:</span> <span class="s2">&quot;Use mm-based sizing: `fr.subplots(axes_width_mm=40, axes_height_mm=28)`.&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;STX-FM009&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;both&quot;</span><span class="p">:</span> <span class="p">(</span>
+            <span class="s2">&quot;Use mm-based margins: `stx.plt.subplots(margin_left_mm=15, margin_bottom_mm=12)` &quot;</span>
+            <span class="s2">&quot;or `fr.subplots(margin_left_mm=15, margin_bottom_mm=12)`.&quot;</span>
+        <span class="p">),</span>
+        <span class="s2">&quot;stx&quot;</span><span class="p">:</span> <span class="s2">&quot;Use mm-based margins: `stx.plt.subplots(margin_left_mm=15, margin_bottom_mm=12)`.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fr&quot;</span><span class="p">:</span> <span class="s2">&quot;Use mm-based margins: `fr.subplots(margin_left_mm=15, margin_bottom_mm=12)`.&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="FMChecker">
+<a class="viewcode-back" href="../../api/scitex_linter.html#scitex_linter._fm_checker.FMChecker">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FMChecker</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">NodeVisitor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;AST visitor for FM (Figure/Millimeter) rules.&quot;&quot;&quot;</span>
+
+    <span class="n">category</span> <span class="o">=</span> <span class="s2">&quot;figure&quot;</span>
+
+<div class="viewcode-block" id="FMChecker.__init__">
+<a class="viewcode-back" href="../../api/scitex_linter.html#scitex_linter._fm_checker.FMChecker.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_lines</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_lines</span> <span class="o">=</span> <span class="n">source_lines</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">pkgs</span> <span class="o">=</span> <span class="n">_detect_pkgs</span><span class="p">()</span>
+        <span class="n">has_fr</span> <span class="o">=</span> <span class="n">pkgs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;figrecipe&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># Always active when FM rules enabled in config (detect patterns</span>
+        <span class="c1"># regardless of whether figrecipe is installed)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_active</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">has_stx</span> <span class="o">=</span> <span class="n">pkgs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scitex&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">has_fr</span> <span class="ow">and</span> <span class="n">has_stx</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ctx</span> <span class="o">=</span> <span class="s2">&quot;both&quot;</span>
+        <span class="k">elif</span> <span class="n">has_stx</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ctx</span> <span class="o">=</span> <span class="s2">&quot;stx&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ctx</span> <span class="o">=</span> <span class="s2">&quot;fr&quot;</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lineno</span><span class="p">):</span>
+        <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">lineno</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_lines</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_lines</span><span class="p">[</span><span class="n">lineno</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">source_line</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">replace</span> <span class="k">as</span> <span class="n">_replace</span>
+
+        <span class="k">if</span> <span class="n">rule</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">disable</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="c1"># Swap suggestion based on available packages</span>
+        <span class="n">suggestion</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">suggestion</span>
+        <span class="n">variants</span> <span class="o">=</span> <span class="n">_SUGGESTIONS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">variants</span><span class="p">:</span>
+            <span class="n">suggestion</span> <span class="o">=</span> <span class="n">variants</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ctx</span><span class="p">,</span> <span class="n">suggestion</span><span class="p">)</span>
+        <span class="n">rule</span> <span class="o">=</span> <span class="n">_replace</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span> <span class="n">suggestion</span><span class="o">=</span><span class="n">suggestion</span><span class="p">)</span>
+        <span class="n">sev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">per_rule_severity</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rule</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sev</span><span class="p">:</span>
+            <span class="n">rule</span> <span class="o">=</span> <span class="n">_replace</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span> <span class="n">severity</span><span class="o">=</span><span class="n">sev</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Issue</span><span class="p">(</span><span class="n">rule</span><span class="o">=</span><span class="n">rule</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="n">line</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">source_line</span><span class="o">=</span><span class="n">source_line</span><span class="p">)</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="FMChecker.visit_Call">
+<a class="viewcode-back" href="../../api/scitex_linter.html#scitex_linter._fm_checker.FMChecker.visit_Call">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">visit_Call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_call</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FMChecker.visit_Assign">
+<a class="viewcode-back" href="../../api/scitex_linter.html#scitex_linter._fm_checker.FMChecker.visit_Assign">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">visit_Assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_assign</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FMChecker._check_call">
+<a class="viewcode-back" href="../../api/scitex_linter.html#scitex_linter._fm_checker.FMChecker._check_call">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check Call nodes for FM001-FM006.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">_is_exempt_call</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="n">func</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">func</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="n">func_name</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">attr</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_source</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">)</span>
+
+        <span class="c1"># FM002: tight_layout()</span>
+        <span class="k">if</span> <span class="n">func_name</span> <span class="o">==</span> <span class="s2">&quot;tight_layout&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">rules</span><span class="o">.</span><span class="n">FM002</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">col_offset</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># FM005: subplots_adjust()</span>
+        <span class="k">if</span> <span class="n">func_name</span> <span class="o">==</span> <span class="s2">&quot;subplots_adjust&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">rules</span><span class="o">.</span><span class="n">FM005</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">col_offset</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># FM006: savefig() + FM003: bbox_inches=&quot;tight&quot;</span>
+        <span class="k">if</span> <span class="n">func_name</span> <span class="o">==</span> <span class="s2">&quot;savefig&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_has_kwarg</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;bbox_inches&quot;</span><span class="p">,</span> <span class="s2">&quot;tight&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">rules</span><span class="o">.</span><span class="n">FM003</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">col_offset</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">rules</span><span class="o">.</span><span class="n">FM006</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">col_offset</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># FM008: set_size_inches()</span>
+        <span class="k">if</span> <span class="n">func_name</span> <span class="o">==</span> <span class="s2">&quot;set_size_inches&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">rules</span><span class="o">.</span><span class="n">FM008</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">col_offset</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># FM009: set_position()</span>
+        <span class="k">if</span> <span class="n">func_name</span> <span class="o">==</span> <span class="s2">&quot;set_position&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">rules</span><span class="o">.</span><span class="n">FM009</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">col_offset</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># FM001: figsize= kwarg on figure()/subplots()</span>
+        <span class="c1"># FM004: constrained_layout=True kwarg</span>
+        <span class="k">if</span> <span class="n">func_name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;figure&quot;</span><span class="p">,</span> <span class="s2">&quot;subplots&quot;</span><span class="p">,</span> <span class="s2">&quot;Figure&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">_has_kwarg</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;figsize&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">rules</span><span class="o">.</span><span class="n">FM001</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">col_offset</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">_has_kwarg</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;constrained_layout&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">rules</span><span class="o">.</span><span class="n">FM004</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">col_offset</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FMChecker._check_assign">
+<a class="viewcode-back" href="../../api/scitex_linter.html#scitex_linter._fm_checker.FMChecker._check_assign">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check Assign nodes for FM007 (rcParams modification).&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">targets</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Subscript</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">)</span> <span class="ow">or</span> <span class="n">val</span><span class="o">.</span><span class="n">attr</span> <span class="o">!=</span> <span class="s2">&quot;rcParams&quot;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span> <span class="ow">and</span> <span class="n">val</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="s2">&quot;plt&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;mpl&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;matplotlib&quot;</span><span class="p">,</span>
+            <span class="p">):</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_source</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">rules</span><span class="o">.</span><span class="n">FM007</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">col_offset</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">break</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Yusuke Watanabe.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

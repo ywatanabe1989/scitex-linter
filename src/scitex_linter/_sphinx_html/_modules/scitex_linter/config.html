@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scitex_linter.config &mdash; SciTeX Linter v0.2.1</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=37f418d5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            SciTeX Linter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#install-from-pypi">Install from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#install-from-source">Install from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#verification">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#via-scitex">Via SciTeX</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#lint-a-file">Lint a File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#severity-levels">Severity Levels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#lint-then-execute">Lint then Execute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#browse-rules">Browse Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#flake8-integration">flake8 Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart.html#what-a-clean-script-looks-like">What a Clean Script Looks Like</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../rules.html">Rules Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#category-s-structure">Category S: Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#category-i-imports">Category I: Imports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#category-io-i-o-calls">Category IO: I/O Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#category-p-plotting">Category P: Plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#category-st-statistics">Category ST: Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#category-pa-path-handling">Category PA: Path Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#category-fm-figure-millimeter-opt-in">Category FM: Figure/Millimeter (opt-in)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rules.html#severity-summary">Severity Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">CLI Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#global-options">Global Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#scitex-linter-check">scitex-linter check</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#scitex-linter-format">scitex-linter format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#scitex-linter-python">scitex-linter python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#scitex-linter-rule">scitex-linter rule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#scitex-linter-api">scitex-linter api</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cli.html#scitex-linter-mcp">scitex-linter mcp</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../hook.html">Claude Code Hook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hook.html#how-it-works">How It Works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hook.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hook.html#command-detection">Command Detection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hook.html#exit-codes">Exit Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hook.html#example-output">Example Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hook.html#disabling">Disabling</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/scitex_linter.html">scitex_linter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.list_rules"><code class="docutils literal notranslate"><span class="pre">list_rules()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/scitex_linter.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter.checker">scitex_linter.checker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.checker.Issue"><code class="docutils literal notranslate"><span class="pre">Issue</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.checker.is_script"><code class="docutils literal notranslate"><span class="pre">is_script()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.checker.lint_file"><code class="docutils literal notranslate"><span class="pre">lint_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.checker.lint_source"><code class="docutils literal notranslate"><span class="pre">lint_source()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter.rules">scitex_linter.rules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.rules.Rule"><code class="docutils literal notranslate"><span class="pre">Rule</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter.formatter">scitex_linter.formatter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.formatter.format_issue"><code class="docutils literal notranslate"><span class="pre">format_issue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.formatter.format_summary"><code class="docutils literal notranslate"><span class="pre">format_summary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.formatter.to_json"><code class="docutils literal notranslate"><span class="pre">to_json()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter.runner">scitex_linter.runner</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.runner._is_git_root"><code class="docutils literal notranslate"><span class="pre">_is_git_root()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.runner.run_script"><code class="docutils literal notranslate"><span class="pre">run_script()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter.cli">scitex_linter.cli</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.cli._collect_files"><code class="docutils literal notranslate"><span class="pre">_collect_files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.cli._print_help_recursive"><code class="docutils literal notranslate"><span class="pre">_print_help_recursive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter.config">scitex_linter.config</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.config.LinterConfig"><code class="docutils literal notranslate"><span class="pre">LinterConfig</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.config.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.config._load_env"><code class="docutils literal notranslate"><span class="pre">_load_env()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.config._load_pyproject"><code class="docutils literal notranslate"><span class="pre">_load_pyproject()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter.flake8_plugin">scitex_linter.flake8_plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter.flake8_plugin.SciTeXFlake8Checker"><code class="docutils literal notranslate"><span class="pre">SciTeXFlake8Checker</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter._fm_checker">scitex_linter._fm_checker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter._fm_checker._is_exempt_call"><code class="docutils literal notranslate"><span class="pre">_is_exempt_call()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter._fm_checker._has_kwarg"><code class="docutils literal notranslate"><span class="pre">_has_kwarg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter._fm_checker.FMChecker"><code class="docutils literal notranslate"><span class="pre">FMChecker</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/scitex_linter.html#module-scitex_linter._packages">scitex_linter._packages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter._packages._can_import"><code class="docutils literal notranslate"><span class="pre">_can_import()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter._packages.detect"><code class="docutils literal notranslate"><span class="pre">detect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/scitex_linter.html#scitex_linter._packages.reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SciTeX Linter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../scitex_linter.html">scitex_linter</a></li>
+      <li class="breadcrumb-item active">scitex_linter.config</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scitex_linter.config</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Configuration system for scitex-linter.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;LinterConfig&quot;</span><span class="p">,</span> <span class="s2">&quot;load_config&quot;</span><span class="p">]</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">fnmatch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">tomllib</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">tomli</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tomllib</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">tomllib</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: ignore</span>
+
+
+<div class="viewcode-block" id="LinterConfig">
+<a class="viewcode-back" href="../../api/scitex_linter.html#scitex_linter.config.LinterConfig">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LinterConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for scitex-linter behavior.&quot;&quot;&quot;</span>
+
+    <span class="n">severity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span>
+    <span class="n">exclude_dirs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;__pycache__&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;.git&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;node_modules&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;.tox&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;venv&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;.venv&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">library_patterns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;__*__.py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;test_*.py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;conftest.py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;setup.py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;manage.py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;settings.py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;settings_*.py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;urls.py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;apps.py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;admin.py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;models.py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;views.py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;wsgi.py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;asgi.py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;conf.py&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">library_dirs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">,</span> <span class="s2">&quot;tests&quot;</span><span class="p">,</span> <span class="s2">&quot;apps&quot;</span><span class="p">,</span> <span class="s2">&quot;config&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">script_dirs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;scripts&quot;</span><span class="p">])</span>
+    <span class="n">disable</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">enable</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">per_rule_severity</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">required_injected</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;CONFIG&quot;</span><span class="p">,</span> <span class="s2">&quot;plt&quot;</span><span class="p">,</span> <span class="s2">&quot;COLORS&quot;</span><span class="p">,</span> <span class="s2">&quot;rngg&quot;</span><span class="p">,</span> <span class="s2">&quot;logger&quot;</span><span class="p">]</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Configuration Loading</span>
+<span class="c1"># =============================================================================</span>
+
+
+<div class="viewcode-block" id="load_config">
+<a class="viewcode-back" href="../../api/scitex_linter.html#scitex_linter.config.load_config">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_config</span><span class="p">(</span><span class="n">start_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LinterConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load configuration from defaults, pyproject.toml, and environment variables.</span>
+
+<span class="sd">    Priority: env vars &gt; pyproject.toml &gt; defaults</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        start_path: File or directory to start pyproject.toml search from.</span>
+<span class="sd">            If a file path, searches from its parent directory.</span>
+<span class="sd">            Defaults to cwd.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Merged configuration</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Start with defaults</span>
+    <span class="n">config_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Load from pyproject.toml — resolve file paths to their directory</span>
+    <span class="k">if</span> <span class="n">start_path</span><span class="p">:</span>
+        <span class="n">start_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">start_path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">start_dir</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="n">start_dir</span> <span class="o">=</span> <span class="n">start_dir</span><span class="o">.</span><span class="n">parent</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">start_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
+    <span class="n">pyproject_config</span> <span class="o">=</span> <span class="n">_load_pyproject</span><span class="p">(</span><span class="n">start_dir</span><span class="p">)</span>
+    <span class="n">config_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pyproject_config</span><span class="p">)</span>
+
+    <span class="c1"># Load from environment variables (highest priority)</span>
+    <span class="n">env_config</span> <span class="o">=</span> <span class="n">_load_env</span><span class="p">()</span>
+    <span class="n">config_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">env_config</span><span class="p">)</span>
+
+    <span class="c1"># Build LinterConfig with merged values</span>
+    <span class="k">return</span> <span class="n">LinterConfig</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="_load_pyproject">
+<a class="viewcode-back" href="../../api/scitex_linter.html#scitex_linter.config._load_pyproject">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_load_pyproject</span><span class="p">(</span><span class="n">start_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Walk up directories to find pyproject.toml with [tool.scitex-linter].</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        start_dir: Starting directory for search</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Configuration dict from [tool.scitex-linter], or empty dict if not found</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">tomllib</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+
+    <span class="n">current</span> <span class="o">=</span> <span class="n">start_dir</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">pyproject_path</span> <span class="o">=</span> <span class="n">current</span> <span class="o">/</span> <span class="s2">&quot;pyproject.toml&quot;</span>
+        <span class="k">if</span> <span class="n">pyproject_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pyproject_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                    <span class="n">tool_config</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tool&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scitex-linter&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                    <span class="k">if</span> <span class="n">tool_config</span><span class="p">:</span>
+                        <span class="c1"># Flatten nested sections</span>
+                        <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+                        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">tool_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;per-rule-severity&quot;</span><span class="p">:</span>
+                                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;per_rule_severity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;session&quot;</span><span class="p">:</span>
+                                <span class="c1"># Handle [tool.scitex-linter.session]</span>
+                                <span class="k">if</span> <span class="s2">&quot;required_injected&quot;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                                    <span class="n">config</span><span class="p">[</span><span class="s2">&quot;required_injected&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span>
+                                        <span class="s2">&quot;required_injected&quot;</span>
+                                    <span class="p">]</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="c1"># Convert kebab-case to snake_case</span>
+                                <span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">value</span>
+                        <span class="k">return</span> <span class="n">config</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="c1"># Move up one directory</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">parent</span>
+        <span class="k">if</span> <span class="n">parent</span> <span class="o">==</span> <span class="n">current</span><span class="p">:</span>
+            <span class="c1"># Reached filesystem root</span>
+            <span class="k">break</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="n">parent</span>
+
+    <span class="k">return</span> <span class="p">{}</span></div>
+
+
+
+<div class="viewcode-block" id="_load_env">
+<a class="viewcode-back" href="../../api/scitex_linter.html#scitex_linter.config._load_env">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_load_env</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load configuration from environment variables with SCITEX_LINTER_ prefix.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Configuration dict with snake_case keys</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Simple string values</span>
+    <span class="k">if</span> <span class="s2">&quot;SCITEX_LINTER_SEVERITY&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;severity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SCITEX_LINTER_SEVERITY&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Comma-separated list values</span>
+    <span class="k">if</span> <span class="s2">&quot;SCITEX_LINTER_DISABLE&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;disable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SCITEX_LINTER_DISABLE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="p">]</span>
+
+    <span class="k">if</span> <span class="s2">&quot;SCITEX_LINTER_ENABLE&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;enable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SCITEX_LINTER_ENABLE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="p">]</span>
+
+    <span class="k">if</span> <span class="s2">&quot;SCITEX_LINTER_EXCLUDE_DIRS&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;exclude_dirs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SCITEX_LINTER_EXCLUDE_DIRS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="p">]</span>
+
+    <span class="k">if</span> <span class="s2">&quot;SCITEX_LINTER_LIBRARY_DIRS&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;library_dirs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SCITEX_LINTER_LIBRARY_DIRS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="p">]</span>
+
+    <span class="k">if</span> <span class="s2">&quot;SCITEX_LINTER_SCRIPT_DIRS&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;script_dirs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SCITEX_LINTER_SCRIPT_DIRS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="p">]</span>
+
+    <span class="k">if</span> <span class="s2">&quot;SCITEX_LINTER_LIBRARY_PATTERNS&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;library_patterns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SCITEX_LINTER_LIBRARY_PATTERNS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="p">]</span>
+
+    <span class="k">if</span> <span class="s2">&quot;SCITEX_LINTER_REQUIRED_INJECTED&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;required_injected&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SCITEX_LINTER_REQUIRED_INJECTED&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">config</span></div>
+
+
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Utility Functions</span>
+<span class="c1"># =============================================================================</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">matches_library_pattern</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">LinterConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if filename matches any library pattern in config.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename: Filename to check (e.g., &quot;__init__.py&quot;, &quot;test_foo.py&quot;)</span>
+<span class="sd">        config: Linter configuration</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if filename matches any pattern</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">library_patterns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Yusuke Watanabe.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

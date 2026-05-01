@@ -17,6 +17,12 @@
 <!-- scitex-badges:end -->
 
 <p align="center">
+  <a href="https://scitex.ai">
+    <img src="docs/scitex-logo-blue-cropped.png" alt="SciTeX" width="400">
+  </a>
+</p>
+
+<p align="center">
   <a href="https://scitex-linter.readthedocs.io/">Full Documentation</a> · <code>pip install scitex-linter</code>
 </p>
 
@@ -348,16 +354,18 @@ Priority: CLI flags > env vars > pyproject.toml > defaults
 the umbrella with `pip install scitex[linter]` to use as
 `scitex.linter` (Python) or `scitex linter ...` (CLI).
 
-The SciTeX ecosystem follows the Four Freedoms for researchers, inspired by [the Free Software Definition](https://www.gnu.org/philosophy/free-sw.en.html):
-
-- **Freedom 0** — Run research for any purpose
-- **Freedom 1** — Study and modify the research pipeline
-- **Freedom 2** — Redistribute results and methods
-- **Freedom 3** — Distribute modified versions to advance science
+>Four Freedoms for Research
+>
+>0. The freedom to **run** your research anywhere — your machine, your terms.
+>1. The freedom to **study** how every step works — from raw data to final manuscript.
+>2. The freedom to **redistribute** your workflows, not just your papers.
+>3. The freedom to **modify** any module and share improvements with the community.
+>
+>AGPL-3.0 — because we believe research infrastructure deserves the same freedoms as the software it runs on.
 
 ## Documentation
 
-[Full Documentation on Read the Docs](https://scitex-linter.readthedocs.io/)
+[Full Documentation on Read the Docs](https://scitex-linter.readthedocs.io/en/latest/)
 
 - [Installation](https://scitex-linter.readthedocs.io/en/latest/installation.html)
 - [Quick Start](https://scitex-linter.readthedocs.io/en/latest/quickstart.html)

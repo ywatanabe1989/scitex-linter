@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CLI Reference &mdash; SciTeX Linter v0.2.1</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=37f418d5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Claude Code Hook" href="hook.html" />
+    <link rel="prev" title="Rules Reference" href="rules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SciTeX Linter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-from-pypi">Install from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-from-source">Install from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#verification">Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#via-scitex">Via SciTeX</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#lint-a-file">Lint a File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#severity-levels">Severity Levels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#lint-then-execute">Lint then Execute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#browse-rules">Browse Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#flake8-integration">flake8 Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#what-a-clean-script-looks-like">What a Clean Script Looks Like</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="rules.html">Rules Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#category-s-structure">Category S: Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#category-i-imports">Category I: Imports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#category-io-i-o-calls">Category IO: I/O Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#category-p-plotting">Category P: Plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#category-st-statistics">Category ST: Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#category-pa-path-handling">Category PA: Path Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#category-fm-figure-millimeter-opt-in">Category FM: Figure/Millimeter (opt-in)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rules.html#severity-summary">Severity Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CLI Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#global-options">Global Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex-linter-check">scitex-linter check</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex-linter-format">scitex-linter format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex-linter-python">scitex-linter python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex-linter-rule">scitex-linter rule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex-linter-api">scitex-linter api</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex-linter-mcp">scitex-linter mcp</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hook.html">Claude Code Hook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hook.html#how-it-works">How It Works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hook.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hook.html#command-detection">Command Detection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hook.html#exit-codes">Exit Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hook.html#example-output">Example Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hook.html#disabling">Disabling</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/scitex_linter.html">scitex_linter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.list_rules"><code class="docutils literal notranslate"><span class="pre">list_rules()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/scitex_linter.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter.checker">scitex_linter.checker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.checker.Issue"><code class="docutils literal notranslate"><span class="pre">Issue</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.checker.is_script"><code class="docutils literal notranslate"><span class="pre">is_script()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.checker.lint_file"><code class="docutils literal notranslate"><span class="pre">lint_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.checker.lint_source"><code class="docutils literal notranslate"><span class="pre">lint_source()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter.rules">scitex_linter.rules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.rules.Rule"><code class="docutils literal notranslate"><span class="pre">Rule</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter.formatter">scitex_linter.formatter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.formatter.format_issue"><code class="docutils literal notranslate"><span class="pre">format_issue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.formatter.format_summary"><code class="docutils literal notranslate"><span class="pre">format_summary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.formatter.to_json"><code class="docutils literal notranslate"><span class="pre">to_json()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter.runner">scitex_linter.runner</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.runner._is_git_root"><code class="docutils literal notranslate"><span class="pre">_is_git_root()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.runner.run_script"><code class="docutils literal notranslate"><span class="pre">run_script()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter.cli">scitex_linter.cli</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.cli._collect_files"><code class="docutils literal notranslate"><span class="pre">_collect_files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.cli._print_help_recursive"><code class="docutils literal notranslate"><span class="pre">_print_help_recursive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter.config">scitex_linter.config</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.config.LinterConfig"><code class="docutils literal notranslate"><span class="pre">LinterConfig</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.config.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.config._load_env"><code class="docutils literal notranslate"><span class="pre">_load_env()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.config._load_pyproject"><code class="docutils literal notranslate"><span class="pre">_load_pyproject()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter.flake8_plugin">scitex_linter.flake8_plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter.flake8_plugin.SciTeXFlake8Checker"><code class="docutils literal notranslate"><span class="pre">SciTeXFlake8Checker</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter._fm_checker">scitex_linter._fm_checker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter._fm_checker._is_exempt_call"><code class="docutils literal notranslate"><span class="pre">_is_exempt_call()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter._fm_checker._has_kwarg"><code class="docutils literal notranslate"><span class="pre">_has_kwarg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter._fm_checker.FMChecker"><code class="docutils literal notranslate"><span class="pre">FMChecker</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/scitex_linter.html#module-scitex_linter._packages">scitex_linter._packages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter._packages._can_import"><code class="docutils literal notranslate"><span class="pre">_can_import()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter._packages.detect"><code class="docutils literal notranslate"><span class="pre">detect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/scitex_linter.html#scitex_linter._packages.reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SciTeX Linter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">CLI Reference</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ywatanabe1989/scitex-linter/blob/main/docs/sphinx/cli.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cli-reference">
+<h1>CLI Reference<a class="headerlink" href="#cli-reference" title="Link to this heading"></a></h1>
+<p>SciTeX Linter provides a single <code class="docutils literal notranslate"><span class="pre">scitex-linter</span></code> command with subcommands.</p>
+<section id="global-options">
+<h2>Global Options<a class="headerlink" href="#global-options" title="Link to this heading"></a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>scitex-linter [-h] [-V] [--help-recursive] {check,format,python,rule,api,mcp} ...
+</pre></div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">-V,</span> <span class="pre">--version</span></code></dt><dd><p>Show version and exit.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--help-recursive</span></code></dt><dd><p>Show help for all commands and subcommands.</p>
+</dd>
+</dl>
+</section>
+<section id="scitex-linter-check">
+<h2>scitex-linter check<a class="headerlink" href="#scitex-linter-check" title="Link to this heading"></a></h2>
+<p>Check Python files for SciTeX pattern compliance.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>scitex-linter check &lt;path&gt; [--json] [--no-color] [--severity LEVEL] [--category CAT]
+</pre></div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code></dt><dd><p>Python file or directory to check. Directories are searched recursively.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--json</span></code></dt><dd><p>Output results as JSON.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--no-color</span></code></dt><dd><p>Disable colored output.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--severity</span> <span class="pre">{error,warning,info}</span></code></dt><dd><p>Minimum severity to report (default: <code class="docutils literal notranslate"><span class="pre">info</span></code>).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--category</span></code></dt><dd><p>Filter by category (comma-separated): <code class="docutils literal notranslate"><span class="pre">structure</span></code>, <code class="docutils literal notranslate"><span class="pre">import</span></code>, <code class="docutils literal notranslate"><span class="pre">io</span></code>, <code class="docutils literal notranslate"><span class="pre">plot</span></code>, <code class="docutils literal notranslate"><span class="pre">stats</span></code>, <code class="docutils literal notranslate"><span class="pre">path</span></code>, <code class="docutils literal notranslate"><span class="pre">figure</span></code>.</p>
+</dd>
+</dl>
+<p><strong>Exit codes:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code> — No issues (or only info-level)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code> — Warnings found</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code> — Errors found</p></li>
+</ul>
+<p><strong>Examples:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check a single file</span>
+scitex-linter<span class="w"> </span>check<span class="w"> </span>script.py
+
+<span class="c1"># Check a directory, errors only</span>
+scitex-linter<span class="w"> </span>check<span class="w"> </span>./src/<span class="w"> </span>--severity<span class="w"> </span>error
+
+<span class="c1"># JSON output for CI</span>
+scitex-linter<span class="w"> </span>check<span class="w"> </span>.<span class="w"> </span>--json<span class="w"> </span>--no-color
+</pre></div>
+</div>
+</section>
+<section id="scitex-linter-format">
+<h2>scitex-linter format<a class="headerlink" href="#scitex-linter-format" title="Link to this heading"></a></h2>
+<p>Auto-fix SciTeX pattern issues in Python files.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>scitex-linter format &lt;path&gt; [--check] [--diff]
+</pre></div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">path</span></code></dt><dd><p>Python file or directory to format.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--check</span></code></dt><dd><p>Dry run — exit 1 if changes would be made (no files modified).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--diff</span></code></dt><dd><p>Show a unified diff of changes.</p>
+</dd>
+</dl>
+<p>Supported auto-fixes: <code class="docutils literal notranslate"><span class="pre">fig.savefig()</span></code> to <code class="docutils literal notranslate"><span class="pre">stx.io.save()</span></code>, <code class="docutils literal notranslate"><span class="pre">np.save/load</span></code> to <code class="docutils literal notranslate"><span class="pre">stx.io</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pd.read_csv</span></code> to <code class="docutils literal notranslate"><span class="pre">stx.io.load()</span></code>, and missing INJECTED parameters.</p>
+<p><strong>Examples:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fix in place</span>
+scitex-linter<span class="w"> </span>format<span class="w"> </span>script.py
+
+<span class="c1"># Dry run</span>
+scitex-linter<span class="w"> </span>format<span class="w"> </span>script.py<span class="w"> </span>--check
+
+<span class="c1"># Show diff</span>
+scitex-linter<span class="w"> </span>format<span class="w"> </span>script.py<span class="w"> </span>--diff
+</pre></div>
+</div>
+</section>
+<section id="scitex-linter-python">
+<h2>scitex-linter python<a class="headerlink" href="#scitex-linter-python" title="Link to this heading"></a></h2>
+<p>Lint a Python script, then execute it.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>scitex-linter python &lt;script&gt; [--strict] [-- script_args...]
+</pre></div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">script</span></code></dt><dd><p>Python script to lint and execute.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--strict</span></code></dt><dd><p>Abort execution if lint errors are found (exit code 2).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--</span> <span class="pre">args...</span></code></dt><dd><p>Arguments passed to the script (after <code class="docutils literal notranslate"><span class="pre">--</span></code> separator).</p>
+</dd>
+</dl>
+<p><strong>Examples:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Lint and run</span>
+scitex-linter<span class="w"> </span>python<span class="w"> </span>experiment.py
+
+<span class="c1"># Strict mode</span>
+scitex-linter<span class="w"> </span>python<span class="w"> </span>experiment.py<span class="w"> </span>--strict
+
+<span class="c1"># Pass arguments to script</span>
+scitex-linter<span class="w"> </span>python<span class="w"> </span>experiment.py<span class="w"> </span>--<span class="w"> </span>--epochs<span class="w"> </span><span class="m">100</span><span class="w"> </span>--lr<span class="w"> </span><span class="m">0</span>.001
+</pre></div>
+</div>
+</section>
+<section id="scitex-linter-rule">
+<h2>scitex-linter rule<a class="headerlink" href="#scitex-linter-rule" title="Link to this heading"></a></h2>
+<p>List all available lint rules.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>scitex-linter rule [--json] [--category CAT] [--severity LEVEL]
+</pre></div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">--json</span></code></dt><dd><p>Output as JSON.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--category</span></code></dt><dd><p>Filter by category (comma-separated).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">--severity</span> <span class="pre">{error,warning,info}</span></code></dt><dd><p>Filter by exact severity level.</p>
+</dd>
+</dl>
+</section>
+<section id="scitex-linter-api">
+<h2>scitex-linter api<a class="headerlink" href="#scitex-linter-api" title="Link to this heading"></a></h2>
+<p>List the public Python API.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>scitex-linter api [--json]
+</pre></div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">--json</span></code></dt><dd><p>Output as JSON.</p>
+</dd>
+</dl>
+<p>Displays a tree view of all public functions, classes, and variables across
+<code class="docutils literal notranslate"><span class="pre">scitex_linter.checker</span></code>, <code class="docutils literal notranslate"><span class="pre">scitex_linter.fixer</span></code>, <code class="docutils literal notranslate"><span class="pre">scitex_linter.formatter</span></code>,
+<code class="docutils literal notranslate"><span class="pre">scitex_linter.rules</span></code>, and <code class="docutils literal notranslate"><span class="pre">scitex_linter.config</span></code>.</p>
+</section>
+<section id="scitex-linter-mcp">
+<h2>scitex-linter mcp<a class="headerlink" href="#scitex-linter-mcp" title="Link to this heading"></a></h2>
+<p>MCP (Model Context Protocol) server commands.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>scitex-linter mcp {start,list-tools}
+</pre></div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">scitex-linter</span> <span class="pre">mcp</span> <span class="pre">start</span> <span class="pre">[--transport</span> <span class="pre">{stdio,sse}]</span></code></dt><dd><p>Start the MCP server. Default transport is <code class="docutils literal notranslate"><span class="pre">stdio</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">scitex-linter</span> <span class="pre">mcp</span> <span class="pre">list-tools</span></code></dt><dd><p>List available MCP tools.</p>
+</dd>
+</dl>
+<p>Requires the <code class="docutils literal notranslate"><span class="pre">mcp</span></code> extra: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">scitex-linter[mcp]</span></code></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rules.html" class="btn btn-neutral float-left" title="Rules Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hook.html" class="btn btn-neutral float-right" title="Claude Code Hook" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Yusuke Watanabe.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
