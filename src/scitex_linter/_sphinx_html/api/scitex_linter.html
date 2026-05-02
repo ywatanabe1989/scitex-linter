@@ -127,6 +127,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-scitex_linter.cli">scitex_linter.cli</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#scitex_linter.cli._collect_files"><code class="docutils literal notranslate"><span class="pre">_collect_files()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#scitex_linter.cli._print_help_recursive"><code class="docutils literal notranslate"><span class="pre">_print_help_recursive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scitex_linter.cli._rewrite_argv"><code class="docutils literal notranslate"><span class="pre">_rewrite_argv()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#scitex_linter.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 </ul>
 </li>
@@ -385,16 +386,33 @@ code cells and calls back into <cite>lint_source</cite> per cell.</p>
 </section>
 <section id="module-scitex_linter.cli">
 <span id="scitex-linter-cli"></span><h3>scitex_linter.cli<a class="headerlink" href="#module-scitex_linter.cli" title="Link to this heading"></a></h3>
-<p>CLI entry point for scitex-linter.</p>
+<p>CLI entry point for scitex-linter (Click-based, audit-compliant).</p>
 <dl class="simple">
-<dt>Usage:</dt><dd><p>scitex-linter check &lt;path&gt; [–json] [–severity] [–category] [–no-color]
-scitex-linter format &lt;path&gt; [–check] [–diff]
-scitex-linter python &lt;script.py&gt; [–strict] [– script_args…]
-scitex-linter rule [–json] [–category] [–severity]
+<dt>Canonical subcommands:</dt><dd><p>scitex-linter check-files &lt;PATH&gt; [–json] [–severity] [–category] [–no-color]
+scitex-linter format-files &lt;PATH&gt; [–check] [–diff] [–dry-run] [–yes]
+scitex-linter run-python &lt;SCRIPT&gt; [–strict] [– script_args…]
+scitex-linter list-rules [–json] [–category] [–severity]      (built-in)
+scitex-linter list-rules-all [–json] [–category] [–severity]  (built-in + plugin)
 scitex-linter list-python-apis [-v|-vv|-vvv] [–json]
-scitex-linter mcp start
-scitex-linter mcp list-tools [-v|-vv|-vvv]
-scitex-linter –help-recursive</p>
+scitex-linter mcp start [–dry-run] [–yes]
+scitex-linter mcp list-tools [-v|-vv|-vvv] [–json]
+scitex-linter mcp doctor
+scitex-linter mcp show-installation
+scitex-linter completion install [–shell bash|zsh] [–dry-run] [–yes]
+scitex-linter show-completion-status [–json]
+scitex-linter show-completion-bash
+scitex-linter show-completion-zsh</p>
+</dd>
+<dt>Deprecated aliases (still work, redirect to new names):</dt><dd><p>check         -&gt; check-files
+format        -&gt; format-files
+python        -&gt; run-python
+rule          -&gt; list-rules
+rules         -&gt; list-rules-all
+api           -&gt; list-python-apis
+mcp installation -&gt; mcp show-installation
+completion status -&gt; show-completion-status
+completion bash   -&gt; show-completion-bash
+completion zsh    -&gt; show-completion-zsh</p>
 </dd>
 </dl>
 <dl class="py function">
@@ -410,19 +428,24 @@ scitex-linter –help-recursive</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="scitex_linter.cli._print_help_recursive">
-<span class="sig-prename descclassname"><span class="pre">scitex_linter.cli.</span></span><span class="sig-name descname"><span class="pre">_print_help_recursive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subparsers_actions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/cli.html#_print_help_recursive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.cli._print_help_recursive" title="Link to this definition"></a></dt>
-<dd><p>Print help for all commands recursively.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
-</dd>
-</dl>
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.cli.</span></span><span class="sig-name descname"><span class="pre">_print_help_recursive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/cli.html#_print_help_recursive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.cli._print_help_recursive" title="Link to this definition"></a></dt>
+<dd><p>Eager callback for –help-recursive.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_linter.cli._rewrite_argv">
+<span class="sig-prename descclassname"><span class="pre">scitex_linter.cli.</span></span><span class="sig-name descname"><span class="pre">_rewrite_argv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/cli.html#_rewrite_argv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.cli._rewrite_argv" title="Link to this definition"></a></dt>
+<dd><p>Translate deprecated subcommand names to canonical Click names.</p>
+<p>Preserves all flags and positional arguments verbatim.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="scitex_linter.cli.main">
 <span class="sig-prename descclassname"><span class="pre">scitex_linter.cli.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_linter/cli.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_linter.cli.main" title="Link to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Entry point. Returns exit code (0 on success).</p>
+<p>Wraps Click so existing callers (and tests) that pass argv lists keep working.
+Translates deprecated subcommand names to canonical Click names.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
 </dd>
