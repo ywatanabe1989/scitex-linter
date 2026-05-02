@@ -25,6 +25,12 @@ dev = [
     "pytest",
     "pytest-cov",
     "ruff",
+    # Optional features whose tests live in the suite — installed in [dev]
+    # so a fresh `pip install -e .[dev]` runs the full suite. Production
+    # users opt in via `pip install scitex-linter[mcp]`. See
+    # _skills/general/01_ecosystem_02_dependency-and-version-pinning.md
+    # `[dev]` extras completeness.
+    "fastmcp>=2.0",       # tested via scitex_linter._mcp_server
 ]
 docs = [
     "sphinx>=7.0",
