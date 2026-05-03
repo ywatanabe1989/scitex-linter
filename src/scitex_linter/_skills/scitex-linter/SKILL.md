@@ -1,5 +1,10 @@
 ---
-description: AST-based linter for reproducible-research Python — 47 built-in rules across 7 categories — STX-I* (imports, e.g. enforce `import scitex as stx`, no star imports, stdlib ordering), STX-IO* (forbid raw `pd.read_csv` / `np.load` / `pickle` / `fig.savefig` → use `stx.io.save` / `stx.io.load`), STX-P* (path handling — no hardcoded `/home/...`, always resolve via `stx.path`), STX-PA* (plot/axes — axis labels/units required, no `plt.show()` in scripts), STX-S* (stats — report effect sizes + CIs alongside p-values, FDR correction for multiple tests), STX-FM* (figure/matplotlib — DPI, tight_layout, colorblind-safe palette), STX-ST* (structure — `@stx.session` entrypoint, `if __name__ == "__main__"` guard, file-size thresholds). Public API — `list_rules(category=...)`. Plugin-loader discovers third-party rule packs. 3 MCP tools — `linter_check` (lint files), `linter_check_source` (lint a string), `linter_list_rules` (browse catalog). Drop-in replacement for `flake8` / `ruff` / `pylint` / `pycodestyle` when you want the *scientific-reproducibility* rule set specifically — it does NOT replace general-purpose linters, it complements them. Use whenever the user asks to "lint my scitex code", "check scitex conventions", "is this using stx.io correctly?", "what scitex rules does this violate?", "list linter rules", "show STX-IO001 meaning", "enforce reproducible-research style", or mentions STX-*, scitex-linter, scitex conventions, reproducibility lint.
+name: scitex-linter
+description: |
+  [WHAT] AST-based linter for reproducible-research Python — 47 built-in rules across 7 categories — STX-I* (imports, e.g. enforce `import scitex as stx`, no star imports, stdlib ordering), STX-IO* (forbid raw `pd.read_csv` / `np.load` / `pickle` / `fig.savefig` → use `stx.io.save` / `stx.io.load`), STX-P* (path handling — no hardcoded `/home/...`, always resolve via `stx.path`), STX-PA* (plot/axes — axis…
+  [WHEN] Use whenever the user asks to "lint my scitex code", "check scitex conventions", "is this using stx.
+  [HOW] io correctly?", "what scitex rules does this violate?", "list linter rules", "show STX-IO001 meaning", "enforce reproducible-research style", or mentions STX-*, scitex-linter, scitex conventions, reproducibility lint.
+tags: [scitex-linter]
 allowed-tools: mcp__scitex__linter_*
 primary_interface: hook
 interfaces:
@@ -7,10 +12,7 @@ interfaces:
   cli: 2
   mcp: 1
   skills: 2
-  hook: 3
   http: 0
-name: scitex-linter
-tags: [scitex-linter, scitex-package]
 ---
 
 # scitex-linter

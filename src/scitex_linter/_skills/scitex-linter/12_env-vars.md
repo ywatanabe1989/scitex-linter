@@ -1,7 +1,8 @@
 ---
-name: scitex-linter-env-vars
-description: Environment variables read by scitex-linter at import / runtime. Follow SCITEX_<MODULE>_* convention — see general/10_arch-environment-variables.md.
-tags: [scitex-linter, scitex-package]
+description: |
+  [TOPIC] Env Vars
+  [DETAILS] Environment variables read by scitex-linter at import / runtime. Follow SCITEX_<MODULE>_* convention — see general/10_arch-environment-variables.md.
+tags: [scitex-linter-env-vars]
 ---
 
 # scitex-linter — Environment Variables

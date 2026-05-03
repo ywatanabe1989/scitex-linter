@@ -1,7 +1,8 @@
 ---
-description: Basic linter usage — check files, list rules.
-name: quick-start
-tags: [scitex-linter, scitex-package]
+description: |
+  [TOPIC] Quick Start
+  [DETAILS] Basic linter usage — check files, list rules.
+tags: [scitex-linter-quick-start]
 ---
 
 # Quick Start
