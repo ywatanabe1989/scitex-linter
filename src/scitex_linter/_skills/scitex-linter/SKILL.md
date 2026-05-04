@@ -1,9 +1,17 @@
 ---
 name: scitex-linter
 description: |
-  [WHAT] AST-based linter for reproducible-research Python — 47 built-in rules across 7 categories — STX-I* (imports, e.g. enforce `import scitex as stx`, no star imports, stdlib ordering), STX-IO* (forbid raw `pd.read_csv` / `np.load` / `pickle` / `fig.savefig` → use `stx.io.save` / `stx.io.load`), STX-P* (path handling — no hardcoded `/home/...`, always resolve via `stx.path`), STX-PA* (plot/axes — axis…
-  [WHEN] Use whenever the user asks to "lint my scitex code", "check scitex conventions", "is this using stx.
-  [HOW] io correctly?", "what scitex rules does this violate?", "list linter rules", "show STX-IO001 meaning", "enforce reproducible-research style", or mentions STX-*, scitex-linter, scitex conventions, reproducibility lint.
+  [WHAT] AST-based linter for reproducible-research Python — 47 built-in
+  rules across 7 categories: STX-I (imports), STX-IO (forbid raw
+  pd.read_csv / np.load / pickle / fig.savefig — use scitex.io.save /
+  scitex.io.load instead), STX-P (path handling — resolve via
+  scitex.path, no hardcoded `/home/...`), STX-PA (plot/axes), and more.
+  [WHEN] User asks to lint scitex code, check scitex conventions, list
+  linter rules, show STX-IO001 meaning, or enforce reproducible-research
+  style; mentions STX-*, scitex-linter, scitex conventions, reproducibility
+  lint.
+  [HOW] `scitex-linter check <path>` (CLI) or `scitex_linter.check(path)`
+  (Python). Hook integration auto-runs on PreToolUse for Edit/Write.
 tags: [scitex-linter]
 allowed-tools: mcp__scitex__linter_*
 primary_interface: hook
