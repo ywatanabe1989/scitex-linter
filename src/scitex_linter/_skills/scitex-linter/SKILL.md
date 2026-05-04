@@ -45,12 +45,18 @@ rule and empirical verification table.
 
 ## Sub-skills
 
+### Mandatory leaves
+- [01_installation.md](01_installation.md) — pip install + extras + smoke verify
+- [02_quick-start.md](02_quick-start.md) — minimal `check-files` example
+- [03_python-api.md](03_python-api.md) — top-level Python surface
+- [04_cli-reference.md](04_cli-reference.md) — `scitex-linter` subcommand summary
+
 ### Core
-- [01_quick-start.md](01_quick-start.md) — Basic usage
-- [02_rule-catalog.md](02_rule-catalog.md) — All built-in rules
+- [06_quick-start.md](06_quick-start.md) — basic usage (legacy detail)
+- [07_rule-catalog.md](07_rule-catalog.md) — all built-in rules
 
 ### Workflows
-- [10_cli-reference.md](10_cli-reference.md) — CLI commands
+- [10_cli-reference.md](10_cli-reference.md) — CLI commands (legacy detail)
 - [11_mcp-tools.md](11_mcp-tools.md) — MCP tools for AI agents
 
 ## CLI
@@ -71,4 +77,4 @@ scitex-linter list-rules
 
 ## Environment
 
-- [12_env-vars.md](12_env-vars.md) — SCITEX_* env vars read by scitex-linter at runtime
+- [20_env-vars.md](20_env-vars.md) — SCITEX_* env vars read by scitex-linter at runtime
