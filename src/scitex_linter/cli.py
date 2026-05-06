@@ -699,8 +699,17 @@ def mcp_show_installation_deprecated(ctx):
 
 @mcp_group.command("install")
 @click.option("--json", "as_json", is_flag=True, default=False, help="Output as JSON.")
-@click.option("--dry-run", is_flag=True, help="Accepted for §2; this verb is informational, never mutates state.")
-@click.option("--yes", "-y", is_flag=True, help="Accepted for §2; this verb is informational, never mutates state.")
+@click.option(
+    "--dry-run",
+    is_flag=True,
+    help="Accepted for §2; this verb is informational, never mutates state.",
+)
+@click.option(
+    "--yes",
+    "-y",
+    is_flag=True,
+    help="Accepted for §2; this verb is informational, never mutates state.",
+)
 def mcp_install(as_json, dry_run, yes):
     """Show Claude Desktop MCP configuration snippet.
 
@@ -808,11 +817,12 @@ def completion_install(shell, dry_run, yes, as_json):
         click.echo(f"Would append completion script to {rc_file}")
         return
 
-    if not yes and not click.confirm(
-        f"Append completion script to {rc_file}?", default=True
-    ):
-        click.echo("Aborted.")
-        return
+    if not yes:
+        click.echo(
+            f"Refusing to modify {rc_file} without --yes/-y.",
+            err=True,
+        )
+        raise SystemExit(2)
 
     with open(rc_file, "a") as f:
         f.write(f"\n{script}\n")
