@@ -680,14 +680,31 @@ def mcp_doctor(as_json):
     sys.exit(0 if all_ok else 1)
 
 
-@mcp_group.command("show-installation")
+@mcp_group.command(
+    "show-installation",
+    hidden=True,
+    context_settings={"ignore_unknown_options": True},
+)
+@click.pass_context
+def mcp_show_installation_deprecated(ctx):
+    """(deprecated) Renamed to `install`."""
+    click.echo(
+        "error: `scitex-linter mcp show-installation` was renamed to "
+        "`scitex-linter mcp install`.\n"
+        "Re-run with: scitex-linter mcp install",
+        err=True,
+    )
+    ctx.exit(2)
+
+
+@mcp_group.command("install")
 @click.option("--json", "as_json", is_flag=True, default=False, help="Output as JSON.")
-def mcp_show_installation(as_json):
+def mcp_install(as_json):
     """Show Claude Desktop MCP configuration snippet.
 
     \b
     Example:
-        $ scitex-linter mcp show-installation
+        $ scitex-linter mcp install
     """
     import shutil
 
