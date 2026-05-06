@@ -887,6 +887,19 @@ def show_completion_zsh(as_json):
 
 
 # =========================================================================
+# §1a: install-shell-completion + print-shell-completion (canonical leaves)
+# Registered alongside the legacy `completion install` / `show-completion-*`
+# commands; the canonical leaves are the §1a-required entry points.
+# =========================================================================
+try:
+    from scitex_dev._cli._completion import attach_shell_completion
+
+    attach_shell_completion(main_group, prog_name="scitex-linter")
+except ImportError:
+    pass
+
+
+# =========================================================================
 # Backward-compat shim: translate deprecated argv names to new names
 # =========================================================================
 
