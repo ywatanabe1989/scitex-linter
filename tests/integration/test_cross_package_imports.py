@@ -20,8 +20,13 @@ import pytest
 
 # ===== AUTO-GENERATED: cross-package imports =====
 CROSS_PACKAGE_IMPORTS = [
-    "scitex_dev._cli._completion",
     "scitex_dev.skills",
+    "scitex_dev.linter",
+    "scitex_dev.linter._fm_checker",
+    "scitex_dev.linter._rules",
+    "scitex_dev.linter._rules._base",
+    "scitex_dev.linter.checker",
+    "scitex_dev.linter.cli",
 ]
 # ===== END AUTO-GENERATED =====
 

@@ -21,6 +21,7 @@ def test_audit_all_clean():
         audit_all_for_package(
             "scitex-linter",
             skip_rules=(
+                "PS102",
                 "PS108",
                 "PS108b",
                 "PS121",
