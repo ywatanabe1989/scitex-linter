@@ -1,11 +1,11 @@
 """SciTeX Linter — soft-migration shim.
 
-The engine has moved to `scitex_dev.lint`. This package re-exports the
+The engine has moved to `scitex_dev.linter`. This package re-exports the
 public API so existing imports (`import scitex_linter`,
 `from scitex_linter import list_rules`, etc.) keep working.
 
 The `scitex-linter` console script is also kept as an alias for
-`scitex-dev lint`. New work should target `scitex_dev.lint` directly.
+`scitex-dev lint`. New work should target `scitex_dev.linter` directly.
 """
 
 from __future__ import annotations
@@ -23,6 +23,6 @@ except ImportError:  # pragma: no cover — only on ancient Pythons
     __version__ = "0.0.0+local"
 
 
-from scitex_dev.lint import list_rules  # noqa: F401,E402
+from scitex_dev.linter import list_rules  # noqa: F401,E402
 
 __all__ = ["__version__", "list_rules"]
