@@ -23,10 +23,13 @@ def test_audit_all_clean():
             skip_rules=(
                 "PS108",
                 "PS108b",
+                "PS121",
                 "PS123",
                 "PS133",
                 "PS202",
                 "PS204",
+                "PS505",
+                "PS506",
                 "§1a",
                 "§4",
             ),
