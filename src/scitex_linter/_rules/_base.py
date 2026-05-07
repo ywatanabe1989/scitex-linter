@@ -1,13 +1,10 @@
-"""Rule dataclass definition."""
+"""Rule dataclass definition.
 
-from dataclasses import dataclass
+Soft-migration shim. The canonical home is `scitex_dev.lint._rules._base`.
+This module re-exports `Rule` so existing imports
+(`from scitex_linter._rules._base import Rule`) keep working.
+"""
 
+from scitex_dev.lint._rules._base import Rule  # noqa: F401
 
-@dataclass(frozen=True)
-class Rule:
-    id: str
-    severity: str  # "error", "warning", "info"
-    category: str  # "structure", "import", "io", "plot", "stats"
-    message: str
-    suggestion: str
-    requires: str = ""
+__all__ = ["Rule"]

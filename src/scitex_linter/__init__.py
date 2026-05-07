@@ -1,4 +1,12 @@
-"""SciTeX Linter — enforce reproducible research patterns via AST analysis."""
+"""SciTeX Linter — soft-migration shim.
+
+The engine has moved to `scitex_dev.lint`. This package re-exports the
+public API so existing imports (`import scitex_linter`,
+`from scitex_linter import list_rules`, etc.) keep working.
+
+The `scitex-linter` console script is also kept as an alias for
+`scitex-dev lint`. New work should target `scitex_dev.lint` directly.
+"""
 
 from __future__ import annotations
 
@@ -15,30 +23,6 @@ except ImportError:  # pragma: no cover — only on ancient Pythons
     __version__ = "0.0.0+local"
 
 
-def list_rules(category: str = None) -> list:
-    """Return all rules (built-in + plugin), optionally filtered by category.
-
-    Parameters
-    ----------
-    category : str, optional
-        If provided, only return rules whose category matches this value.
-
-    Returns
-    -------
-    list of Rule
-        All matching Rule objects from built-in definitions and loaded plugins.
-    """
-    from ._plugin_loader import load_plugins
-    from ._rules import ALL_RULES
-
-    all_rules = dict(ALL_RULES)
-    plugin_rules = load_plugins()["rules"]
-    all_rules.update(plugin_rules)
-
-    rules = list(all_rules.values())
-    if category is not None:
-        rules = [r for r in rules if r.category == category]
-    return rules
-
+from scitex_dev.lint import list_rules  # noqa: F401,E402
 
 __all__ = ["__version__", "list_rules"]

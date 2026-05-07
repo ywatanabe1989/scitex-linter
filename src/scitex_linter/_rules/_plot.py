@@ -45,3 +45,8 @@ P005 = Rule(
     suggestion="Replace `print(msg)` with `logger.info(msg)` (injected by @stx.session).",
     requires="scitex",
 )
+
+# NOTE: P006-P009 (style-override rules: s=, fontsize=, figsize=, linewidth=)
+# are owned by figrecipe and shipped via figrecipe._linter_plugin. They are
+# loaded into ALL_RULES through the entry-point plugin loader, not defined
+# here, so the rules live in the package whose API they enforce.

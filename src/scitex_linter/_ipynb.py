@@ -15,6 +15,17 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+# Rules that don't make sense per-cell in a notebook context.
+# Notebooks are interactive; they have no `__main__` guard, no shebang,
+# and rarely a top-level docstring per cell.
+_NOTEBOOK_SKIP_RULES = {
+    "STX-S001",  # Missing shebang
+    "STX-S002",  # Missing `if __name__ == '__main__'` guard
+    "STX-S003",  # Missing module docstring
+    "STX-S004",  # Missing EOF marker
+    "STX-S005",  # Missing timestamp
+}
+
 
 def lint_ipynb(path: Path, config=None) -> list:
     """Lint a Jupyter notebook by extracting code cells and running
@@ -39,7 +50,10 @@ def lint_ipynb(path: Path, config=None) -> list:
         if not source.strip():
             continue
         fake_path = f"{path}::cell-{i}"
-        issues.extend(lint_source(source, filepath=fake_path, config=config))
+        cell_issues = lint_source(source, filepath=fake_path, config=config)
+        issues.extend(
+            iss for iss in cell_issues if iss.rule.id not in _NOTEBOOK_SKIP_RULES
+        )
     return issues
 
 

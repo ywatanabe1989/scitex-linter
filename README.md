@@ -30,6 +30,8 @@
 
 ---
 
+> **Migration notice (2026-Q2)** — the linter engine has moved into `scitex-dev` as `scitex_dev.lint`, and rules are now **owned by the package whose API they enforce** (figrecipe ships `STX-P*` / `STX-FM*`, etc.) and aggregated at runtime via the `scitex_dev.lint.plugins` entry point. The `scitex-linter` package + console script remain as a thin alias for the soft-migration window. New work should target `scitex-dev lint <subcommand>`. See [`01_ecosystem_08_linter-plugins.md`](https://github.com/ywatanabe1989/scitex-dev/blob/main/src/scitex_dev/_skills/general/01_ecosystem_08_linter-plugins.md) for the plugin contract.
+
 ## Problem and Solution
 
 | # | Problem | Solution |
