@@ -36,6 +36,10 @@ jobs:
         run: |
           python -m venv /tmp/clean-venv
           /tmp/clean-venv/bin/pip install --upgrade pip
+          # Soft-migration: shim re-exports from scitex_dev.lint, which is
+          # not yet on PyPI. Install scitex-dev from the develop branch.
+          /tmp/clean-venv/bin/pip install \
+            "git+https://github.com/ywatanabe1989/scitex-dev.git@develop"
           /tmp/clean-venv/bin/pip install dist/*.whl
           # Detect import name from src/ layout (the only directory under
           # src/ that contains __init__.py). Works on every supported Python
