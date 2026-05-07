@@ -40,6 +40,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          # Soft-migration window: scitex-linter is a shim re-exporting
+          # from scitex_dev.linter, which isn't on PyPI yet. Install
+          # scitex-dev from the develop branch so the shim resolves.
+          pip install "git+https://github.com/ywatanabe1989/scitex-dev.git@develop"
           pip install -e ".[dev]"
 
       - name: Run tests
