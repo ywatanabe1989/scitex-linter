@@ -41,21 +41,31 @@
 pip install scitex-linter
 ```
 
-## Quick Start
+## Architecture
 
-```bash
-# Lint a file
-scitex-linter check script.py
-
-# Lint then execute
-scitex-linter python experiment.py --strict
-
-# Auto-fix issues
-scitex-linter format script.py
-
-# List all 47 rules
-scitex-linter rule
 ```
+scitex_linter/
+├── checker.py             ← lint_file / lint_source — top-level entrypoints
+├── fixer.py               ← fix_source / fix_file — auto-fix engine
+├── formatter.py           ← human + JSON output renderers
+├── runner.py              ← orchestrates checks across files / dirs
+├── rules.py / _rule_tables.py   ← rule registry + metadata tables
+├── _rules/                ← rule corpus (S, I, IO, P, ST, PA, FM categories)
+├── _naming_checker.py     ← variable / function naming conventions
+├── _path_checker.py       ← STX-PA* path-style rules
+├── _fm_checker.py         ← STX-FM* figure-management rules
+├── _ipynb.py              ← Jupyter notebook adapter
+├── flake8_plugin.py       ← STX prefix flake8 entrypoint
+├── _plugin_loader.py      ← scitex_linter.plugins discovery
+├── config.py              ← pyproject.toml + env-var config
+├── cli.py / _cmd_*.py     ← Click CLI (check / format / python / rule)
+├── _server.py / _mcp/     ← MCP server for AI agents
+└── _skills/               ← agent-facing skill pages
+```
+
+Each rule is a small AST visitor in `_rules/`; the registry keeps
+metadata (category, severity, message, fixer). Downstream packages
+contribute extra rules via the `scitex_linter.plugins` entry point.
 
 ## Four Interfaces
 
@@ -205,6 +215,42 @@ scitex-dev skills export --package scitex-linter  # Export to Claude Code
 | `mcp-tools` | MCP tools for AI agents |
 
 </details>
+
+## Demo
+
+```mermaid
+flowchart LR
+    A["script.py"] --> B["scitex-linter check"]
+    B --> C["AST visitors<br/>(_rules/, _path_checker, _fm_checker)"]
+    C --> D["Issue list<br/>(rule_id, severity, message)"]
+    D --> E["formatter / JSON / flake8"]
+    A --> F["scitex-linter format"]
+    F --> G["fixer.py auto-rewrites"]
+    G --> H["clean script.py"]
+```
+
+```bash
+$ scitex-linter check script.py
+script.py:1   STX-S003  [error]    argparse detected — @scitex.session auto-generates CLI
+script.py:5   STX-PA001 [warning]  Absolute path in `scitex.io` call — use relative paths
+script.py: 2 issues (1 error, 1 warning)
+```
+
+## Quick Start
+
+```bash
+# Lint a file
+scitex-linter check script.py
+
+# Lint then execute
+scitex-linter python experiment.py --strict
+
+# Auto-fix issues
+scitex-linter format script.py
+
+# List all 47 rules
+scitex-linter rule
+```
 
 ## 47 Rules Across 7 Categories
 
