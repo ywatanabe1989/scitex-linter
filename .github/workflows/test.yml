@@ -26,6 +26,11 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install pytest pytest-cov pytest-timeout
+          # During the soft-migration window, scitex-linter is a thin shim
+          # that re-exports from scitex_dev.lint. PyPI's scitex-dev hasn't
+          # released the lint sub-package yet, so install scitex-dev from
+          # the develop branch in CI.
+          pip install "git+https://github.com/ywatanabe1989/scitex-dev.git@develop"
           pip install -e ".[dev]" || pip install -e .
       - name: Detect import name
         id: pkg
