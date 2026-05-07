@@ -30,7 +30,29 @@
 
 ---
 
-> **Migration notice (2026-Q2)** — the linter engine has moved into `scitex-dev` as `scitex_dev.lint`, and rules are now **owned by the package whose API they enforce** (figrecipe ships `STX-P*` / `STX-FM*`, etc.) and aggregated at runtime via the `scitex_dev.lint.plugins` entry point. The `scitex-linter` package + console script remain as a thin alias for the soft-migration window. New work should target `scitex-dev lint <subcommand>`. See [`01_ecosystem_08_linter-plugins.md`](https://github.com/ywatanabe1989/scitex-dev/blob/main/src/scitex_dev/_skills/general/01_ecosystem_08_linter-plugins.md) for the plugin contract.
+> **⚠️ DEPRECATED — use `scitex-dev[lint]` instead.**
+>
+> The linter engine has moved into `scitex-dev` as `scitex_dev.linter`,
+> and rules are now **owned by the package whose API they enforce**
+> (figrecipe ships `STX-P*` / `STX-FM*`, etc.) and aggregated at runtime
+> via the `scitex_dev.linter.plugins` entry point.
+>
+> **Migration:**
+> ```bash
+> pip uninstall scitex-linter
+> pip install scitex-dev
+> # CLI rename:
+> scitex-linter check-files src/  →  scitex-dev linter check-files src/
+> # Python imports:
+> from scitex_linter.checker import lint_source  →  from scitex_dev.linter.checker import lint_source
+> ```
+>
+> This package is now a thin shim that re-exports from
+> `scitex_dev.linter`. It will be archived and yanked from PyPI after
+> the next ecosystem release wave. **No new development should target
+> this package.** See
+> [`01_ecosystem_08_linter-plugins.md`](https://github.com/ywatanabe1989/scitex-dev/blob/main/src/scitex_dev/_skills/general/01_ecosystem_08_linter-plugins.md)
+> for the plugin contract.
 
 ## Problem and Solution
 
